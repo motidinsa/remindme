@@ -34,6 +34,7 @@ dependencies:
   date_time_picker: ^1.1.1
   syncfusion_flutter_datepicker: ^18.4.46-beta
   day_night_time_picker: ^0.5.0
+  smart_select: ^4.3.2
 
 
 dev_dependencies:

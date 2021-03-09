@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mytodo/add_reminder.dart';
 import 'package:mytodo/drawer.dart';
+import 'package:mytodo/expense.dart';
 import 'package:mytodo/homepage.dart';
 import 'package:mytodo/report.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -97,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             );
             break;
           case 2:
-            body = Report('day', 200, 100);
+            body = Expense();
             appbar = AppBar(
               title: Text('Statics'),
             );
