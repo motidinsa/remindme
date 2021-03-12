@@ -32,14 +32,7 @@ class _ExpenseState extends State<Expense> {
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     setState(
       () {
-        if (args.value is PickerDateRange) {
-          _range =
-              DateFormat('dd/MM/yyyy').format(args.value.startDate).toString() +
-                  ' - ' +
-                  DateFormat('dd/MM/yyyy')
-                      .format(args.value.endDate ?? args.value.startDate)
-                      .toString();
-        } else if (args.value is DateTime) {
+        if (args.value is DateTime) {
           _selectedDate = args.value.toString();
           date =
               '${DateTime.parse(_selectedDate).day > 9 ? DateTime.parse(_selectedDate).day : '0${DateTime.parse(_selectedDate).day}'}-${DateTime.parse(_selectedDate).month > 9 ? DateTime.parse(_selectedDate).month : '0${DateTime.parse(_selectedDate).month}'}-${DateTime.parse(_selectedDate).year}';
@@ -79,198 +72,81 @@ class _ExpenseState extends State<Expense> {
               child: Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       ExpenseCategory(
-                          'Foodhjhjgjh',
+                          'Transportation',
                           Icon(
                             Icons.phonelink_setup,
                             size: 30,
                             color: Colors.black54,
                           ),
                           true),
-                      Column(
-                        children: [
-                          InkWell(
-                            borderRadius: BorderRadius.circular(100),
-                            onTap: () {},
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              constraints: BoxConstraints(),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  // color: Colors.black12,
-                                  border: Border.all(color: Colors.grey)),
-                              child: Icon(
-                                Icons.star,
-                                size: 30,
-                                color: Colors.black54,
-                              ),
-                            ),
+
+                      ExpenseCategory(
+                          'Food',
+                          Icon(
+                            Icons.star,
+                            size: 30,
+                            color: Colors.black54,
                           ),
-                          Text(
-                            'Food',
-                            style: TextStyle(fontSize: 16),
-                          )
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          InkWell(
-                            borderRadius: BorderRadius.circular(100),
-                            onTap: () {},
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              constraints: BoxConstraints(),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  // color: Colors.black12,
-                                  border: Border.all(color: Colors.grey)),
-                              child: Icon(
-                                Icons.assignment,
-                                size: 30,
-                                color: Colors.black54,
-                              ),
-                            ),
+                          false),
+                      ExpenseCategory(
+                          'Food',
+                          Icon(
+                            Icons.assignment,
+                            size: 30,
+                            color: Colors.black54,
                           ),
-                          Text(
-                            'Food',
-                            style: TextStyle(fontSize: 16),
-                          )
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          InkWell(
-                            borderRadius: BorderRadius.circular(100),
-                            onTap: () {},
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              constraints: BoxConstraints(),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  // color: Colors.black12,
-                                  border: Border.all(color: Colors.grey)),
-                              child: Icon(
-                                Icons.wysiwyg,
-                                size: 30,
-                                color: Colors.black54,
-                              ),
-                            ),
+                          false),
+                      ExpenseCategory(
+                          'Food',
+                          Icon(
+                            Icons.wysiwyg,
+                            size: 30,
+                            color: Colors.black54,
                           ),
-                          Text(
-                            'Food',
-                            style: TextStyle(fontSize: 16),
-                          )
-                        ],
-                      ),
+                          false),
                     ],
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
+                  // SizedBox(
+                  //   height: 20,
+                  // ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Column(
-                        children: [
-                          InkWell(
-                            borderRadius: BorderRadius.circular(100),
-                            onTap: () {},
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              constraints: BoxConstraints(),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(color: Colors.grey)),
-                              child: Icon(
-                                Icons.app_settings_alt,
-                                size: 30,
-                                color: Colors.black54,
-                              ),
-                            ),
+                      ExpenseCategory(
+                          'Food',
+                          Icon(
+                            Icons.app_settings_alt,
+                            size: 30,
+                            color: Colors.black54,
                           ),
-                          Text(
-                            'Food',
-                            style: TextStyle(fontSize: 16),
-                          )
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          InkWell(
-                            borderRadius: BorderRadius.circular(100),
-                            onTap: () {},
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              constraints: BoxConstraints(),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  // color: Colors.black12,
-                                  border: Border.all(color: Colors.grey)),
-                              child: Icon(
-                                Icons.star,
-                                size: 30,
-                                color: Colors.black54,
-                              ),
-                            ),
+                          false),
+                      ExpenseCategory(
+                          'Food',
+                          Icon(
+                            Icons.star,
+                            size: 30,
+                            color: Colors.black54,
                           ),
-                          Text(
-                            'Food',
-                            style: TextStyle(fontSize: 16),
-                          )
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          InkWell(
-                            borderRadius: BorderRadius.circular(100),
-                            onTap: () {},
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              constraints: BoxConstraints(),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  // color: Colors.black12,
-                                  border: Border.all(color: Colors.grey)),
-                              child: Icon(
-                                Icons.assignment,
-                                size: 30,
-                                color: Colors.black54,
-                              ),
-                            ),
+                          false),
+                      ExpenseCategory(
+                          'Food',
+                          Icon(
+                            Icons.assignment,
+                            size: 30,
+                            color: Colors.black54,
                           ),
-                          Text(
-                            'Food',
-                            style: TextStyle(fontSize: 16),
-                          )
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          InkWell(
-                            borderRadius: BorderRadius.circular(100),
-                            onTap: () {},
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              constraints: BoxConstraints(),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  // color: Colors.black12,
-                                  border: Border.all(color: Colors.grey)),
-                              child: Icon(
-                                Icons.wysiwyg,
-                                size: 30,
-                                color: Colors.black54,
-                              ),
-                            ),
+                          false),
+                      ExpenseCategory(
+                          'Food',
+                          Icon(
+                            Icons.wysiwyg,
+                            size: 30,
+                            color: Colors.black54,
                           ),
-                          Text(
-                            'Food',
-                            style: TextStyle(fontSize: 16),
-                          )
-                        ],
-                      ),
+                          false),
                     ],
                   ),
                   Row(

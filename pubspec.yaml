@@ -31,10 +31,11 @@ dependencies:
   equatable:
   abushakir: ^0.1.4
   flutter_rounded_date_picker: 1.0.5
-  date_time_picker: ^1.1.1
+  date_time_picker:
   syncfusion_flutter_datepicker: ^18.4.46-beta
   day_night_time_picker: ^0.5.0
   smart_select: ^4.3.2
+  flutter_material_color_picker: ^1.0.5
 
 
 dev_dependencies:

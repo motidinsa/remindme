@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:mytodo/about.dart';
 import 'package:mytodo/add_reminder.dart';
+import 'package:mytodo/completed_task.dart';
 import 'package:mytodo/drawer.dart';
 import 'package:mytodo/expense.dart';
 import 'package:mytodo/homepage.dart';
+import 'package:mytodo/modal.dart';
 import 'package:mytodo/report.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_rounded_date_picker/rounded_picker.dart';
+import 'package:mytodo/setting.dart';
+import 'package:mytodo/theme.dart';
+
+import 'income_category.dart';
 
 void main() {
   runApp(MyApp());
@@ -92,21 +99,21 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             );
             break;
           case 1:
-            body = AddReminder();
+            body = AboutMe();
             appbar = AppBar(
               title: Text('Completed tasks'),
             );
             break;
           case 2:
-            body = Expense();
+            body = Income();
             appbar = AppBar(
               title: Text('Statics'),
             );
             break;
           case 3:
-            body = Report('month', 200, 100);
+            body = ThemeConfigure();
             appbar = AppBar(
-              title: Text('Settings'),
+              title: Text('Theme'),
             );
             break;
         }
