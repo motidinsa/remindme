@@ -3,18 +3,19 @@ import 'package:flutter/material.dart';
 class AboutMe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Wrap(
-        children: [
-          Card(
-            elevation: 10,
-            // color: Colors.blue,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  // margin: EdgeInsets.symmetric(horizontal: 5),
+    return Scaffold(
+      body: Center(
+        child: Wrap(
+          children: [
+            Card(
+              elevation: 10,
+              // color: Colors.blue,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    // margin: EdgeInsets.symmetric(horizontal: 5),
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.black87,
@@ -47,22 +48,22 @@ class AboutMe extends StatelessWidget {
 
                   child: Row(
                     children: [
-                      Expanded(
-                          child: Text(
-                        'Moti Dinsa',
-                        style: TextStyle(fontSize: 16),
-                      )),
-                      SizedBox(
-                        width: 25,
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
+                        Expanded(
+                            child: Text(
+                          'Moti Dinsa',
+                          style: TextStyle(fontSize: 16),
+                        )),
+                        SizedBox(
+                          width: 25,
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
                                   Icons.email,
                                   color: Colors.grey,
                                 ),
@@ -94,15 +95,16 @@ class AboutMe extends StatelessWidget {
                               ],
                             ),
                           ],
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

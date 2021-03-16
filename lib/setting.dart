@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mytodo/add_subcategory.dart';
+import 'package:mytodo/common_reason.dart';
+import 'package:mytodo/theme.dart';
+
+import 'about.dart';
 
 class Setting extends StatelessWidget {
   @override
@@ -6,7 +11,7 @@ class Setting extends StatelessWidget {
     return ListView(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 10,top: 15),
+          padding: const EdgeInsets.only(left: 10, top: 15),
           child: Text(
             'Report related',
             style: TextStyle(
@@ -23,11 +28,14 @@ class Setting extends StatelessWidget {
           title: Padding(
             padding: const EdgeInsets.only(left: 10),
             child: Text(
-              'Add category to report',
+              'Add category to transaction',
               style: TextStyle(fontSize: 18),
             ),
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => AddSubcategory()));
+          },
         ),
         Divider(
           height: 0,
@@ -40,7 +48,10 @@ class Setting extends StatelessWidget {
               style: TextStyle(fontSize: 18),
             ),
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => AddSubcategory()));
+          },
         ),
         Divider(
           height: 0,
@@ -53,7 +64,21 @@ class Setting extends StatelessWidget {
               style: TextStyle(fontSize: 18),
             ),
           ),
-          onTap: () {},
+          onTap: () {
+            showModalBottomSheet(
+              isScrollControlled: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              context: context,
+              builder: (context) =>
+                  StatefulBuilder(
+                    builder: (context, setState) {
+                      return CommonReason();
+                    },
+                  ),
+            );
+          },
         ),
         Divider(
           height: 0,
@@ -101,7 +126,10 @@ class Setting extends StatelessWidget {
               style: TextStyle(fontSize: 18),
             ),
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ThemeConfigure()));
+          },
         ),  Divider(
           height: 0,
         ),
@@ -128,7 +156,22 @@ class Setting extends StatelessWidget {
           onTap: () {},
         ),
         Divider(
-          height: 0,
+          // height: 30,
+          thickness: 1,
+          color: Colors.grey,
+        ),
+        ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Text(
+              'About developer',
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+          onTap: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => AboutMe()));
+          },
         ),
       ],
     );

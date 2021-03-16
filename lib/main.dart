@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mytodo/about.dart';
 import 'package:mytodo/add_reminder.dart';
+import 'package:mytodo/add_subcategory.dart';
+import 'package:mytodo/common_reason.dart';
 import 'package:mytodo/completed_task.dart';
 import 'package:mytodo/drawer.dart';
+import 'package:mytodo/empty_todo.dart';
 import 'package:mytodo/expense.dart';
+import 'package:mytodo/history.dart';
 import 'package:mytodo/homepage.dart';
 import 'package:mytodo/modal.dart';
 import 'package:mytodo/report.dart';
@@ -55,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   TabController _tabController;
   Widget body;
   AppBar appbar;
+  FloatingActionButton floatingActionButton;
 
   @override
   void initState() {
@@ -67,13 +72,23 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         controller: _tabController,
         tabs: <Widget>[
           Tab(
-            text: 'ToDos',
+            text: 'Tasks',
           ),
           Tab(
-            text: 'Report',
+            text: 'Transaction',
           ),
         ],
       ),
+    );
+    floatingActionButton = FloatingActionButton(
+      backgroundColor: Colors.green,
+      foregroundColor: Colors.white,
+      onPressed: () => {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => AddReminder()))
+      },
+      tooltip: 'Add',
+      child: Icon(Icons.add),
     );
   }
 
@@ -83,38 +98,53 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         switch (index) {
           case 0:
             body = HomePage(_tabController);
+            ;
             appbar = AppBar(
               title: Text('Home'),
               bottom: TabBar(
                 controller: _tabController,
                 tabs: <Widget>[
                   Tab(
-                    text: 'ToDos',
+                    text: 'Tasks',
                   ),
                   Tab(
-                    text: 'Report',
+                    text: 'Transaction',
                   ),
                 ],
               ),
             );
+            floatingActionButton = FloatingActionButton(
+              backgroundColor: Colors.green,
+              foregroundColor: Colors.white,
+              onPressed: () => {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AddReminder()))
+              },
+              tooltip: 'Add',
+              child: Icon(Icons.add),
+            );
             break;
           case 1:
-            body = AboutMe();
+            body = CompletedTask();
             appbar = AppBar(
               title: Text('Completed tasks'),
             );
+            floatingActionButton = null;
+
             break;
           case 2:
-            body = Income();
+            body = History();
             appbar = AppBar(
               title: Text('Statics'),
             );
+            floatingActionButton = null;
             break;
           case 3:
-            body = ThemeConfigure();
+            body = Setting();
             appbar = AppBar(
               title: Text('Theme'),
             );
+            floatingActionButton = null;
             break;
         }
         _selectedIndex = index;
@@ -160,13 +190,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
-        onPressed: () => {},
-        tooltip: 'Add',
-        child: Icon(Icons.add),
-      ),
+      floatingActionButton: floatingActionButton,
     );
   }
 }

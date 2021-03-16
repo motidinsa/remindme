@@ -10,7 +10,7 @@ class PageDrawer extends StatelessWidget {
           DrawerHeader(
             child: Center(
                 child: Text(
-              'My ToDo',
+              'My Tasks',
               style: TextStyle(fontSize: 20),
             )),
             decoration: BoxDecoration(
@@ -19,7 +19,7 @@ class PageDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.edit),
-            title: Text('Customize ToDo'),
+            title: Text('Customize Task'),
             onTap: () {
               // Update the state of the app.
               // ...
@@ -27,7 +27,7 @@ class PageDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.bar_chart),
-            title: Text('Customize report'),
+            title: Text('Customize transaction'),
             onTap: () {
               // Update the state of the app.
               // ...

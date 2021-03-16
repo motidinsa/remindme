@@ -66,276 +66,285 @@ class _AddReminderState extends State<AddReminder> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: ListView(
-        children: [
-          Container(
-            margin: EdgeInsets.fromLTRB(50, 40, 50, 20),
-            child: TextField(
-              cursorHeight: 30,
-              controller: _nameController,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Name',
-                  labelStyle: TextStyle(
-                    fontSize: 20,
-                    color: Colors.green,
-                  ),
-                  contentPadding: EdgeInsets.all(20)),
-              onChanged: (text) => {name = text},
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-            child: TextField(
-              cursorHeight: 30,
-              controller: _descriptionController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Description (Optional)',
-                labelStyle: TextStyle(
-                  fontSize: 20,
-                  color: Colors.green,
+    return Scaffold(
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Card(
+          elevation: 10,
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(50, 40, 50, 20),
+                child: TextField(
+                  cursorHeight: 30,
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Name',
+                      labelStyle: TextStyle(
+                        fontSize: 20,
+                        color: Colors.green,
+                      ),
+                      contentPadding: EdgeInsets.all(20)),
+                  onChanged: (text) => {name = text},
                 ),
-                contentPadding: EdgeInsets.all(20),
               ),
-              onChanged: (text) => {description = text},
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(35, 10, 0, 10),
-              child: FlatButton(
-                textTheme: ButtonTextTheme.accent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                child: Text(
-                  'Set time and date',
-                  style: TextStyle(fontSize: 20, color: Colors.green),
-                ),
-                onPressed: () {
-                  showModalBottomSheet(
-                    isScrollControlled: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                child: TextField(
+                  cursorHeight: 30,
+                  controller: _descriptionController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Description (Optional)',
+                    labelStyle: TextStyle(
+                      fontSize: 20,
+                      color: Colors.green,
                     ),
-                    context: context,
-                    builder: (context) => StatefulBuilder(
-                      builder: (context, setState) {
-                        return Container(
-                          padding: EdgeInsets.only(top: 20),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SfDateRangePicker(
-                                onSelectionChanged: _onSelectionChanged,
-                                showNavigationArrow: true,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.alarm,
-                                      color: Colors.brown,
-                                    ),
-                                    FlatButton(
-                                      textTheme: ButtonTextTheme.accent,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      onPressed: () => {
-                                        Navigator.of(context).push(
-                                          showPicker(
-                                            context: context,
-                                            is24HrFormat: true,
-                                            value: _time,
-                                            onChange: onTimeChanged,
-                                            disableHour: false,
-                                            disableMinute: false,
-                                            onChangeDateTime:
-                                                (DateTime dateTime) {
-                                              setState(
-                                                () {
-                                                  timeIn12HrFormat =
-                                                      '${dateTime.hour > 12 ? dateTime.hour - 12 : dateTime.hour}:${dateTime.minute} ${dateTime.hour > 12 ? 'PM' : 'AM'}';
-                                                  time =
-                                                      '${dateTime.hour}:${dateTime.minute} ($timeIn12HrFormat)';
-                                                  _timeController.text = time;
-                                                },
-                                              );
-
-                                              print(dateTime);
-                                            },
-                                          ),
-                                        )
-                                      },
-                                      child: time == null
-                                          ? Text('Set time')
-                                          : Text(
-                                              time,
-                                              style: TextStyle(
-                                                  color: Colors.green),
-                                            ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
+                    contentPadding: EdgeInsets.all(20),
+                  ),
+                  onChanged: (text) => {description = text},
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(35, 10, 0, 10),
+                  child: FlatButton(
+                    textTheme: ButtonTextTheme.accent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    child: Text(
+                      'Set time and date',
+                      style: TextStyle(fontSize: 20, color: Colors.green),
+                    ),
+                    onPressed: () {
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        context: context,
+                        builder: (context) => StatefulBuilder(
+                          builder: (context, setState) {
+                            return Container(
+                              padding: EdgeInsets.only(top: 20),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Container(
-                                    margin: EdgeInsets.only(right: 20),
-                                    child: OutlineButton(
-                                      textTheme: ButtonTextTheme.accent,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      onPressed: () => {
-                                        setState(
-                                          () {
-                                            _dateController.text = date;
-                                            Navigator.pop(context);
+                                  SfDateRangePicker(
+                                    onSelectionChanged: _onSelectionChanged,
+                                    showNavigationArrow: true,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.alarm,
+                                          color: Colors.brown,
+                                        ),
+                                        FlatButton(
+                                          textTheme: ButtonTextTheme.accent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          onPressed: () => {
+                                            Navigator.of(context).push(
+                                              showPicker(
+                                                context: context,
+                                                is24HrFormat: true,
+                                                value: _time,
+                                                onChange: onTimeChanged,
+                                                disableHour: false,
+                                                disableMinute: false,
+                                                onChangeDateTime:
+                                                    (DateTime dateTime) {
+                                                  setState(
+                                                    () {
+                                                      timeIn12HrFormat =
+                                                          '${dateTime.hour > 12 ? dateTime.hour - 12 : dateTime.hour}:${dateTime.minute} ${dateTime.hour > 12 ? 'PM' : 'AM'}';
+                                                      time =
+                                                          '${dateTime.hour}:${dateTime.minute} ($timeIn12HrFormat)';
+                                                      _timeController.text =
+                                                          time;
+                                                    },
+                                                  );
+
+                                                  print(dateTime);
+                                                },
+                                              ),
+                                            )
                                           },
-                                        )
-                                        // DateTime date = Datetime
-                                      },
-                                      child: Text(
-                                        'OK',
-                                        style: TextStyle(color: Colors.green),
-                                      ),
+                                          child: time == null
+                                              ? Text('Set time')
+                                              : Text(
+                                                  time,
+                                                  style: TextStyle(
+                                                      color: Colors.green),
+                                                ),
+                                        ),
+                                      ],
                                     ),
                                   ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(right: 20),
+                                        child: OutlineButton(
+                                          textTheme: ButtonTextTheme.accent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          onPressed: () => {
+                                            setState(
+                                              () {
+                                                _dateController.text = date;
+                                                Navigator.pop(context);
+                                              },
+                                            )
+                                            // DateTime date = Datetime
+                                          },
+                                          child: Text(
+                                            'OK',
+                                            style:
+                                                TextStyle(color: Colors.green),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
                                 ],
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
-                  child: TextField(
-                    readOnly: true,
-                    enabled: false,
-                    cursorHeight: 30,
-                    controller: _dateController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Date',
-                        labelStyle: TextStyle(
-                          fontSize: 18,
-                          color: Colors.green,
+                              ),
+                            );
+                          },
                         ),
-                        contentPadding: EdgeInsets.only(left: 20)),
-                    onChanged: (text) => {name = text},
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(10, 0, 20, 0),
-                  // width: 100,
-                  child: TextField(
-                    readOnly: true,
-                    enabled: false,
-                    cursorHeight: 30,
-                    controller: _timeController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Time',
-                        labelStyle: TextStyle(
-                          fontSize: 18,
-                          color: Colors.green,
-                        ),
-                        contentPadding: EdgeInsets.only(left: 20)),
-                    // onChanged: (text) => {name = text},
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 30),
-            // margin: EdgeInsets.only(top: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Reminder importance',
-                  style: TextStyle(fontSize: 18, color: Colors.orangeAccent),
-                ),
-                Container(
-                  padding: EdgeInsets.all(20),
-                  child: DropdownButton(
-                    value: notificationType,
-                    hint: Text('Select'),
-                    items: [
-                      DropdownMenuItem(
-                        child: Text('High'),
-                        value: 'High',
-                      ),
-                      DropdownMenuItem(
-                        child: Text('Medium'),
-                        value: 'Medium',
-                      ),
-                      DropdownMenuItem(
-                        child: Text('Low'),
-                        value: 'Low',
-                      )
-                    ],
-                    onChanged: (value) {
-                      setState(
-                        () {
-                          notificationType = value;
-                        },
                       );
                     },
                   ),
                 ),
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(right: 50),
-            padding: EdgeInsets.all(10),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.green),
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white)),
-                  child: Text(
-                    'Save',
-                    style: TextStyle(fontSize: 18),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
+                      child: TextField(
+                        readOnly: true,
+                        enabled: false,
+                        cursorHeight: 30,
+                        controller: _dateController,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Date',
+                            labelStyle: TextStyle(
+                              fontSize: 18,
+                              color: Colors.green,
+                            ),
+                            contentPadding: EdgeInsets.only(left: 20)),
+                        onChanged: (text) => {name = text},
+                      ),
+                    ),
                   ),
-                  onPressed: () => {},
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(10, 0, 20, 0),
+                      // width: 100,
+                      child: TextField(
+                        readOnly: true,
+                        enabled: false,
+                        cursorHeight: 30,
+                        controller: _timeController,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Time',
+                            labelStyle: TextStyle(
+                              fontSize: 18,
+                              color: Colors.green,
+                            ),
+                            contentPadding: EdgeInsets.only(left: 20)),
+                        // onChanged: (text) => {name = text},
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                // margin: EdgeInsets.only(top: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Reminder importance',
+                      style:
+                          TextStyle(fontSize: 18, color: Colors.orangeAccent),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(20),
+                      child: DropdownButton(
+                        value: notificationType,
+                        hint: Text('Select'),
+                        items: [
+                          DropdownMenuItem(
+                            child: Text('High'),
+                            value: 'High',
+                          ),
+                          DropdownMenuItem(
+                            child: Text('Medium'),
+                            value: 'Medium',
+                          ),
+                          DropdownMenuItem(
+                            child: Text('Low'),
+                            value: 'Low',
+                          )
+                        ],
+                        onChanged: (value) {
+                          setState(
+                            () {
+                              notificationType = value;
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          )
-        ],
+              ),
+              Container(
+                margin: EdgeInsets.only(right: 50, bottom: 10),
+                padding: EdgeInsets.all(10),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.green),
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(Colors.white)),
+                      child: Text(
+                        'Save',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      onPressed: () => {Navigator.pop(context)},
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
