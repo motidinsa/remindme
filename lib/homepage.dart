@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mytodo/empty_todo.dart';
 import 'package:mytodo/report.dart';
-import 'package:mytodo/todos.dart';
+import 'package:mytodo/task.dart';
+import 'package:mytodo/tasks.dart';
 
 class HomePage extends StatelessWidget {
-  final TabController _tabController;
+  final TabController tabController;
+  final GlobalKey<ScaffoldState> sc;
+
+  // final List<Task> tasks;
   final List<Widget> tabBarTaskBody = [
     Container(
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -14,20 +18,16 @@ class HomePage extends StatelessWidget {
             fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green),
       ),
     ),
-    Todos(),
-    Todos(),
-    Todos(),
-    Todos(),
   ];
 
-  HomePage(this._tabController);
+  HomePage({this.tabController, this.sc});
 
   @override
   Widget build(BuildContext context) {
     return TabBarView(
-      controller: _tabController,
+      controller: tabController,
       children: [
-        EmptyTodo(),
+        Tasks(sc: sc),
         ListView(
           children: [
             Report('day', 200, 120),

@@ -36,6 +36,10 @@ dependencies:
   day_night_time_picker: ^0.5.0
   smart_select: ^4.3.2
   flutter_material_color_picker: ^1.0.5
+  sqflite: ^2.0.0+2
+  path_provider: ^2.0.1
+  flutter_bloc: ^7.0.0
+  flutter_slidable: ^0.5.7
 
 
 dev_dependencies:

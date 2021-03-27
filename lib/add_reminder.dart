@@ -2,9 +2,18 @@ import 'package:day_night_time_picker/lib/constants.dart';
 import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mytodo/homepage.dart';
+import 'package:mytodo/main.dart';
+import 'package:mytodo/sqlite.dart';
+import 'package:mytodo/task.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class AddReminder extends StatefulWidget {
+  final String type;
+  final Task task;
+
+  AddReminder({this.type, this.task});
+
   @override
   _AddReminderState createState() => _AddReminderState();
 }
@@ -17,6 +26,8 @@ class _AddReminderState extends State<AddReminder> {
   String timeIn12HrFormat;
   String date;
   bool dateSelected = false;
+  String currentDate;
+  String currentTime;
   TextEditingController _nameController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _timeController = TextEditingController();
@@ -27,6 +38,28 @@ class _AddReminderState extends State<AddReminder> {
   String _rangeCount;
   TimeOfDay _time = TimeOfDay.now().replacing(minute: 30);
   bool iosStyle = true;
+
+  SqliteDB database = SqliteDB.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.type == 'Edit') {
+      _nameController.text = widget.task.name;
+      _descriptionController.text = widget.task.description;
+      _dateController.text = widget.task.date;
+      _timeController.text = widget.task.time;
+      notificationType = widget.task.importance;
+    }
+  }
+
+  void setCurrentTimeAndDate() {
+    DateTime now = DateTime.now();
+    DateFormat dateFormat = DateFormat("dd-MM-yy");
+    DateFormat timeFormat = DateFormat("HH:mm");
+    currentDate = dateFormat.format(now);
+    currentTime = timeFormat.format(now);
+  }
 
   void onTimeChanged(TimeOfDay dateTime) {
     // setState(
@@ -64,9 +97,76 @@ class _AddReminderState extends State<AddReminder> {
     });
   }
 
+  Future<void> _showDeleteDialog() async {
+    return showDialog<void>(
+      context: context,
+      // barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete task?'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Text(
+                    'The task can not be recovered so be sure when you remove a task'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: Colors.grey),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Confirm',
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () {
+                database.deleteTask(widget.task.id);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MyHomePage()));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('${widget.type} task'),
+        actions: widget.type == 'Edit'
+            ? <Widget>[
+                PopupMenuButton(
+                  offset: Offset(0, 20),
+                  padding: EdgeInsets.zero,
+                  icon: Icon(Icons.more_vert),
+                  itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                    PopupMenuItem(
+                      child: ListTile(
+                        leading: Icon(Icons.delete),
+                        title: Text('Remove'),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          _showDeleteDialog();
+                        },
+                        contentPadding: EdgeInsets.zero,
+                      ),
+                    ),
+                  ],
+                ),
+              ]
+            : null,
+      ),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -152,7 +252,7 @@ class _AddReminderState extends State<AddReminder> {
                                           textTheme: ButtonTextTheme.accent,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(8.0),
+                                            BorderRadius.circular(8.0),
                                           ),
                                           onPressed: () => {
                                             Navigator.of(context).push(
@@ -166,11 +266,11 @@ class _AddReminderState extends State<AddReminder> {
                                                 onChangeDateTime:
                                                     (DateTime dateTime) {
                                                   setState(
-                                                    () {
+                                                        () {
                                                       timeIn12HrFormat =
-                                                          '${dateTime.hour > 12 ? dateTime.hour - 12 : dateTime.hour}:${dateTime.minute} ${dateTime.hour > 12 ? 'PM' : 'AM'}';
+                                                      '${dateTime.hour > 12 ? dateTime.hour - 12 : dateTime.hour}:${dateTime.minute} ${dateTime.hour > 12 ? 'PM' : 'AM'}';
                                                       time =
-                                                          '${dateTime.hour}:${dateTime.minute} ($timeIn12HrFormat)';
+                                                      '${dateTime.hour}:${dateTime.minute} ($timeIn12HrFormat)';
                                                       _timeController.text =
                                                           time;
                                                     },
@@ -184,10 +284,10 @@ class _AddReminderState extends State<AddReminder> {
                                           child: time == null
                                               ? Text('Set time')
                                               : Text(
-                                                  time,
-                                                  style: TextStyle(
-                                                      color: Colors.green),
-                                                ),
+                                            time,
+                                            style: TextStyle(
+                                                color: Colors.green),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -201,11 +301,11 @@ class _AddReminderState extends State<AddReminder> {
                                           textTheme: ButtonTextTheme.accent,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(8.0),
+                                            BorderRadius.circular(8.0),
                                           ),
                                           onPressed: () => {
                                             setState(
-                                              () {
+                                                  () {
                                                 _dateController.text = date;
                                                 Navigator.pop(context);
                                               },
@@ -215,7 +315,7 @@ class _AddReminderState extends State<AddReminder> {
                                           child: Text(
                                             'OK',
                                             style:
-                                                TextStyle(color: Colors.green),
+                                            TextStyle(color: Colors.green),
                                           ),
                                         ),
                                       ),
@@ -287,7 +387,7 @@ class _AddReminderState extends State<AddReminder> {
                     Text(
                       'Reminder importance',
                       style:
-                          TextStyle(fontSize: 18, color: Colors.orangeAccent),
+                      TextStyle(fontSize: 18, color: Colors.orangeAccent),
                     ),
                     Container(
                       padding: EdgeInsets.all(20),
@@ -310,7 +410,7 @@ class _AddReminderState extends State<AddReminder> {
                         ],
                         onChanged: (value) {
                           setState(
-                            () {
+                                () {
                               notificationType = value;
                             },
                           );
@@ -324,7 +424,7 @@ class _AddReminderState extends State<AddReminder> {
                 margin: EdgeInsets.only(right: 50, bottom: 10),
                 padding: EdgeInsets.all(10),
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
+                  // mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ElevatedButton(
@@ -337,7 +437,35 @@ class _AddReminderState extends State<AddReminder> {
                         'Save',
                         style: TextStyle(fontSize: 18),
                       ),
-                      onPressed: () => {Navigator.pop(context)},
+                      onPressed: () => {
+                        setCurrentTimeAndDate(),
+                        widget.type == 'Add'
+                            ? database.insertTask(
+                                Task(
+                                    name: 'chjbf',
+                                    description: 'cnjd',
+                                    date: 'urgfyc',
+                                    time: 'asknx',
+                                    importance: 'Medium',
+                                    dateAdded: currentDate,
+                                    timeAdded: currentTime),
+                                description: false)
+                            : database.updateTask(
+                                Task(
+                                    id: widget.task.id,
+                                    name: 'update',
+                                    description: 'cnjd',
+                                    date: 'urgfyc',
+                                    time: 'asknx',
+                                    importance: 'Medium',
+                                    dateAdded: widget.task.dateAdded,
+                                    timeAdded: widget.task.timeAdded),
+                                description: true),
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyHomePage()))
+                      },
                     ),
                   ],
                 ),

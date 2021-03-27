@@ -14,6 +14,8 @@ import 'package:mytodo/report.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_rounded_date_picker/rounded_picker.dart';
 import 'package:mytodo/setting.dart';
+import 'package:mytodo/sqlite.dart';
+import 'package:mytodo/task.dart';
 import 'package:mytodo/theme.dart';
 
 import 'income_category.dart';
@@ -24,6 +26,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -60,12 +63,34 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget body;
   AppBar appbar;
   FloatingActionButton floatingActionButton;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  @override
-  void initState() {
-    super.initState();
+  // SqliteDB database;
+  // List<Task> tasks;
+
+  // getTasks() async {
+  //   tasks = await database.tasks();
+  //   // tasks.forEach((element) {print(element);});
+  //   for (int i = 0; i < tasks.length; i++) {
+  //     print(tasks[i].toString() + ' $i');
+  //   }
+  //   print(tasks.length.toString() + 'get');
+  // }
+  void _showSnackBar() {
+    scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text('Snackbar is displayed'),
+    ));
+    // Scaffold.of(context).showSnackBar(SnackBar(content: Text('text')));
+    // setState(() {});
+  }
+
+  init() {
+    print('init called');
     _tabController = TabController(length: 2, vsync: this);
-    body = HomePage(_tabController);
+    // database = SqliteDB.instance;
+    // tasks = await database.tasks();
+
+    body = HomePage(tabController: _tabController, sc: scaffoldKey);
     appbar = AppBar(
       title: Text('Home'),
       bottom: TabBar(
@@ -83,13 +108,78 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     floatingActionButton = FloatingActionButton(
       backgroundColor: Colors.green,
       foregroundColor: Colors.white,
-      onPressed: () => {
+      onPressed: () =>
+      {
+        // showDialog<bool>(
+        //   context: context,
+        //   builder: (context) {
+        //     return AlertDialog(
+        //               title: Text('Delete task?'),
+        //               content: SingleChildScrollView(
+        //                 child: Column(
+        //                   children: <Widget>[
+        //                     Text(
+        //                         'The task can not be recovered so be sure when you remove a task'),
+        //                   ],
+        //                 ),
+        //               ),
+        //               actions: <Widget>[
+        //                 TextButton(
+        //                   child: Text(
+        //                     'Cancel',
+        //                     style: TextStyle(color: Colors.grey),
+        //                   ),
+        //                   onPressed: () {
+        //                     Navigator.of(context).pop(false);
+        //                   },
+        //                 ),
+        //                 TextButton(
+        //                   child: Text(
+        //                     'Confirm',
+        //                     style: TextStyle(color: Colors.red),
+        //                   ),
+        //                   onPressed: () {
+        //                     _showSnackBar();
+        //                     Navigator.of(context).pop();
+        //                     // database.deleteTask(
+        //                     //     tasks[itemIndex].id);
+        //                     // Navigator.of(context).pop(true);
+        //                     // Scaffold.of(context).showSnackBar(
+        //                     //     SnackBar(content: Text('deleted')));
+        //                   },
+        //                 ),
+        //               ],
+        //             );
+        //   },
+        // )
+
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => AddReminder()))
+            context,
+            MaterialPageRoute(
+                builder: (context) => AddReminder(
+                      type: 'Add',
+                    )))
       },
       tooltip: 'Add',
       child: Icon(Icons.add),
     );
+
+    //   for (int i = 0; i < tasks.length; i++) {
+    //     print(tasks[i].toString() + ' $i');
+    //   }
+    //   print(tasks.length.toString() + 'get');
+    //   print(tasks?.length);
+  }
+
+  @override
+  initState() {
+    super.initState();
+    init();
+    // tasks.forEach((element) {
+    //   print(element);
+    // });
+    print('init after called');
+    // print(tasks.length);
   }
 
   void _onItemTapped(int index) {
@@ -97,8 +187,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       () {
         switch (index) {
           case 0:
-            body = HomePage(_tabController);
-            ;
+            body = HomePage(tabController: _tabController, sc: scaffoldKey);
             appbar = AppBar(
               title: Text('Home'),
               bottom: TabBar(
@@ -116,9 +205,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             floatingActionButton = FloatingActionButton(
               backgroundColor: Colors.green,
               foregroundColor: Colors.white,
-              onPressed: () => {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddReminder()))
+              onPressed: () =>
+              {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddReminder(
+                              type: 'Add',
+                            )))
               },
               tooltip: 'Add',
               child: Icon(Icons.add),
@@ -133,11 +227,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
             break;
           case 2:
-            body = History();
-            appbar = AppBar(
-              title: Text('Statics'),
-            );
-            floatingActionButton = null;
+            setState(() {
+              body = History();
+              appbar = AppBar(
+                title: Text('Statics'),
+              );
+              floatingActionButton = null;
+            });
+
             break;
           case 3:
             body = Setting();
@@ -154,7 +251,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    // print(tasks?.length.toString() + 'body');
     return Scaffold(
+      key: scaffoldKey,
       drawer: PageDrawer(),
       appBar: appbar,
       body: body,
