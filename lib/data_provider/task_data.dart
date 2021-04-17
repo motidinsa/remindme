@@ -1,13 +1,16 @@
-import "dart:io" as io;
 import 'package:mytask/task.dart';
-import "package:path/path.dart";
-import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
+import "package:path/path.dart";
 
-class SqliteDB {
-  SqliteDB._internal();
+class TaskDataProvider {
+  TaskDataProvider._internal();
 
-  static final SqliteDB instance = new SqliteDB._internal();
+  static final TaskDataProvider instance = new TaskDataProvider._internal();
+
+  // final Database database;
+
+  // TaskDataProvider();
 
   static Database _db;
 
@@ -21,7 +24,7 @@ class SqliteDB {
 
   /// Initialize DB
   initDb() async {
-    io.Directory documentDirectory = await getApplicationDocumentsDirectory();
+    var documentDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentDirectory.path, "tasks.db");
     return await openDatabase(path, onCreate: (db, version) {
       db.execute(
@@ -39,10 +42,9 @@ class SqliteDB {
     }, version: 1);
   }
 
-  Future<int> insertTask(Task task, {bool description}) async {
+  Future<int> insertTask(Task task) async {
     final Database db = await instance.db;
-
-    return description
+    return task.hasDescription == 1
         ? await db.insert(
             'task',
             task.toMap(),
@@ -52,6 +54,16 @@ class SqliteDB {
             '''INSERT INTO task(name,date,time,importance,dateAdded,timeAdded) VALUES('${task.name}','${task.date}','${task.time}','${task.importance}','${task.dateAdded}','${task.timeAdded}')''',
             // conflictAlgorithm: ConflictAlgorithm.replace,
           );
+  }
+
+  Future<int> insertDayFrequency(Map<String, String> dayTime) async {
+    final Database db = await instance.db;
+
+    return await db.insert(
+      'days',
+      dayTime,
+      // conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   Future<List<Task>> tasks() async {
@@ -79,7 +91,6 @@ class SqliteDB {
 
   Future<List<Task>> completedTasks() async {
     final Database db = await instance.db;
-
     // final List<Map<String, dynamic>> maps = await db.query('task');
     final List<Map<String, dynamic>> maps = await db
         .rawQuery('''SELECT * FROM task WHERE isCompleted IS NOT NULL''');
@@ -102,11 +113,11 @@ class SqliteDB {
     );
   }
 
-  Future<int> updateTask(Task task, {bool description}) async {
-    final db = await instance.db;
+  Future<int> updateTask(Task task) async {
+    final Database db = await instance.db;
     print('${task.id} id');
     print('${task.name} name');
-    return description
+    return task.hasDescription == 1
         ? await db.update(
             'task',
             task.toMap(),
@@ -119,16 +130,16 @@ class SqliteDB {
           );
   }
 
-  Future<int> markCompleted(Task task) async {
-    final db = await instance.db;
+  Future<int> markCompleted(int id) async {
+    final Database db = await instance.db;
     return await db.rawUpdate(
-      '''UPDATE task SET isCompleted = 1 WHERE id = ${task.id}''',
+      '''UPDATE task SET isCompleted = 1 WHERE id = $id''',
       // conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
   Future<int> deleteTask(int id) async {
-    final db = await instance.db;
+    final Database db = await instance.db;
     return await db.delete(
       'task',
       where: "id = ?",
@@ -137,7 +148,7 @@ class SqliteDB {
   }
 
   Future<int> deleteDayTime(int id) async {
-    final db = await instance.db;
+    final Database db = await instance.db;
     return await db.delete(
       'days',
       where: "id = ?",
@@ -146,7 +157,7 @@ class SqliteDB {
   }
 
   Future<int> queryRowCount() async {
-    Database db = await instance.db;
+    final Database db = await instance.db;
     return Sqflite.firstIntValue(
         await db.rawQuery('SELECT COUNT(*) FROM task'));
   }

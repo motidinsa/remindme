@@ -1,5 +1,5 @@
-name: mytodo
-description: ToDo and daily tracking app
+name: mytask
+description: Task and daily tracking app
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mytodo/add_subcategory.dart';
-import 'package:mytodo/common_reason.dart';
-import 'package:mytodo/theme.dart';
+import 'package:mytask/add_subcategory.dart';
+import 'package:mytask/common_reason.dart';
+import 'package:mytask/theme.dart';
 
 import 'about.dart';
 

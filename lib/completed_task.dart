@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mytodo/sqlite.dart';
-import 'package:mytodo/task.dart';
+import 'package:mytask/sqlite.dart';
+import 'package:mytask/task.dart';
 
 import 'empty_todo.dart';
 

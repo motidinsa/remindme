@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mytodo/empty_todo.dart';
-import 'package:mytodo/report.dart';
-import 'package:mytodo/task.dart';
-import 'package:mytodo/tasks.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mytask/bloc/task_bloc.dart';
+import 'package:mytask/bloc/task_state.dart';
+import 'package:mytask/empty_todo.dart';
+import 'package:mytask/report.dart';
+import 'package:mytask/task.dart';
+import 'package:mytask/tasks.dart';
 
 class HomePage extends StatelessWidget {
   final TabController tabController;
@@ -27,7 +30,17 @@ class HomePage extends StatelessWidget {
     return TabBarView(
       controller: tabController,
       children: [
-        Tasks(sc: sc),
+        BlocBuilder<TaskBloc, TaskState>(builder: (_, state) {
+          if (state is TaskOperationFailure) {
+            return Text('Could not do course operation');
+          }
+          if (state is TaskLoadSuccess) {
+            final tasks = state.tasks;
+            print(tasks.length.toString() + ' b');
+            return Tasks(tasks: tasks, sc: sc);
+          }
+          return Center(child: Text('Loading'));
+        }),
         ListView(
           children: [
             Report('day', 200, 120),

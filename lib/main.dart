@@ -1,50 +1,70 @@
 import 'package:flutter/material.dart';
-import 'package:mytodo/about.dart';
-import 'package:mytodo/add_reminder.dart';
-import 'package:mytodo/add_subcategory.dart';
-import 'package:mytodo/common_reason.dart';
-import 'package:mytodo/completed_task.dart';
-import 'package:mytodo/drawer.dart';
-import 'package:mytodo/empty_todo.dart';
-import 'package:mytodo/expense.dart';
-import 'package:mytodo/history.dart';
-import 'package:mytodo/homepage.dart';
-import 'package:mytodo/modal.dart';
-import 'package:mytodo/report.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_rounded_date_picker/rounded_picker.dart';
-import 'package:mytodo/setting.dart';
-import 'package:mytodo/sqlite.dart';
-import 'package:mytodo/task.dart';
-import 'package:mytodo/theme.dart';
-
-import 'income_category.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mytask/add_reminder.dart';
+import 'package:mytask/bloc/add_reminder_bloc.dart';
+import 'package:mytask/bloc/subcategory_bloc.dart';
+import 'package:mytask/completed_task.dart';
+import 'package:mytask/drawer.dart';
+import 'package:mytask/history.dart';
+import 'package:mytask/homepage.dart';
+import 'package:mytask/repository/task_repository.dart';
+import 'package:mytask/setting.dart';
+import 'package:mytask/task_route.dart';
+import 'bloc/task_bloc.dart';
+import 'bloc/task_event.dart';
+import 'data_provider/task_data.dart';
 
 void main() {
-  runApp(MyApp());
+  final TaskRepository taskRepository = TaskRepository(
+    dataProvider: TaskDataProvider.instance,
+  );
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<TaskBloc>(
+            create: (context) =>
+                TaskBloc(taskRepository: taskRepository)..add(TaskLoad())),
+        BlocProvider<SubcategoryBloc>(
+          create: (context) => SubcategoryBloc(),
+        ),
+        BlocProvider<AddReminderBloc>(
+          create: (context) => AddReminderBloc(),
+        )
+      ],
+      child: MyApp(
+        taskRepository: taskRepository,
+      ),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  final TaskRepository taskRepository;
+
+  MyApp({@required this.taskRepository}) : assert(taskRepository != null);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'My ToDo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.grey,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return RepositoryProvider.value(
+      value: this.taskRepository,
+      child: MaterialApp(
+        title: 'My Task',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.grey,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        // localizationsDelegates: [
+        //   GlobalMaterialLocalizations.delegate,
+        //   GlobalWidgetsLocalizations.delegate,
+        // ],
+        supportedLocales: [
+          const Locale('en', 'US'), // English
+          const Locale('am', 'ET'),
+        ],
+        onGenerateRoute: TaskRoute.generateRoute,
+        // home: MyHomePage(),
       ),
-      // localizationsDelegates: [
-      //   GlobalMaterialLocalizations.delegate,
-      //   GlobalWidgetsLocalizations.delegate,
-      // ],
-      supportedLocales: [
-        const Locale('en', 'US'), // English
-        const Locale('am', 'ET'),
-      ],
-      home: MyHomePage(),
     );
   }
 }
@@ -65,17 +85,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   FloatingActionButton floatingActionButton;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // SqliteDB database;
-  // List<Task> tasks;
-
-  // getTasks() async {
-  //   tasks = await database.tasks();
-  //   // tasks.forEach((element) {print(element);});
-  //   for (int i = 0; i < tasks.length; i++) {
-  //     print(tasks[i].toString() + ' $i');
-  //   }
-  //   print(tasks.length.toString() + 'get');
-  // }
   void _showSnackBar() {
     scaffoldKey.currentState.showSnackBar(SnackBar(
       content: Text('Snackbar is displayed'),
@@ -108,78 +117,27 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     floatingActionButton = FloatingActionButton(
       backgroundColor: Colors.green,
       foregroundColor: Colors.white,
-      onPressed: () =>
-      {
-        // showDialog<bool>(
-        //   context: context,
-        //   builder: (context) {
-        //     return AlertDialog(
-        //               title: Text('Delete task?'),
-        //               content: SingleChildScrollView(
-        //                 child: Column(
-        //                   children: <Widget>[
-        //                     Text(
-        //                         'The task can not be recovered so be sure when you remove a task'),
-        //                   ],
-        //                 ),
-        //               ),
-        //               actions: <Widget>[
-        //                 TextButton(
-        //                   child: Text(
-        //                     'Cancel',
-        //                     style: TextStyle(color: Colors.grey),
-        //                   ),
-        //                   onPressed: () {
-        //                     Navigator.of(context).pop(false);
-        //                   },
-        //                 ),
-        //                 TextButton(
-        //                   child: Text(
-        //                     'Confirm',
-        //                     style: TextStyle(color: Colors.red),
-        //                   ),
-        //                   onPressed: () {
-        //                     _showSnackBar();
-        //                     Navigator.of(context).pop();
-        //                     // database.deleteTask(
-        //                     //     tasks[itemIndex].id);
-        //                     // Navigator.of(context).pop(true);
-        //                     // Scaffold.of(context).showSnackBar(
-        //                     //     SnackBar(content: Text('deleted')));
-        //                   },
-        //                 ),
-        //               ],
-        //             );
-        //   },
-        // )
-
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => AddReminder(
-                      type: 'Add',
-                    )))
+      onPressed: () => {
+        Navigator.of(context).pushNamed(AddReminder.routeName,
+            arguments: TaskArgument(edit: false))
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => AddReminder(
+        //               type: 'Add',
+        //             )))
       },
       tooltip: 'Add',
       child: Icon(Icons.add),
     );
 
-    //   for (int i = 0; i < tasks.length; i++) {
-    //     print(tasks[i].toString() + ' $i');
-    //   }
-    //   print(tasks.length.toString() + 'get');
-    //   print(tasks?.length);
   }
 
   @override
   initState() {
     super.initState();
     init();
-    // tasks.forEach((element) {
-    //   print(element);
-    // });
     print('init after called');
-    // print(tasks.length);
   }
 
   void _onItemTapped(int index) {
@@ -205,14 +163,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             floatingActionButton = FloatingActionButton(
               backgroundColor: Colors.green,
               foregroundColor: Colors.white,
-              onPressed: () =>
-              {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AddReminder(
-                              type: 'Add',
-                            )))
+              onPressed: () => {
+                Navigator.of(context).pushNamed(AddReminder.routeName,
+                    arguments: TaskArgument(edit: false))
               },
               tooltip: 'Add',
               child: Icon(Icons.add),

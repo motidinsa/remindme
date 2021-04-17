@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mytodo/icon_select.dart';
+import 'package:mytask/icon_select.dart';
+import 'package:mytask/subcategory.dart';
 
 class AddSubcategory extends StatefulWidget {
   @override
@@ -227,151 +228,6 @@ class _AddSubcategoryState extends State<AddSubcategory> {
                             setState(
                               () {
                                 switchValue = value;
-                                if (value) {
-                                  subCategoryWidget = Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 5, right: 5, top: 10),
-                                      child: StatefulBuilder(
-                                        builder: (context, setState) {
-                                          return Card(
-                                            elevation: 10,
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 20),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 15),
-                                                    child: Row(
-                                                      children: [
-                                                        Text('Parent category'),
-                                                        SizedBox(
-                                                          width: 30,
-                                                        ),
-                                                        Icon(Icons
-                                                            .wb_sunny_outlined),
-                                                        SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Text('Transportation')
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 15,
-                                                  ),
-                                                  Container(
-                                                    // margin: EdgeInsets.fromLTRB(10, 0, 20, 0),
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width /
-                                                            2,
-                                                    child: TextField(
-                                                      // readOnly: true,
-                                                      // enabled: false,
-                                                      cursorHeight: 25,
-                                                      controller:
-                                                          nameController,
-                                                      decoration:
-                                                          InputDecoration(
-                                                              border:
-                                                                  OutlineInputBorder(),
-                                                              labelText:
-                                                                  'Sub category name',
-                                                              labelStyle:
-                                                                  TextStyle(
-                                                                fontSize: 17,
-                                                                color: Colors
-                                                                    .green,
-                                                              ),
-                                                              contentPadding:
-                                                                  EdgeInsets.only(
-                                                                      left:
-                                                                          20)),
-                                                      // onChanged: (text) => {name = text},
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                    children: [
-                                                      Text(
-                                                          'Add icon for this sub category'),
-                                                      Switch(
-                                                        value: iconSwitchValue,
-                                                        onChanged: (value2) {
-                                                          setState(
-                                                            () {
-                                                              iconSwitchValue =
-                                                                  value2;
-                                                              if (value2) {
-                                                                iconSubcategoryWidget =
-                                                                    Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceEvenly,
-                                                                  children: [
-                                                                    Text(
-                                                                      'Icon',
-                                                                    ),
-                                                                    Icon(
-                                                                      Icons
-                                                                          .wb_sunny_outlined,
-                                                                    ),
-                                                                    OutlinedButton(
-                                                                      onPressed:
-                                                                          () {},
-                                                                      child:
-                                                                          Text(
-                                                                        'Choose',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              Colors.green,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                );
-                                                              } else {
-                                                                iconSubcategoryWidget =
-                                                                    null;
-                                                              }
-                                                            },
-                                                          );
-                                                        },
-                                                      )
-                                                    ],
-                                                  ),
-                                                  Container(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width /
-                                                            2,
-                                                    margin: EdgeInsets.only(
-                                                        left: 10, bottom: 5),
-                                                    child:
-                                                        iconSubcategoryWidget,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ));
-                                } else {
-                                  subCategoryWidget = null;
-                                }
                               },
                             );
                           },
@@ -382,10 +238,7 @@ class _AddSubcategoryState extends State<AddSubcategory> {
                 ),
               ),
             ),
-            Container(
-              child: subCategoryWidget,
-              margin: EdgeInsets.only(bottom: 10),
-            ),
+            if (switchValue) Subcategory(),
             Padding(
               padding: const EdgeInsets.only(right: 10),
               child: Align(

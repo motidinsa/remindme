@@ -1,7 +1,7 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:mytodo/expense_category.dart';
-import 'package:mytodo/reason.dart';
+import 'package:mytask/expense_category.dart';
+import 'package:mytask/reason.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class Income extends StatefulWidget {

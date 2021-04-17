@@ -1,19 +1,25 @@
-import 'package:day_night_time_picker/lib/constants.dart';
 import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_button/group_button.dart';
 import 'package:intl/intl.dart';
-import 'package:mytodo/homepage.dart';
-import 'package:mytodo/main.dart';
-import 'package:mytodo/sqlite.dart';
-import 'package:mytodo/task.dart';
+import 'package:mytask/bloc/add_reminder_bloc.dart';
+import 'package:mytask/bloc/add_reminder_event.dart';
+import 'package:mytask/bloc/add_reminder_state.dart';
+import 'package:mytask/bloc/task_event.dart';
+import 'package:mytask/task.dart';
+import 'package:mytask/task_route.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-class AddReminder extends StatefulWidget {
-  final String type;
-  final Task task;
+import 'bloc/task_bloc.dart';
 
-  AddReminder({this.type, this.task});
+class AddReminder extends StatefulWidget {
+  // final String type;
+  // final Task task;
+  static const routeName = 'taskAddUpdate';
+  final TaskArgument args;
+
+  AddReminder({this.args});
 
   @override
   _AddReminderState createState() => _AddReminderState();
@@ -23,7 +29,6 @@ class _AddReminderState extends State<AddReminder> {
   String name = '';
   String description = '';
   String notificationType;
-
   String time;
   String timeIn12HrFormat;
   String date;
@@ -42,7 +47,7 @@ class _AddReminderState extends State<AddReminder> {
   TimeOfDay _time = TimeOfDay.now().replacing(minute: 30);
   bool iosStyle = true;
 
-  SqliteDB database = SqliteDB.instance;
+  // SqliteDB database = SqliteDB.instance;
 
   bool hasCustomTime = false;
   bool hasRecurringPeriod = false;
@@ -52,22 +57,24 @@ class _AddReminderState extends State<AddReminder> {
   Widget customFrequencySelect;
   Widget customTimeSelect;
 
+  Map<String, String> dayTime = {};
+
   @override
   void initState() {
     super.initState();
-    if (widget.type == 'Edit') {
-      _nameController.text = widget.task.name;
-      _descriptionController.text = widget.task.description;
-      _dateController.text = widget.task.date;
-      _timeController.text = widget.task.time;
-      notificationType = widget.task.importance;
+    if (widget.args.edit) {
+      _nameController.text = widget.args.task.name;
+      _descriptionController.text = widget.args.task.description;
+      _dateController.text = widget.args.task.date;
+      _timeController.text = widget.args.task.time;
+      notificationType = widget.args.task.importance;
     }
   }
 
   void setCurrentTimeAndDate() {
     DateTime now = DateTime.now();
     DateFormat dateFormat = DateFormat("dd-MM-yy");
-    DateFormat timeFormat = DateFormat("HH:mm");
+    DateFormat timeFormat = DateFormat("HH:mm:ss");
     currentDate = dateFormat.format(now);
     currentTime = timeFormat.format(now);
   }
@@ -139,9 +146,14 @@ class _AddReminderState extends State<AddReminder> {
                 style: TextStyle(color: Colors.red),
               ),
               onPressed: () {
-                database.deleteTask(widget.task.id);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MyHomePage()));
+                final TaskEvent event = TaskDelete(widget.args.task.id);
+                BlocProvider.of<TaskBloc>(context).add(event);
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Task deleted successfully'),
+                  ),
+                );
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -154,8 +166,8 @@ class _AddReminderState extends State<AddReminder> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.type} task'),
-        actions: widget.type == 'Edit'
+        title: Text('${widget.args.edit ? 'Edit' : 'Add'} task'),
+        actions: widget.args.edit
             ? <Widget>[
                 PopupMenuButton(
                   offset: Offset(0, 20),
@@ -453,65 +465,11 @@ class _AddReminderState extends State<AddReminder> {
                                 setState(
                                   () {
                                     hasRecurringPeriod = value;
-                                    if (value) {
-                                      recurSelect = RecurPeriod();
-                                      frequencySwitch = StatefulBuilder(
-                                          builder: (context, setState) =>
-                                              Container(
-                                                child: Column(
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        Text(
-                                                          'Custom Frequency',
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              color:
-                                                                  Colors.green),
-                                                        ),
-                                                        Expanded(
-                                                          child: Align(
-                                                            child: Switch(
-                                                              value:
-                                                                  hasFrequency,
-                                                              onChanged:
-                                                                  (value) {
-                                                                setState(
-                                                                  () {
-                                                                    hasFrequency =
-                                                                        value;
-                                                                    if (value) {
-                                                                      customFrequencySelect =
-                                                                          CustomFrequency();
-                                                                    } else {
-                                                                      customFrequencySelect =
-                                                                          null;
-                                                                    }
-                                                                  },
-                                                                );
-                                                              },
-                                                            ),
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                    Container(
-                                                        child:
-                                                            customFrequencySelect),
-                                                    // Container(child: customTimeSelect),
-                                                  ],
-                                                ),
-                                              ));
-                                    } else {
-                                      recurSelect = null;
-                                      frequencySwitch = null;
-                                      hasFrequency = false;
-                                      customFrequencySelect = null;
-                                      // customFrequencySelect=null;
-                                      // customTimeSelect = null;
-                                    }
                                   },
                                 );
+                                if (!value) {
+                                  hasFrequency = false;
+                                }
                               },
                             ),
                           ),
@@ -528,8 +486,33 @@ class _AddReminderState extends State<AddReminder> {
                         )
                       ],
                     ),
-                    Container(child: recurSelect),
-                    Container(child: frequencySwitch),
+                    if (hasRecurringPeriod) RecurPeriod(),
+                    if (hasRecurringPeriod)
+                      Row(
+                        children: [
+                          Text(
+                            'Custom Frequency',
+                            style: TextStyle(fontSize: 16, color: Colors.green),
+                          ),
+                          Expanded(
+                            child: Align(
+                              child: Switch(
+                                value: hasFrequency,
+                                onChanged: (value) {
+                                  setState(
+                                    () {
+                                      hasFrequency = value;
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    if (hasFrequency) CustomFrequency(),
+                    // Container(child: recurSelect),
+                    // Container(child: frequencySwitch),
                   ],
                 ),
               ),
@@ -540,44 +523,79 @@ class _AddReminderState extends State<AddReminder> {
                   // mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.green),
-                          foregroundColor:
-                              MaterialStateProperty.all<Color>(Colors.white)),
-                      child: Text(
-                        'Save',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      onPressed: () => {
-                        setCurrentTimeAndDate(),
-                        widget.type == 'Add'
-                            ? database.insertTask(
-                                Task(
-                                    name: 'chjbf',
-                                    description: 'cnjd',
-                                    date: 'urgfyc',
-                                    time: 'asknx',
-                                    importance: 'Medium',
-                                    dateAdded: currentDate,
-                                    timeAdded: currentTime),
-                                description: false)
-                            : database.updateTask(
-                                Task(
-                                    id: widget.task.id,
-                                    name: 'update',
-                                    description: 'cnjd',
-                                    date: 'urgfyc',
-                                    time: 'asknx',
-                                    importance: 'Medium',
-                                    dateAdded: widget.task.dateAdded,
-                                    timeAdded: widget.task.timeAdded),
-                                description: true),
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MyHomePage()))
+                    BlocBuilder<AddReminderBloc, AddReminderState>(
+                      builder: (_, state) {
+                        if (state is AddDaysSuccess) {
+                          dayTime.containsKey(state.days.keys.first)
+                              ? dayTime.update(state.days.keys.first,
+                                  (value) => state.days.values.first)
+                              : dayTime.addAll(state.days);
+                          context.read<AddReminderBloc>().add(Clear());
+                          print(dayTime);
+                        }
+                        return ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.green),
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white)),
+                          child: Text(
+                            'Save',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          onPressed: () {
+                            Map<String, String> dayMap = {};
+                            List<String> days = [
+                              "monday",
+                              "tuesday",
+                              "wednesday",
+                              "thursday",
+                              "friday",
+                              "saturday",
+                              "sunday"
+                            ];
+                            for (int i = 0; i < days.length; i++) {
+                              if (dayTime.containsKey(days[i])) {
+                                dayMap[days[i]] = dayTime[days[i]];
+                              } else {
+                                dayMap[days[i]] = null;
+                              }
+                            }
+                            setCurrentTimeAndDate();
+                            if (widget.args.edit)
+                              BlocProvider.of<TaskBloc>(context).add(
+                                TaskUpdate(
+                                  Task(
+                                      id: widget.args.task.id,
+                                      name: 'update ${widget.args.task.id}',
+                                      description: 'cnjd',
+                                      date: 'urgfyc',
+                                      time: 'asknx',
+                                      importance: 'Medium',
+                                      dateAdded: currentDate,
+                                      timeAdded: currentTime),
+                                ),
+                              );
+                            else {
+                              context.read<TaskBloc>().add(
+                                    TaskCreate(
+                                      Task(
+                                          name: 'data',
+                                          description: 'cnjd',
+                                          date: 'urgfyc',
+                                          time: 'asknx',
+                                          importance: 'Medium',
+                                          dateAdded: currentDate,
+                                          timeAdded: currentTime),
+                                    ),
+                                  );
+                              context
+                                  .read<TaskBloc>()
+                                  .add(DayTimeInsert(dayMap));
+                            }
+                            Navigator.of(context).pop();
+                          },
+                        );
                       },
                     ),
                   ],
@@ -641,7 +659,7 @@ class _RecurPeriodState extends State<RecurPeriod> {
                   items: [
                     DropdownMenuItem(
                       child: Text('Day'),
-                      value: 'Week',
+                      value: 'Day',
                     ),
                     DropdownMenuItem(
                       child: Text('Week'),
@@ -682,22 +700,37 @@ class _CustomFrequencyState extends State<CustomFrequency> {
   bool hasCustomTime = false;
   Widget setTime;
   List<Widget> customDayAndTimeWidget = [];
+  TimeOfDay _time = TimeOfDay.now().replacing(minute: 30);
+  TextEditingController _timeController = TextEditingController();
 
+  // String time;
+  // String timeIn12HrFormat;
   List<int> daysSelectedInNumFinal = [];
   List<String> daysSelectedInName = [];
+  Map<String, String> daysWithTime = {};
   List<String> days = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday"
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday"
   ];
 
-  // setSelectedDays(){
-  //   for(day)
-  // }
+  void onTimeChanged(TimeOfDay dateTime) {
+    // setState(
+    //   () {
+    //     timeIn12HrFormat =
+    //     '${dateTime.hour > 12 ? dateTime.hour - 12 : dateTime.hour}:${dateTime.minute} ${dateTime.hour > 12 ? 'PM' : 'AM'}';
+    //     time =
+    //     '${dateTime.hour}:${dateTime.minute} ($timeIn12HrFormat)';
+    //
+    //
+    //   },
+    // );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -706,236 +739,118 @@ class _CustomFrequencyState extends State<CustomFrequency> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             OutlinedButton(
-                onPressed: () {
-                  daysSelectedInName = [];
-                  List<int> daysSelectedInNum = [...daysSelectedInNumFinal];
-                  // for(int i in daysSelectedInNum){
-                  //
-                  // }
-                  daysSelectedInNumFinal.forEach((index) {
-                    daysSelectedInName.add(days[index]);
-                  });
-                  print(daysSelectedInName);
-                  print(daysSelectedInNum);
-                  print(daysSelectedInNumFinal.toString() + ' final');
-                  return showDialog<void>(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Select days for the task'),
-                        contentPadding: EdgeInsets.fromLTRB(24, 20, 24, 0),
-                        content: Container(
-                          // width: 100,
-                          child: GroupButton(
-                              spacing: 15,
-                              isRadio: false,
-                              direction: Axis.horizontal,
-                              unselectedColor: Colors.grey[200],
-                              onSelected: (index, isSelected) => isSelected
-                                  ? daysSelectedInNum.add(index)
-                                  : daysSelectedInNum.remove(index),
-                              buttons: days,
-                              selectedButtons: daysSelectedInName),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text(
-                              'Ok',
-                              style: TextStyle(color: Colors.green),
-                            ),
-                            onPressed: () {
-                              // setState(() {
-                              //
-                              // });
+              onPressed: () {
+                daysSelectedInName = [];
+                List<int> daysSelectedInNum = [...daysSelectedInNumFinal];
+                // for(int i in daysSelectedInNum){
+                //
+                // }
+                daysSelectedInNumFinal.forEach((index) {
+                  daysSelectedInName.add(days[index]);
+                });
+                print(daysSelectedInName);
+                print(daysSelectedInNum);
+                print(daysSelectedInNumFinal.toString() + ' final');
+                return showDialog<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Select days for the task'),
+                      contentPadding: EdgeInsets.fromLTRB(24, 20, 24, 0),
+                      content: Container(
+                        // width: 100,
+                        child: GroupButton(
+                            spacing: 15,
+                            isRadio: false,
+                            direction: Axis.horizontal,
+                            unselectedColor: Colors.grey[200],
+                            onSelected: (index, isSelected) => isSelected
+                                ? daysSelectedInNum.add(index)
+                                : daysSelectedInNum.remove(index),
+                            buttons: days,
+                            selectedButtons: daysSelectedInName),
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text(
+                            'Ok',
+                            style: TextStyle(color: Colors.green),
+                          ),
+                          onPressed: () {
+                            // setState(() {
+                            //
+                            // });
 
-                              daysSelectedInNumFinal = daysSelectedInNum;
-                              // daysSelectedInNumFinal.forEach((index) {
-                              //   daysSelectedInName.add(days[index]);
-                              // });
-                              print(daysSelectedInNumFinal);
-                              customDayAndTimeWidget = [];
-                              daysSelectedInNumFinal
-                                  .sort((a, b) => a.compareTo(b));
-                              for (int i = 0;
-                                  i < daysSelectedInNumFinal.length;
-                                  i++) {
-                                if (i == daysSelectedInNumFinal.length - 1)
-                                  customDayAndTimeWidget.add(
-                                    Padding(
-                                      padding: hasCustomTime
-                                          ? const EdgeInsets.symmetric(
-                                              horizontal: 30)
-                                          : const EdgeInsets.symmetric(
-                                              horizontal: 30, vertical: 8),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Expanded(
-                                            flex: 2,
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(days[
-                                                    daysSelectedInNumFinal[
-                                                        i]])),
-                                          ),
-                                          // SizedBox(
-                                          //   width: 10,
-                                          // ),
-                                          Expanded(
-                                            flex: 5,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                Text('17:00'),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Container(
-                                                  child: hasCustomTime
-                                                      ? OutlinedButton(
-                                                          child: Text(
-                                                            'Set time',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .green),
-                                                          ),
-                                                          onPressed: () {},
-                                                        )
-                                                      : null,
-                                                ),
-                                                SizedBox(
-                                                  width: 5,
-                                                ),
-                                                InkWell(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100),
-                                                  onTap: () {},
-                                                  child: Ink(
-                                                    padding: EdgeInsets.all(5),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              100),
-                                                    ),
-                                                    child: Icon(
-                                                      Icons.minimize_rounded,
-                                                      color: Colors.red,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                else {
-                                  customDayAndTimeWidget.add(
-                                    Padding(
-                                      padding: hasCustomTime
-                                          ? const EdgeInsets.symmetric(
-                                              horizontal: 30)
-                                          : const EdgeInsets.symmetric(
-                                              horizontal: 30, vertical: 8),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Expanded(
-                                            flex: 2,
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(days[
-                                                    daysSelectedInNumFinal[
-                                                        i]])),
-                                          ),
-                                          // SizedBox(
-                                          //   width: 10,
-                                          // ),
-                                          Expanded(
-                                            flex: 5,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                Text('17:00'),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Container(
-                                                  child: hasCustomTime
-                                                      ? OutlinedButton(
-                                                          child: Text(
-                                                            'Set time',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .green),
-                                                          ),
-                                                          onPressed: () {},
-                                                        )
-                                                      : null,
-                                                ),
-                                                SizedBox(
-                                                  width: 5,
-                                                ),
-                                                InkWell(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100),
-                                                  onTap: () {},
-                                                  child: Ink(
-                                                    padding: EdgeInsets.all(5),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              100),
-                                                    ),
-                                                    child: Icon(
-                                                      Icons.minimize_rounded,
-                                                      color: Colors.red,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                  customDayAndTimeWidget.add(
-                                    Divider(
-                                      color: Colors.grey,
-                                    ),
-                                  );
-                                }
+                            daysSelectedInNumFinal = daysSelectedInNum;
+                            // sortDays(daysSelectedInNumFinal);
+                            print(daysSelectedInNumFinal.toString() + ' f2');
+                            // daysSelectedInNumFinal.forEach((index) {
+                            //   daysSelectedInName.add(days[index]);
+                            // });
+
+                            customDayAndTimeWidget = [];
+                            daysWithTime = {};
+                            // daysSelectedInNumFinal
+                            //     .sort((a, b) => a.compareTo(b));
+                            print(daysSelectedInNumFinal);
+                            for (int i = 0;
+                                i < daysSelectedInNumFinal.length;
+                                i++) {
+                              if (i == daysSelectedInNumFinal.length - 1) {
+                                customDayAndTimeWidget.add(
+                                  CustomTime(
+                                    hasCustomTime: hasCustomTime,
+                                    day: days[daysSelectedInNumFinal[i]],
+                                  ),
+                                );
+                              } else {
+                                customDayAndTimeWidget.add(
+                                  CustomTime(
+                                    hasCustomTime: hasCustomTime,
+                                    day: days[daysSelectedInNumFinal[i]],
+                                  ),
+                                );
+                                customDayAndTimeWidget.add(
+                                  Divider(
+                                    color: Colors.grey,
+                                  ),
+                                );
                               }
+                              context.read<AddReminderBloc>().add(AddDays(
+                                  {days[daysSelectedInNumFinal[i]]: '17:00'}));
+                            }
 
-                              setState(() {
+                            // daysSelectedInNumFinal
+                            //     .sort((a, b) => a.compareTo(b));
+                            // print(daysSelectedInNumFinal);
+                            // context
+                            //     .read<AddReminderBloc>()
+                            //     .add(AddDays(daysSelectedInNumFinal));
+                            // print();
+                            setState(
+                              () {
                                 // daysSelectedInNumFinal.forEach((element) {
                                 //   customDayAndTimeWidgets
                                 //       .add(Text(days[element]));
                                 // });
                                 // customDayAndTimeWidget = CustomDayAndTime(
                                 //     daysSelectedInNum, hasCustomTime);
-                              });
+                              },
+                            );
 
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: Text(
-                  'Add days',
-                  style: TextStyle(color: Colors.green),
-                )),
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              child: Text(
+                'Add days',
+                style: TextStyle(color: Colors.green),
+              ),
+            ),
             Expanded(
               child: Column(
                 children: [
@@ -952,172 +867,36 @@ class _CustomFrequencyState extends State<CustomFrequency> {
                           setState(
                             () {
                               hasCustomTime = value;
-                              setState(() {
-                                customDayAndTimeWidget = [];
+                              setState(
+                                () {
+                                  customDayAndTimeWidget = [];
 
-                                for (int i = 0;
-                                    i < daysSelectedInNumFinal.length;
-                                    i++) {
-                                  if (i == daysSelectedInNumFinal.length - 1)
-                                    customDayAndTimeWidget.add(
-                                      Padding(
-                                        padding: hasCustomTime
-                                            ? const EdgeInsets.symmetric(
-                                                horizontal: 30)
-                                            : const EdgeInsets.symmetric(
-                                                horizontal: 30, vertical: 8),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Expanded(
-                                              flex: 2,
-                                              child: Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(days[
-                                                      daysSelectedInNumFinal[
-                                                          i]])),
-                                            ),
-                                            // SizedBox(
-                                            //   width: 10,
-                                            // ),
-                                            Expanded(
-                                              flex: 5,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  Text('17:00'),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                    child: hasCustomTime
-                                                        ? OutlinedButton(
-                                                            child: Text(
-                                                              'Set time',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .green),
-                                                            ),
-                                                            onPressed: () {},
-                                                          )
-                                                        : null,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  InkWell(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            100),
-                                                    onTap: () {},
-                                                    child: Ink(
-                                                      padding:
-                                                          EdgeInsets.all(5),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(100),
-                                                      ),
-                                                      child: Icon(
-                                                        Icons.minimize_rounded,
-                                                        color: Colors.red,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
+                                  for (int i = 0;
+                                      i < daysSelectedInNumFinal.length;
+                                      i++) {
+                                    if (i == daysSelectedInNumFinal.length - 1)
+                                      customDayAndTimeWidget.add(
+                                        CustomTime(
+                                          hasCustomTime: hasCustomTime,
+                                          day: days[daysSelectedInNumFinal[i]],
                                         ),
-                                      ),
-                                    );
-                                  else {
-                                    customDayAndTimeWidget.add(
-                                      Padding(
-                                        padding: hasCustomTime
-                                            ? const EdgeInsets.symmetric(
-                                                horizontal: 30)
-                                            : const EdgeInsets.symmetric(
-                                                horizontal: 30, vertical: 8),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Expanded(
-                                              flex: 2,
-                                              child: Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(days[
-                                                      daysSelectedInNumFinal[
-                                                          i]])),
-                                            ),
-                                            // SizedBox(
-                                            //   width: 10,
-                                            // ),
-                                            Expanded(
-                                              flex: 5,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  Text('17:00'),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                    child: hasCustomTime
-                                                        ? OutlinedButton(
-                                                            child: Text(
-                                                              'Set time',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .green),
-                                                            ),
-                                                            onPressed: () {},
-                                                          )
-                                                        : null,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  InkWell(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            100),
-                                                    onTap: () {},
-                                                    child: Ink(
-                                                      padding:
-                                                          EdgeInsets.all(5),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(100),
-                                                      ),
-                                                      child: Icon(
-                                                        Icons.minimize_rounded,
-                                                        color: Colors.red,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
+                                      );
+                                    else {
+                                      customDayAndTimeWidget.add(
+                                        CustomTime(
+                                          hasCustomTime: hasCustomTime,
+                                          day: days[daysSelectedInNumFinal[i]],
                                         ),
-                                      ),
-                                    );
-                                    customDayAndTimeWidget.add(
-                                      Divider(
-                                        color: Colors.grey,
-                                      ),
-                                    );
+                                      );
+                                      customDayAndTimeWidget.add(
+                                        Divider(
+                                          color: Colors.grey,
+                                        ),
+                                      );
+                                    }
                                   }
-                                }
-                              });
+                                },
+                              );
                               // customDayAndTimeWidget = CustomDayAndTime(
                               //     daysSelectedInNumFinal, hasCustomTime);
                             },
@@ -1141,15 +920,141 @@ class _CustomFrequencyState extends State<CustomFrequency> {
         ),
         // Container(child:Column(children:dayWidgets ,) ,),
         Container(
-            child: customDayAndTimeWidget.length == 0
-                ? null
-                : Card(
-                    elevation: 5,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Column(children: customDayAndTimeWidget),
-                    ))),
+          child: customDayAndTimeWidget.length == 0
+              ? null
+              : Card(
+                  elevation: 5,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Column(children: customDayAndTimeWidget),
+                  ),
+                ),
+        ),
       ],
+    );
+  }
+}
+
+class CustomTime extends StatefulWidget {
+  final bool hasCustomTime;
+  final String day;
+
+  final String timeSelected;
+
+  CustomTime({this.hasCustomTime, this.day, this.timeSelected});
+
+  @override
+  _CustomTimeState createState() => _CustomTimeState();
+}
+
+class _CustomTimeState extends State<CustomTime> {
+  TimeOfDay _time = TimeOfDay.now();
+  String time;
+  String timeIn12HrFormat;
+
+  // List<String>
+
+  // TextEditingController _timeController = TextEditingController();
+
+  void onTimeChanged(TimeOfDay dateTime) {
+    // setState(
+    //   () {
+    //     timeIn12HrFormat =
+    //     '${dateTime.hour > 12 ? dateTime.hour - 12 : dateTime.hour}:${dateTime.minute} ${dateTime.hour > 12 ? 'PM' : 'AM'}';
+    //     time =
+    //     '${dateTime.hour}:${dateTime.minute} ($timeIn12HrFormat)';
+    //
+    //
+    //   },
+    // );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: widget.hasCustomTime
+          ? const EdgeInsets.symmetric(horizontal: 30)
+          : const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            flex: 2,
+            child:
+                Align(alignment: Alignment.centerLeft, child: Text(widget.day)),
+          ),
+          // SizedBox(
+          //   width: 10,
+          // ),
+          Expanded(
+            flex: 5,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(time ?? '17:00'),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  child: widget.hasCustomTime
+                      ? OutlinedButton(
+                          child: Text(
+                            'Set time',
+                            style: TextStyle(color: Colors.green),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              showPicker(
+                                context: context,
+                                is24HrFormat: true,
+                                value: _time,
+                                onChange: onTimeChanged,
+                                disableHour: false,
+                                disableMinute: false,
+                                onChangeDateTime: (DateTime dateTime) {
+                                  setState(
+                                    () {
+                                      timeIn12HrFormat =
+                                          '${dateTime.hour > 12 ? dateTime.hour - 12 : dateTime.hour}:${dateTime.minute} ${dateTime.hour > 12 ? 'PM' : 'AM'}';
+                                      time =
+                                          '${dateTime.hour}:${dateTime.minute}';
+                                      // _timeController.text = time;
+                                    },
+                                  );
+                                  context
+                                      .read<AddReminderBloc>()
+                                      .add(AddDays({widget.day: time}));
+
+                                  print(time);
+                                },
+                              ),
+                            );
+                          },
+                        )
+                      : null,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                InkWell(
+                  borderRadius: BorderRadius.circular(100),
+                  onTap: () {},
+                  child: Ink(
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: Icon(
+                      Icons.minimize_rounded,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
