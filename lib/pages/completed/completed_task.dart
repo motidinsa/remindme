@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mytask/sqlite.dart';
-import 'package:mytask/task.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mytask/bloc/completed_task/completed_task_bloc.dart';
+import 'package:mytask/bloc/completed_task/completed_task_state.dart';
 
-import 'empty_todo.dart';
+import '../home/empty_todo.dart';
 
 class CompletedTask extends StatefulWidget {
   @override
@@ -11,15 +12,12 @@ class CompletedTask extends StatefulWidget {
 
 class _CompletedTaskState extends State<CompletedTask> {
   bool userValue = true;
-  SqliteDB database;
-  List<Task> tasks;
+
+  // SqliteDB database;
+  // List<Task> tasks;
 
   init() async {
     print('init called');
-
-    database = SqliteDB.instance;
-    tasks = await database.completedTasks();
-    setState(() {});
   }
 
   @override
@@ -30,9 +28,15 @@ class _CompletedTaskState extends State<CompletedTask> {
 
   @override
   Widget build(BuildContext context) {
-    return tasks == null
-        ? Center(child: CircularProgressIndicator())
-        : tasks.length == 0
+    return BlocBuilder<CompletedTaskBloc, CompletedTaskState>(
+        builder: (_, state) {
+      if (state is CompletedTaskLoadFailure) {
+        return Text('Could not do course operation');
+      }
+      if (state is CompletedTaskLoadSuccess) {
+        final tasks = state.tasks;
+        print(tasks.length.toString() + ' b');
+        return tasks.length == 0
             ? EmptyTodo()
             : ListView.builder(
                 itemCount: tasks.length,
@@ -151,5 +155,8 @@ class _CompletedTaskState extends State<CompletedTask> {
                     ),
                   );
                 });
+      }
+      return Center(child: Text('Loading'));
+    });
   }
 }

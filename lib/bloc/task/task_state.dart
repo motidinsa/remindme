@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-
-import '../task.dart';
+import 'package:mytask/models/task.dart';
 
 class TaskState extends Equatable {
   const TaskState();

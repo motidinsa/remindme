@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mytask/add_subcategory.dart';
-import 'package:mytask/common_reason.dart';
-import 'package:mytask/theme.dart';
+import 'package:mytask/pages/setting/theme/theme.dart';
 
-import 'about.dart';
+import 'about/about.dart';
+import 'add_common_reason/common_reason.dart';
+import 'add_subcategory/add_subcategory.dart';
 
 class Setting extends StatelessWidget {
   @override

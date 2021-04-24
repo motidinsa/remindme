@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mytask/bloc/task_event.dart';
-import 'package:mytask/bloc/task_state.dart';
+import 'package:mytask/bloc/task/task_event.dart';
+import 'package:mytask/bloc/task/task_state.dart';
+import 'package:mytask/models/task.dart';
+import 'package:mytask/pages/setting/add_subcategory/subcategory.dart';
 import 'package:mytask/repository/task_repository.dart';
-import 'package:mytask/subcategory.dart';
-
-import '../task.dart';
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final TaskRepository taskRepository;
-  List<Task> localTasks;
 
   TaskBloc({@required this.taskRepository})
       : assert(taskRepository != null),
@@ -22,7 +20,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       yield TaskLoading();
       try {
         final tasks = await taskRepository.tasks();
-        localTasks = [...tasks];
         yield TaskLoadSuccess(tasks);
       } catch (_) {
         yield TaskOperationFailure();
@@ -32,16 +29,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     if (event is TaskCreate) {
       try {
         await taskRepository.insertTask(event.task);
-        final tasks = await taskRepository.tasks();
-        yield TaskLoadSuccess(tasks);
-      } catch (_) {
-        yield TaskOperationFailure();
-      }
-    }
-
-    if (event is DayTimeInsert) {
-      try {
-        await taskRepository.insertDayFrequency(event.days);
         final tasks = await taskRepository.tasks();
         yield TaskLoadSuccess(tasks);
       } catch (_) {

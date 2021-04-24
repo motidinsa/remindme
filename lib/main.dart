@@ -1,41 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mytask/add_reminder.dart';
-import 'package:mytask/bloc/add_reminder_bloc.dart';
-import 'package:mytask/bloc/subcategory_bloc.dart';
-import 'package:mytask/completed_task.dart';
-import 'package:mytask/drawer.dart';
-import 'package:mytask/history.dart';
-import 'package:mytask/homepage.dart';
+import 'package:mytask/bloc/completed_task/completed_task_bloc.dart';
+import 'package:mytask/bloc/completed_task/completed_task_event.dart';
+import 'package:mytask/pages/add_reminder/add_reminder.dart';
+import 'package:mytask/pages/completed/completed_task.dart';
+import 'package:mytask/pages/home/drawer/drawer.dart';
+import 'package:mytask/pages/home/homepage.dart';
+import 'package:mytask/pages/setting/setting.dart';
 import 'package:mytask/repository/task_repository.dart';
-import 'package:mytask/setting.dart';
-import 'package:mytask/task_route.dart';
-import 'bloc/task_bloc.dart';
-import 'bloc/task_event.dart';
+import 'package:mytask/route/task_route.dart';
+import 'bloc/add_reminder/add_reminder_bloc.dart';
+import 'bloc/task/task_bloc.dart';
+import 'bloc/task/task_event.dart';
 import 'data_provider/task_data.dart';
+import './pages/statics/history.dart';
 
 void main() {
   final TaskRepository taskRepository = TaskRepository(
     dataProvider: TaskDataProvider.instance,
   );
-  runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider<TaskBloc>(
-            create: (context) =>
-                TaskBloc(taskRepository: taskRepository)..add(TaskLoad())),
-        BlocProvider<SubcategoryBloc>(
-          create: (context) => SubcategoryBloc(),
-        ),
-        BlocProvider<AddReminderBloc>(
-          create: (context) => AddReminderBloc(),
-        )
-      ],
-      child: MyApp(
-        taskRepository: taskRepository,
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider<TaskBloc>(
+          create: (context) =>
+              TaskBloc(taskRepository: taskRepository)..add(TaskLoad())),
+      BlocProvider<AddReminderBloc>(
+        create: (context) => AddReminderBloc(),
       ),
+      BlocProvider<CompletedTaskBloc>(
+        create: (context) => CompletedTaskBloc(taskRepository: taskRepository)
+          ..add(CompletedTaskLoad()),
+      )
+    ],
+    child: MyApp(
+      taskRepository: taskRepository,
     ),
-  );
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -130,7 +130,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       tooltip: 'Add',
       child: Icon(Icons.add),
     );
-
   }
 
   @override
@@ -172,6 +171,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             );
             break;
           case 1:
+            BlocProvider.of<CompletedTaskBloc>(context)
+                .add(CompletedTaskLoad());
             body = CompletedTask();
             appbar = AppBar(
               title: Text('Completed tasks'),

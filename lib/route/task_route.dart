@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mytask/add_reminder.dart';
-import 'package:mytask/task.dart';
-import 'package:mytask/test.dart';
-import 'main.dart';
+import 'package:mytask/models/task.dart';
+import 'package:mytask/pages/add_reminder/add_reminder.dart';
+
+import '../main.dart';
 
 class TaskRoute {
   static Route generateRoute(RouteSettings settings) {

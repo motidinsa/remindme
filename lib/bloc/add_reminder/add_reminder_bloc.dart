@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mytask/bloc/add_reminder_event.dart';
-import 'package:mytask/bloc/add_reminder_state.dart';
+
+import 'add_reminder_event.dart';
+import 'add_reminder_state.dart';
 
 class AddReminderBloc extends Bloc<AddReminderEvent, AddReminderState> {
   AddReminderBloc() : super(NoItemAdded());

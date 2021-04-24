@@ -3,15 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_button/group_button.dart';
 import 'package:intl/intl.dart';
-import 'package:mytask/bloc/add_reminder_bloc.dart';
-import 'package:mytask/bloc/add_reminder_event.dart';
-import 'package:mytask/bloc/add_reminder_state.dart';
-import 'package:mytask/bloc/task_event.dart';
-import 'package:mytask/task.dart';
-import 'package:mytask/task_route.dart';
+import 'package:mytask/models/task.dart';
+import 'package:mytask/route/task_route.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
-import 'bloc/task_bloc.dart';
+import '../../bloc/add_reminder/add_reminder_bloc.dart';
+import '../../bloc/add_reminder/add_reminder_event.dart';
+import '../../bloc/add_reminder/add_reminder_state.dart';
+import '../../bloc/task/task_bloc.dart';
+import '../../bloc/task/task_event.dart';
 
 class AddReminder extends StatefulWidget {
   // final String type;
@@ -581,19 +580,21 @@ class _AddReminderState extends State<AddReminder> {
                                     TaskCreate(
                                       Task(
                                           name: 'data',
-                                          description: 'cnjd',
+                                          description:
+                                              'cnjd kfnkv kv fknv vkjfvkjnfv kjvdf vfnkjnvk vkdfj',
                                           date: 'urgfyc',
                                           time: 'asknx',
                                           importance: 'Medium',
                                           dateAdded: currentDate,
-                                          timeAdded: currentTime),
+                                          timeAdded: currentTime,
+                                          customFrequency: 1,
+                                          recurTime: '3 day',
+                                          daysWithTime: dayMap),
                                     ),
                                   );
-                              context
-                                  .read<TaskBloc>()
-                                  .add(DayTimeInsert(dayMap));
                             }
                             Navigator.of(context).pop();
+                            // Navigator.of(context).pushReplacementNamed('/');
                           },
                         );
                       },

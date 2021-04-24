@@ -1,18 +1,14 @@
 import 'package:meta/meta.dart';
 import 'package:mytask/data_provider/task_data.dart';
-import '../task.dart';
+import 'package:mytask/models/task.dart';
 
 class TaskRepository {
   final TaskDataProvider dataProvider;
 
   TaskRepository({@required this.dataProvider}) : assert(dataProvider != null);
 
-  Future<int> insertTask(Task task) async {
+  Future<void> insertTask(Task task) async {
     return await dataProvider.insertTask(task);
-  }
-
-  Future<int> insertDayFrequency(Map<String, String> dayTime) async {
-    return await dataProvider.insertDayFrequency(dayTime);
   }
 
   Future<List<Task>> tasks() async {
@@ -31,7 +27,7 @@ class TaskRepository {
     return await dataProvider.markCompleted(id);
   }
 
-  Future<int> deleteTask(int id) async {
+  Future<void> deleteTask(int id) async {
     return await dataProvider.deleteTask(id);
   }
 

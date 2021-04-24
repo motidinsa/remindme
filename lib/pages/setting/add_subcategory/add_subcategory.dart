@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mytask/icon_select.dart';
-import 'package:mytask/subcategory.dart';
+import 'package:mytask/pages/add_transaction/icon_select.dart';
+import 'package:mytask/pages/setting/add_subcategory/subcategory.dart';
 
 class AddSubcategory extends StatefulWidget {
   @override

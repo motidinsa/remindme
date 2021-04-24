@@ -9,8 +9,9 @@ class Task {
   final String timeAdded;
   final String dateCompleted;
   final int isCompleted;
-  final int hasFrequency;
-  final int hasDescription;
+  final int customFrequency;
+  final String recurTime;
+  final Map<String, dynamic> daysWithTime;
 
   Task(
       {this.id,
@@ -23,8 +24,9 @@ class Task {
       this.timeAdded,
       this.dateCompleted,
       this.isCompleted,
-      this.hasFrequency,
-      this.hasDescription});
+      this.customFrequency,
+      this.recurTime,
+      this.daysWithTime});
 
   Map<String, dynamic> toMap() {
     return {
@@ -37,8 +39,8 @@ class Task {
       'timeAdded': timeAdded,
       'dateCompleted': dateCompleted,
       'isCompleted': isCompleted,
-      'hasFrequency': hasFrequency,
-      'hasDescription': hasDescription
+      'customFrequency': customFrequency,
+      'recurTime': recurTime,
     };
   }
 
