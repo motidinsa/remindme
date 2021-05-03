@@ -1,9 +1,14 @@
 import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_button/group_button.dart';
 import 'package:intl/intl.dart';
 import 'package:mytask/models/task.dart';
+import 'package:mytask/pages/add_reminder/new_task_name_and_description.dart';
+import 'package:mytask/pages/add_reminder/reminder_importance.dart';
+import 'package:mytask/pages/add_reminder/selected_date_and_time.dart';
+import 'package:mytask/pages/add_reminder/set_time_button.dart';
 import 'package:mytask/route/task_route.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../bloc/add_reminder/add_reminder_bloc.dart';
@@ -13,8 +18,6 @@ import '../../bloc/task/task_bloc.dart';
 import '../../bloc/task/task_event.dart';
 
 class AddReminder extends StatefulWidget {
-  // final String type;
-  // final Task task;
   static const routeName = 'taskAddUpdate';
   final TaskArgument args;
 
@@ -186,8 +189,61 @@ class _AddReminderState extends State<AddReminder> {
                     ),
                   ],
                 ),
-              ]
-            : null,
+        ]
+            : <Widget>[
+          PopupMenuButton(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            offset: Offset(0, 20),
+            padding: EdgeInsets.zero,
+            icon: Icon(Icons.more_vert),
+            itemBuilder: (BuildContext context) =>
+            <PopupMenuEntry>[
+              PopupMenuItem(
+                // height: 200,
+                child: Container(
+                  // width: MediaQuery.of(context).size.width / 2,
+                  child: Column(
+                    children: [
+                      Text('High'),
+                      Text(
+                          'You will be reminded every 15 minute until you mark as seen and continuous notification appears'),
+                    ],
+                  ),
+
+                ),
+              ),
+              PopupMenuDivider(),
+              PopupMenuItem(
+                // height: 200,
+                child: Container(
+                  // width: MediaQuery.of(context).size.width / 2,
+                  child: Column(
+                    children: [
+                      Text('Medium'),
+                      Text(
+                        'You will be reminded once but continuous notification appear',),
+                    ],
+                  ),
+                ),
+              ),
+              PopupMenuDivider(),
+              PopupMenuItem(
+                // height: 200,
+                child: Container(
+                  // width: MediaQuery.of(context).size.width / 2,
+                  child: Column(
+                    children: [
+                      Text('Low'),
+                      Text(
+                        'You will be reminded once and no continuous notification appear',),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       body: GestureDetector(
         onTap: () {
@@ -198,39 +254,42 @@ class _AddReminderState extends State<AddReminder> {
           child: ListView(
             // shrinkWrap: true,
             children: [
-              Container(
-                margin: EdgeInsets.fromLTRB(50, 40, 50, 20),
-                child: TextField(
-                  cursorHeight: 30,
-                  controller: _nameController,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Name',
-                      labelStyle: TextStyle(
-                        fontSize: 20,
-                        color: Colors.green,
-                      ),
-                      contentPadding: EdgeInsets.all(20)),
-                  onChanged: (text) => {name = text},
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                child: TextField(
-                  cursorHeight: 30,
-                  controller: _descriptionController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Description (Optional)',
-                    labelStyle: TextStyle(
-                      fontSize: 20,
-                      color: Colors.green,
-                    ),
-                    contentPadding: EdgeInsets.all(20),
-                  ),
-                  onChanged: (text) => {description = text},
-                ),
-              ),
+              NewTaskNameAndDescription(),
+              SetTimeButton(),
+
+              // Container(
+              //   margin: EdgeInsets.fromLTRB(50, 40, 50, 20),
+              //   child: TextField(
+              //     cursorHeight: 30,
+              //     controller: _nameController,
+              //     decoration: InputDecoration(
+              //         border: OutlineInputBorder(),
+              //         labelText: 'Name',
+              //         labelStyle: TextStyle(
+              //           fontSize: 20,
+              //           color: Colors.green,
+              //         ),
+              //         contentPadding: EdgeInsets.all(20)),
+              //     onChanged: (text) => {name = text},
+              //   ),
+              // ),
+              // Container(
+              //   margin: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+              //   child: TextField(
+              //     cursorHeight: 30,
+              //     controller: _descriptionController,
+              //     decoration: InputDecoration(
+              //       border: OutlineInputBorder(),
+              //       labelText: 'Description (Optional)',
+              //       labelStyle: TextStyle(
+              //         fontSize: 20,
+              //         color: Colors.green,
+              //       ),
+              //       contentPadding: EdgeInsets.all(20),
+              //     ),
+              //     onChanged: (text) => {description = text},
+              //   ),
+              // ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
@@ -290,9 +349,18 @@ class _AddReminderState extends State<AddReminder> {
                                                   setState(
                                                         () {
                                                       timeIn12HrFormat =
-                                                          '${dateTime.hour > 12 ? dateTime.hour - 12 : dateTime.hour}:${dateTime.minute} ${dateTime.hour > 12 ? 'PM' : 'AM'}';
+                                                      '${dateTime.hour > 12
+                                                          ? dateTime.hour - 12
+                                                          : dateTime
+                                                          .hour}:${dateTime
+                                                          .minute} ${dateTime
+                                                          .hour > 12
+                                                          ? 'PM'
+                                                          : 'AM'}';
                                                       time =
-                                                          '${dateTime.hour}:${dateTime.minute} ($timeIn12HrFormat)';
+                                                      '${dateTime
+                                                          .hour}:${dateTime
+                                                          .minute} ($timeIn12HrFormat)';
                                                       _timeController.text =
                                                           time;
                                                     },
@@ -353,6 +421,7 @@ class _AddReminderState extends State<AddReminder> {
                   ),
                 ),
               ),
+              SelectedDateAndTime(values: ['day 1', 'day2']),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -400,6 +469,7 @@ class _AddReminderState extends State<AddReminder> {
                   ),
                 ],
               ),
+              ReminderImportance(),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 30),
                 // margin: EdgeInsets.only(top: 20),
@@ -409,7 +479,7 @@ class _AddReminderState extends State<AddReminder> {
                     Text(
                       'Reminder importance',
                       style:
-                          TextStyle(fontSize: 18, color: Colors.orangeAccent),
+                      TextStyle(fontSize: 18, color: Colors.orangeAccent),
                     ),
                     Container(
                       padding: EdgeInsets.all(20),
