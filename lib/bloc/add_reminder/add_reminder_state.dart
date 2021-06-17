@@ -26,3 +26,29 @@ class AddTimeSuccess extends AddReminderState {
   @override
   List<Object> get props => [time];
 }
+
+class AddTaskDateSuccess extends AddReminderState {
+  final String date;
+
+  AddTaskDateSuccess(this.date);
+
+  @override
+  List<Object> get props => [date];
+}
+class AddTaskTimeSuccess extends AddReminderState {
+  final String time;
+
+  AddTaskTimeSuccess(this.time);
+
+  @override
+  List<Object> get props => [time];
+}
+
+class AddTaskTimeAndDateSuccess extends AddReminderState {
+  final Map<String,String> dateAndtime;
+
+  AddTaskTimeAndDateSuccess(this.dateAndtime);
+
+  @override
+  List<Object> get props => [dateAndtime];
+}

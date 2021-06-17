@@ -16,7 +16,7 @@ class _TaskTextFieldState extends State<TaskTextField> {
     return Container(
       margin: widget.type == 'Name'
           ? EdgeInsets.fromLTRB(50, 40, 50, 20)
-          : EdgeInsets.fromLTRB(50, 10, 50, 20),
+          : EdgeInsets.fromLTRB(50, 10, 50, 10),
       child: TextField(
         cursorHeight: 30,
         // controller: widget.textFieldController,

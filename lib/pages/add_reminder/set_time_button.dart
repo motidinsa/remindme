@@ -7,7 +7,7 @@ class SetTimeButton extends StatelessWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(35, 10, 0, 10),
+        padding: EdgeInsets.fromLTRB(60, 10, 0, 10),
         child: TextButton(
           // textTheme: ButtonTextTheme.accent,
           // shape: RoundedRectangleBorder(

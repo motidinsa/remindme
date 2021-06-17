@@ -15,7 +15,15 @@ class AddReminderBloc extends Bloc<AddReminderEvent, AddReminderState> {
     if (event is AddTime) {
       yield AddTimeSuccess(event.timeSelected);
     }
-
+    if (event is AddTaskTime) {
+      yield AddTaskTimeSuccess(event.timeSelected);
+    }
+    if (event is AddTaskDate) {
+      yield AddTaskDateSuccess(event.dateSelected);
+    }
+    if (event is AddTaskDateAndTime) {
+      yield AddTaskTimeAndDateSuccess(event.dateAndTimeSelected);
+    }
     if (event is Clear) {
       yield NoItemAdded();
     }

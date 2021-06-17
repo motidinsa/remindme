@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mytask/bloc/add_reminder/add_reminder_bloc.dart';
 import 'package:mytask/bloc/add_reminder/add_reminder_event.dart';
 
-
 class CustomFrequency extends StatefulWidget {
   @override
   _CustomFrequencyState createState() => _CustomFrequencyState();
@@ -54,6 +53,10 @@ class _CustomFrequencyState extends State<CustomFrequency> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             OutlinedButton(
+              child: Text(
+                'Add days',
+                style: TextStyle(color: Colors.green),
+              ),
               onPressed: () {
                 daysSelectedInName = [];
                 List<int> daysSelectedInNum = [...daysSelectedInNumFinal];
@@ -79,8 +82,7 @@ class _CustomFrequencyState extends State<CustomFrequency> {
                             isRadio: false,
                             direction: Axis.horizontal,
                             unselectedColor: Colors.grey[200],
-                            onSelected: (index, isSelected) =>
-                            isSelected
+                            onSelected: (index, isSelected) => isSelected
                                 ? daysSelectedInNum.add(index)
                                 : daysSelectedInNum.remove(index),
                             buttons: days,
@@ -110,8 +112,8 @@ class _CustomFrequencyState extends State<CustomFrequency> {
                             //     .sort((a, b) => a.compareTo(b));
                             print(daysSelectedInNumFinal);
                             for (int i = 0;
-                            i < daysSelectedInNumFinal.length;
-                            i++) {
+                                i < daysSelectedInNumFinal.length;
+                                i++) {
                               if (i == daysSelectedInNumFinal.length - 1) {
                                 customDayAndTimeWidget.add(
                                   CustomTime(
@@ -144,7 +146,7 @@ class _CustomFrequencyState extends State<CustomFrequency> {
                             //     .add(AddDays(daysSelectedInNumFinal));
                             // print();
                             setState(
-                                  () {
+                              () {
                                 // daysSelectedInNumFinal.forEach((element) {
                                 //   customDayAndTimeWidgets
                                 //       .add(Text(days[element]));
@@ -162,10 +164,6 @@ class _CustomFrequencyState extends State<CustomFrequency> {
                   },
                 );
               },
-              child: Text(
-                'Add days',
-                style: TextStyle(color: Colors.green),
-              ),
             ),
             Expanded(
               child: Column(
@@ -181,15 +179,15 @@ class _CustomFrequencyState extends State<CustomFrequency> {
                         value: hasCustomTime,
                         onChanged: (value) {
                           setState(
-                                () {
+                            () {
                               hasCustomTime = value;
                               setState(
-                                    () {
+                                () {
                                   customDayAndTimeWidget = [];
 
                                   for (int i = 0;
-                                  i < daysSelectedInNumFinal.length;
-                                  i++) {
+                                      i < daysSelectedInNumFinal.length;
+                                      i++) {
                                     if (i == daysSelectedInNumFinal.length - 1)
                                       customDayAndTimeWidget.add(
                                         CustomTime(
@@ -239,12 +237,12 @@ class _CustomFrequencyState extends State<CustomFrequency> {
           child: customDayAndTimeWidget.length == 0
               ? null
               : Card(
-            elevation: 5,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Column(children: customDayAndTimeWidget),
-            ),
-          ),
+                  elevation: 5,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Column(children: customDayAndTimeWidget),
+                  ),
+                ),
         ),
       ],
     );

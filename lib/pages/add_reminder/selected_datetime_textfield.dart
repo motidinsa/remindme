@@ -17,7 +17,7 @@ class _SelectedDateTimeState extends State<SelectedDateTime> {
   Widget build(BuildContext context) {
     _textEditingController.text = widget.value;
     return Container(
-      margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
+      margin: widget.type=='Date'?EdgeInsets.fromLTRB(20, 0, 10, 0):EdgeInsets.fromLTRB(10, 0, 20, 0),
       child: TextField(
         readOnly: true,
         enabled: false,
