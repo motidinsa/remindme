@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mytask/bloc/add_reminder/add_reminder_bloc.dart';
+import 'package:mytask/bloc/add_reminder/add_reminder_event.dart';
 
 class TaskTextField extends StatefulWidget {
   final String type;
@@ -21,14 +24,20 @@ class _TaskTextFieldState extends State<TaskTextField> {
         cursorHeight: 30,
         // controller: widget.textFieldController,
         decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: widget.type,
-            labelStyle: TextStyle(
-              fontSize: 20,
-              color: Colors.green,
-            ),
-            contentPadding: EdgeInsets.all(20)),
-        // onChanged: (text) => {name = text},
+          border: OutlineInputBorder(),
+          labelText: widget.type,
+          labelStyle: TextStyle(
+            fontSize: 20,
+            color: Colors.green,
+          ),
+          contentPadding: EdgeInsets.all(20),
+        ),
+        onChanged: (text) => {
+          widget.type == 'Name'
+              ? BlocProvider.of<AddReminderBloc>(context).add(AddTaskName(text))
+              : BlocProvider.of<AddReminderBloc>(context)
+                  .add(AddTaskDescription(text))
+        },
       ),
     );
   }

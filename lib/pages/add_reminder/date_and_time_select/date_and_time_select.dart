@@ -7,6 +7,18 @@ import 'package:mytask/pages/add_reminder/date_and_time_select/date_select_calen
 import 'package:mytask/pages/add_reminder/date_and_time_select/time_select.dart';
 
 class DateAndTimeSelect extends StatelessWidget {
+  List<String> days = [
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday"
+  ];
+  List<int> daysSelectedInNumber = [];
+  Map<String, String> daysWithTime = {};
+
   @override
   Widget build(BuildContext context) {
     Map<String, String> datesWithTime = {};
@@ -33,17 +45,12 @@ class DateAndTimeSelect extends StatelessWidget {
                       builder: (_, state) {
                         if (state is AddTaskDateSuccess) {
                           datesWithTime['date'] = state.date;
-                          Text(
-                            'OK',
-                            style: TextStyle(color: Colors.green),
-                          );
                         }
                         if (state is AddTaskTimeSuccess) {
                           datesWithTime['time'] = state.time;
-                          Text(
-                            'OK',
-                            style: TextStyle(color: Colors.green),
-                          );
+                        }
+                        if (state is AddCustomDayTimeSuccess) {
+                          daysWithTime = state.dayWithTime;
                         }
                         return Text(
                           'OK',
@@ -51,9 +58,17 @@ class DateAndTimeSelect extends StatelessWidget {
                         );
                       },
                     ),
-                    onPressed: (){
-                    BlocProvider.of<AddReminderBloc>(context)
-                        .add(AddTaskDateAndTime(datesWithTime));
+                    onPressed: () {
+                      BlocProvider.of<AddReminderBloc>(context)
+                          .add(AddTimeOnly(datesWithTime['time']));
+                      BlocProvider.of<AddReminderBloc>(context)
+                          .add(AddTaskDateAndTime(datesWithTime));
+                      daysWithTime.forEach((key, value) {
+                        daysWithTime[key] = datesWithTime['time'];
+                      });
+                      // BlocProvider.of<AddReminderBloc>(context)
+                      //     .add(AddCustomDayTime(daysWithTime));
+
                       Navigator.pop(context);
                       // setState(
                       //       () {

@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mytask/bloc/add_reminder/add_reminder_bloc.dart';
+import 'package:mytask/bloc/add_reminder/add_reminder_event.dart';
 
 class ReminderImportance extends StatefulWidget {
+  final String importance;
+
+  ReminderImportance(this.importance);
+
   @override
   _ReminderImportanceState createState() => _ReminderImportanceState();
 }
 
 class _ReminderImportanceState extends State<ReminderImportance> {
-  String importanceType = 'None';
+  // String importanceType = 'None';
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +28,13 @@ class _ReminderImportanceState extends State<ReminderImportance> {
             style: TextStyle(fontSize: 18, color: Colors.orangeAccent),
           ),
           Container(
-            child: Text(importanceType),
+            child: Text(widget.importance),
           ),
           Container(
             padding: EdgeInsets.all(20),
             child: PopupMenuButton(
 
-              child: Text(importanceType == null ? 'Select' : 'Edit'),
+              child: Text(widget.importance == null ? 'Select' : 'Edit'),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(10),
@@ -41,10 +48,13 @@ class _ReminderImportanceState extends State<ReminderImportance> {
                   // height: 200,
                   child: GestureDetector(
                     onTap: () {
-                      setState(() {
-                        importanceType = 'High';
-                        Navigator.of(context).pop();
-                      });
+                      BlocProvider.of<AddReminderBloc>(context)
+                          .add(AddTaskReminderImportance('High'));
+                      Navigator.of(context).pop();
+                      // setState(() {
+                      //   importanceType = 'High';
+                      //   Navigator.of(context).pop();
+                      // });
                     },
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
@@ -66,10 +76,9 @@ class _ReminderImportanceState extends State<ReminderImportance> {
                   // height: 200,
                   child: GestureDetector(
                     onTap: () {
-                      setState(() {
-                        importanceType = 'Medium';
-                        Navigator.of(context).pop();
-                      });
+                      BlocProvider.of<AddReminderBloc>(context)
+                          .add(AddTaskReminderImportance('Medium'));
+                      Navigator.of(context).pop();
                     },
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
@@ -92,10 +101,9 @@ class _ReminderImportanceState extends State<ReminderImportance> {
                   // height: 200,
                   child: GestureDetector(
                     onTap: () {
-                      setState(() {
-                        importanceType = 'Low';
-                        Navigator.of(context).pop();
-                      });
+                      BlocProvider.of<AddReminderBloc>(context)
+                          .add(AddTaskReminderImportance('Low'));
+                      Navigator.of(context).pop();
                     },
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),

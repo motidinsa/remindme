@@ -2,12 +2,10 @@ import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:group_button/group_button.dart';
 import 'package:intl/intl.dart';
 import 'package:mytask/models/task.dart';
 import 'package:mytask/pages/add_reminder/new_task_name_and_description.dart';
 import 'package:mytask/pages/add_reminder/recur_period.dart';
-import 'package:mytask/pages/add_reminder/recur_period_select.dart';
 import 'package:mytask/pages/add_reminder/reminder_importance.dart';
 import 'package:mytask/pages/add_reminder/selected_date_and_time.dart';
 import 'package:mytask/pages/add_reminder/set_time_button.dart';
@@ -31,8 +29,8 @@ class AddReminder extends StatefulWidget {
 }
 
 class _AddReminderState extends State<AddReminder> {
-  String name = '';
-  String description = '';
+  String name;
+  String description;
   String notificationType;
   String time;
   String timeIn12HrFormat;
@@ -64,6 +62,11 @@ class _AddReminderState extends State<AddReminder> {
 
   Map<String, String> dayTime = {};
   Map<String, String> values;
+  Map<String, String> daysWithTime;
+  String reminderImportance = 'None';
+  String recurNumber;
+  String recurDuration;
+  bool customDayTime = false;
 
   @override
   void initState() {
@@ -199,60 +202,7 @@ class _AddReminderState extends State<AddReminder> {
                     ],
                   ),
                 ]
-              : <Widget>[
-                  PopupMenuButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    offset: Offset(0, 20),
-                    padding: EdgeInsets.zero,
-                    icon: Icon(Icons.more_vert),
-                    itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                      PopupMenuItem(
-                        // height: 200,
-                        child: Container(
-                          // width: MediaQuery.of(context).size.width / 2,
-                          child: Column(
-                            children: [
-                              Text('High'),
-                              Text(
-                                  'You will be reminded every 15 minute until you mark as seen and continuous notification appears'),
-                            ],
-                          ),
-                        ),
-                      ),
-                      PopupMenuDivider(),
-                      PopupMenuItem(
-                        // height: 200,
-                        child: Container(
-                          // width: MediaQuery.of(context).size.width / 2,
-                          child: Column(
-                            children: [
-                              Text('Medium'),
-                              Text(
-                                'You will be reminded once but continuous notification appear',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      PopupMenuDivider(),
-                      PopupMenuItem(
-                        // height: 200,
-                        child: Container(
-                          // width: MediaQuery.of(context).size.width / 2,
-                          child: Column(
-                            children: [
-                              Text('Low'),
-                              Text(
-                                'You will be reminded once and no continuous notification appear',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+              : null,
         ),
         body: GestureDetector(
           onTap: () {
@@ -261,7 +211,20 @@ class _AddReminderState extends State<AddReminder> {
           child: ListView(
             // shrinkWrap: true,
             children: [
-              NewTaskNameAndDescription(),
+              BlocBuilder<AddReminderBloc, AddReminderState>(
+                builder: (_, state) {
+                  if (state is AddTaskNameSuccess) {
+                    name = state.taskName;
+                  }
+                  if (state is AddTaskDescriptionSuccess) {
+                    description = state.taskDescription;
+                  }
+                  print(name);
+                  print(description);
+                  return NewTaskNameAndDescription();
+                },
+              ),
+
               SetTimeButton(),
 
               // Container(
@@ -434,11 +397,11 @@ class _AddReminderState extends State<AddReminder> {
                 builder: (_, state) {
                   if (state is AddTaskTimeAndDateSuccess) {
                     values = state.dateAndtime;
-
-                    return SelectedDateAndTime(values: [
-                      state.dateAndtime['date'],
-                      state.dateAndtime['time']
-                    ]);
+                    time = state.dateAndtime['time'];
+                    print(time + ' time');
+                  }
+                  if (state is AddCustomDayTimeSuccess) {
+                    daysWithTime = state.dayWithTime;
                   }
                   return values == null
                       ? Container()
@@ -493,7 +456,15 @@ class _AddReminderState extends State<AddReminder> {
               //     ),
               //   ],
               // ),
-              ReminderImportance(),
+              BlocBuilder<AddReminderBloc, AddReminderState>(
+                builder: (_, state) {
+                  if (state is AddTaskReminderImportanceSuccess) {
+                    reminderImportance = state.taskReminderImportance;
+                  }
+                  return ReminderImportance(reminderImportance);
+                },
+              ),
+
               // Container(
               //   padding: EdgeInsets.symmetric(horizontal: 30),
               //   // margin: EdgeInsets.only(top: 20),
@@ -563,6 +534,8 @@ class _AddReminderState extends State<AddReminder> {
                                 );
                                 if (!value) {
                                   hasFrequency = false;
+                                  BlocProvider.of<AddReminderBloc>(context)
+                                      .add(Clear());
                                 }
                               },
                             ),
@@ -580,7 +553,20 @@ class _AddReminderState extends State<AddReminder> {
                         )
                       ],
                     ),
-                    if (hasRecurringPeriod) RecurPeriod(),
+                    if (hasRecurringPeriod)
+                      BlocBuilder<AddReminderBloc, AddReminderState>(
+                        builder: (_, state) {
+                          if (state is AddTaskRecurNumberSuccess) {
+                            recurNumber = state.recurNumber;
+                          }
+                          if (state is AddTaskRecurDurationSuccess) {
+                            recurDuration = state.recurDuration;
+                          }
+                          // debugPrint(recurNumber);
+                          // debugPrint(recurDuration);
+                          return RecurPeriod(recurDuration);
+                        },
+                      ),
                     if (hasRecurringPeriod)
                       Row(
                         children: [
@@ -596,6 +582,10 @@ class _AddReminderState extends State<AddReminder> {
                                   setState(
                                     () {
                                       hasFrequency = value;
+                                      if (!hasFrequency)
+                                        BlocProvider.of<AddReminderBloc>(
+                                                context)
+                                            .add(Clear());
                                     },
                                   );
                                 },
@@ -604,7 +594,17 @@ class _AddReminderState extends State<AddReminder> {
                           )
                         ],
                       ),
-                    if (hasFrequency) CustomFrequency(),
+                    if (hasFrequency)
+                      BlocBuilder<AddReminderBloc, AddReminderState>(
+                        builder: (_, state) {
+                          if (state is AddTaskTimeAndDateSuccess) {
+                            time = state.dateAndtime['time'];
+                          }
+                          return CustomFrequency(
+                            defaultTime: time,
+                          );
+                        },
+                      ),
                     // Container(child: recurSelect),
                     // Container(child: frequencySwitch),
                   ],
@@ -620,13 +620,20 @@ class _AddReminderState extends State<AddReminder> {
                     BlocBuilder<AddReminderBloc, AddReminderState>(
                       builder: (_, state) {
                         if (state is AddDaysSuccess) {
-                          dayTime.containsKey(state.days.keys.first)
-                              ? dayTime.update(state.days.keys.first,
-                                  (value) => state.days.values.first)
-                              : dayTime.addAll(state.days);
-                          context.read<AddReminderBloc>().add(Clear());
-                          print(dayTime);
+                          dayTime = state.days;
+                          // dayTime.containsKey(state.days.keys.first)
+                          //     ? dayTime.update(state.days.keys.first,
+                          //         (value) => state.days.values.first)
+                          //     : dayTime.addAll(state.days);
+                          // context.read<AddReminderBloc>().add(Clear());
+                          // print(dayTime.toString() + " --------");
                         }
+                        if (state is UpdateDateTimeSuccess) {
+                          dayTime[state.updatedDateTime.keys.first] =
+                              state.updatedDateTime.values.first;
+                        }
+                        // context.read<AddReminderBloc>().add(Clear());
+                        print(dayTime.toString() + " --------");
                         return ElevatedButton(
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
@@ -671,25 +678,33 @@ class _AddReminderState extends State<AddReminder> {
                                 ),
                               );
                             else {
+                              print(values.toString() + " values");
                               context.read<TaskBloc>().add(
                                     TaskCreate(
                                       Task(
-                                          name: 'Task name',
-                                          description:
-                                              'This is a short description for the task',
-                                          date: values==null?'some day':values['date'],
-                                          time: values==null?'some day':values['time'],
-                                          importance: 'Medium',
+                                          name: name ?? 'None',
+                                          description: description,
+                                          date: values == null
+                                              ? 'some day'
+                                              : values['date'],
+                                          time: values == null
+                                              ? 'some time'
+                                              : values['time'],
+                                          importance:
+                                              reminderImportance ?? 'None',
                                           dateAdded: currentDate,
                                           timeAdded: currentTime,
-                                          customFrequency: 1,
-                                          recurTime: '3 day',
-                                          daysWithTime: dayMap),
+                                          customFrequency:
+                                              int.parse(recurNumber ?? '-1'),
+                                          recurTime: recurDuration ?? 'None',
+                                          daysWithTime:
+                                              daysWithTime ?? {'monday': null}),
                                     ),
                                   );
                             }
                             Navigator.of(context).pop();
-                            BlocProvider.of<AddReminderBloc>(context).add(Clear());
+                            BlocProvider.of<AddReminderBloc>(context)
+                                .add(Clear());
                             // Navigator.of(context).pushReplacementNamed('/');
                           },
                         );
