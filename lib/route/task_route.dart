@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mytask/models/task.dart';
 import 'package:mytask/pages/add_reminder/add_reminder.dart';
+import 'package:mytask/pages/add_transaction/expense/expense.dart';
 
 import '../main.dart';
 
@@ -17,7 +18,10 @@ class TaskRoute {
                 args: args,
               ));
     }
-
+    if (settings.name == ExpensePage.routeName) {
+      // TaskArgument args = settings.arguments;
+      return MaterialPageRoute(builder: (context) => ExpensePage());
+    }
     // if (settings.name == CourseDetail.routeName) {
     //   Course course = settings.arguments;
     //   return MaterialPageRoute(

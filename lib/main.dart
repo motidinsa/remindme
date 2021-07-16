@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mytask/bloc/completed_task/completed_task_bloc.dart';
 import 'package:mytask/bloc/completed_task/completed_task_event.dart';
+import 'package:mytask/bloc/expense/expense_bloc.dart';
 import 'package:mytask/pages/add_reminder/add_reminder.dart';
+import 'package:mytask/pages/add_transaction/expense/expense.dart';
 import 'package:mytask/pages/completed/completed_task.dart';
 import 'package:mytask/pages/home/drawer/drawer.dart';
 import 'package:mytask/pages/home/homepage.dart';
@@ -10,6 +12,7 @@ import 'package:mytask/pages/setting/setting.dart';
 import 'package:mytask/repository/task_repository.dart';
 import 'package:mytask/route/task_route.dart';
 import 'bloc/add_reminder/add_reminder_bloc.dart';
+import 'bloc/expense/expense_event.dart';
 import 'bloc/task/task_bloc.dart';
 import 'bloc/task/task_event.dart';
 import 'data_provider/task_data.dart';
@@ -30,6 +33,9 @@ void main() {
       BlocProvider<CompletedTaskBloc>(
         create: (context) => CompletedTaskBloc(taskRepository: taskRepository)
           ..add(CompletedTaskLoad()),
+      ),
+      BlocProvider<ExpenseBloc>(
+        create: (context) => ExpenseBloc()..add(NoCategory()),
       )
     ],
     child: MyApp(
@@ -118,8 +124,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       backgroundColor: Colors.green,
       foregroundColor: Colors.white,
       onPressed: () => {
-        Navigator.of(context).pushNamed(AddReminder.routeName,
-            arguments: TaskArgument(edit: false))
+        Navigator.of(context).pushNamed(
+          ExpensePage.routeName,
+        )
         // Navigator.push(
         //     context,
         //     MaterialPageRoute(

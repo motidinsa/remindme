@@ -402,6 +402,7 @@ class _AddReminderState extends State<AddReminder> {
                   }
                   if (state is AddCustomDayTimeSuccess) {
                     daysWithTime = state.dayWithTime;
+                    print(daysWithTime.toString() + ' whyyyy');
                   }
                   return values == null
                       ? Container()

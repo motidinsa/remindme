@@ -51,13 +51,9 @@ class _SelectTimeState extends State<SelectTime> {
                     setState(
                           () {
                         timeIn12HrFormat =
-                        '${dateTime.hour > 12 ? dateTime.hour - 12 : dateTime
-                            .hour}:${dateTime.minute} ${dateTime.hour > 12
-                            ? 'PM'
-                            : 'AM'}';
+                            '${dateTime.hour > 12 ? dateTime.hour - 12 : dateTime.hour}:${dateTime.minute > 9 ? dateTime.minute : '0' + dateTime.minute.toString()} ${dateTime.hour > 12 ? 'PM' : 'AM'}';
                         time =
-                        '${dateTime.hour}:${dateTime
-                            .minute} ($timeIn12HrFormat)';
+                            '${dateTime.hour}:${dateTime.minute > 9 ? dateTime.minute : '0' + dateTime.minute.toString()}';
                         // _timeController.text = time;
                       },
                     );
