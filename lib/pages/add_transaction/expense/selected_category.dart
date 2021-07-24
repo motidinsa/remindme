@@ -1,13 +1,16 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:mytask/models/expense.dart';
+import 'package:mytask/pages/add_transaction/expense/added_expense_list.dart';
 
 import 'expense_detail_list.dart';
 
 class SelectedCategoryInsertItem extends StatefulWidget {
   // final List<Widget> categories;
   final List<Widget> categories;
+  List<List<Expense>> finishedCategories;
 
-  SelectedCategoryInsertItem(this.categories);
+  SelectedCategoryInsertItem(this.categories, this.finishedCategories);
 
   @override
   _SelectedCategoryInsertItemState createState() =>
@@ -21,9 +24,13 @@ class _SelectedCategoryInsertItemState
   @override
   Widget build(BuildContext context) {
     // print(widget.categories.length.toString() + ' cat length');
-    return widget.categories.length == 0
-        ? Container()
-        : Stack(
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        // if (widget.finishedCategories.length > 0)
+        AddedExpenseList(widget.finishedCategories),
+        if (widget.categories.length > 0)
+          Stack(
             alignment: Alignment.bottomCenter,
             children: [
               CarouselSlider(
@@ -67,6 +74,8 @@ class _SelectedCategoryInsertItemState
                 ).toList(),
               )
             ],
-          );
+          ),
+      ],
+    );
   }
 }

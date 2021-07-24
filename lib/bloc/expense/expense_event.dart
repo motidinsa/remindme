@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:mytask/models/expense.dart';
 import 'package:mytask/pages/add_transaction/expense/expense_category.dart';
 
 abstract class ExpenseEvent extends Equatable {
@@ -27,6 +28,48 @@ class AddAnotherItem extends ExpenseEvent {
   final int categoryID;
 
   const AddAnotherItem(this.categoryID);
+
+  @override
+  List<Object> get props => [];
+}
+
+class AddExpenseDate extends ExpenseEvent {
+  final int categoryID;
+  final int index;
+  final String date;
+
+  const AddExpenseDate(this.categoryID, this.index, this.date);
+
+  @override
+  List<Object> get props => [];
+}
+
+class AddExpenseAmount extends ExpenseEvent {
+  final int categoryID;
+  final int index;
+  final double amount;
+
+  const AddExpenseAmount(this.categoryID, this.index, this.amount);
+
+  @override
+  List<Object> get props => [];
+}
+
+class AddExpenseReason extends ExpenseEvent {
+  final int categoryID;
+  final int index;
+  final String reason;
+
+  const AddExpenseReason(this.categoryID, this.index, this.reason);
+
+  @override
+  List<Object> get props => [];
+}
+
+class FinishCategory extends ExpenseEvent {
+  final int id;
+
+  const FinishCategory(this.id);
 
   @override
   List<Object> get props => [];

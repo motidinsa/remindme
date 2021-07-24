@@ -59,7 +59,7 @@ class _AddedExpenseState extends State<AddedExpense> {
                                 ),
                               ),
                               Text(
-                                expenseList[index].expenseName,
+                                expenseList[index].reason,
                                 style: TextStyle(
                                   fontSize: 16,
                                 ),
@@ -107,7 +107,7 @@ class _AddedExpenseState extends State<AddedExpense> {
                                     ),
                                   ),
                                   Text(
-                                    expenseList[index].expenseName,
+                                    expenseList[index].reason,
                                     style: TextStyle(
                                       fontSize: 16,
                                     ),

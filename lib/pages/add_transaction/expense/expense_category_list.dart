@@ -106,7 +106,7 @@ class _CategoryListState extends State<CategoryList> {
     return Card(
       child: ListView(
         shrinkWrap: true,
-        // physics: NeverScrollableScrollPhysics(),
+        physics: NeverScrollableScrollPhysics(),
         children: categoryList2,
       ),
       // ),

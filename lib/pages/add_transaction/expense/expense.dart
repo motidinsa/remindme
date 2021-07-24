@@ -6,8 +6,8 @@ import 'package:mytask/bloc/expense/expense_bloc.dart';
 import 'package:mytask/bloc/expense/expense_event.dart';
 import 'package:mytask/bloc/expense/expense_state.dart';
 import 'package:mytask/pages/add_transaction/expense/added_expense.dart';
+import 'package:mytask/pages/add_transaction/expense/added_expense_list.dart';
 import 'package:mytask/pages/add_transaction/expense/expense_detail.dart';
-import 'package:mytask/pages/add_transaction/expense/expense_detail_list.dart';
 import 'package:mytask/pages/add_transaction/expense/selected_category.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
@@ -30,7 +30,9 @@ class _ExpensePageState extends State<ExpensePage> {
   List<ExpenseCategoryy> selectedCategories = [];
   List<Widget> cardItems = [];
   List<List<ExpenseDetail>> expenseDetailList = [];
-
+  List<List<Expense>> expenseList = [];
+  List<List<Expense>> finishedCategory = [];
+  bool expenseAdded = false;
   String _selectedDate;
   String date;
   String dateSet =
@@ -213,56 +215,88 @@ class _ExpensePageState extends State<ExpensePage> {
           },
           child: ListView(children: [
             CategoryList(categoryList),
-            AddedExpense(
-              [
-                Expense(
-                    categoryName: 'Transport',
-                    date: '23/02/2013',
-                    expenseName: 'some dcghs',
-                    amount: 23.5),
-                Expense(
-                    categoryName: 'Transport',
-                    date: '23/02/2013',
-                    expenseName: 'some dcghs',
-                    amount: 23.5),
-                Expense(
-                    categoryName: 'Transport',
-                    date: '23/02/2013',
-                    expenseName: 'some dcghs',
-                    amount: 23.5),
-              ],
-            ),
+
+            // AddedExpense(
+            //   [
+            //     Expense(
+            //         categoryName: 'Transport',
+            //         date: '23/02/2013',
+            //         expenseName: 'some dcghs',
+            //         amount: 23.5),
+            //     Expense(
+            //         categoryName: 'Transport',
+            //         date: '23/02/2013',
+            //         expenseName: 'some dcghs',
+            //         amount: 23.5),
+            //     Expense(
+            //         categoryName: 'Transport',
+            //         date: '23/02/2013',
+            //         expenseName: 'some dcghs',
+            //         amount: 23.5),
+            //   ],
+            // ),
             BlocBuilder<ExpenseBloc, ExpenseState>(
               builder: (_, state) {
                 if (state is AddExpenseCategorySuccess) {
                   selectedCategories.add(state.selectedCategory);
-                  // singleCategoryMultipleItems = [];
+                  int index = selectedCategories.indexOf(selectedCategories
+                      .where(
+                          (element) => element.id == state.selectedCategory.id)
+                      .first);
+                  print(index.toString() + ' new index');
                   List<ExpenseDetail> singleCategoryMultipleItems = [];
-                  singleCategoryMultipleItems
-                      .add(ExpenseDetail(state.selectedCategory.id, true));
+                  List<Expense> singleCategoryMultipleExpenses = [];
+                  singleCategoryMultipleItems.add(ExpenseDetail(
+                      id: state.selectedCategory.id,
+                      expense: Expense(id: state.selectedCategory.id),
+                      isLastItem: true));
+                  singleCategoryMultipleExpenses.add(Expense(
+                      id: state.selectedCategory.id,
+                      categoryName: state.selectedCategory.categoryName));
                   expenseDetailList.add(singleCategoryMultipleItems);
+                  expenseList.add(singleCategoryMultipleExpenses);
                   cardItems = convertToCategoryCard(
                       selectedCategories, expenseDetailList);
+                  print(selectedCategories.length.toString() + ' selected cat');
+                  print(
+                      expenseDetailList.length.toString() + ' expense detail');
+                  print(expenseList.length.toString() + ' expense list');
                 }
                 if (state is RemoveExpenseCategorySuccess) {
                   int index = selectedCategories.indexOf(selectedCategories
                       .where((element) => element.id == state.categoryID)
                       .first);
-                  selectedCategories
-                      .removeWhere((element) => element.id == state.categoryID);
-                  print(selectedCategories.length);
+                  print(index.toString() + ' newwwwww index');
+                  if (selectedCategories.length == 1) {
+                    selectedCategories = [];
+                    expenseDetailList = [];
+                    expenseList = [];
+                  } else {
+                    selectedCategories.removeAt(index);
+                    // selectedCategories
+                    //     .removeWhere((element) => element.id == state.categoryID);
+                    // print(selectedCategories.length);
+                    expenseDetailList.removeAt(index);
+                    // expenseDetailList[index]
+                    //     .removeWhere((element) => element.id == state.categoryID);
+                    // expenseDetailList
+                    //     .removeWhere((element) => element.length == 0);
+                    // expenseList[index].removeWhere(
+                    //     (element) => element.id == state.categoryID);
+                    // expenseList.removeWhere((element) => element.length == 0);
+                    print(expenseList[0][0].amount.toString() + ' previous');
+                    expenseList.removeAt(index);
+                    print(expenseList[0][0].amount.toString() + ' after');
+                  }
 
-                  expenseDetailList[index]
-                      .removeWhere((element) => element.id == state.categoryID);
-                  expenseDetailList
-                      .removeWhere((element) => element.length == 0);
-                  // singleCategoryMultipleItems = [];
-                  // for (int i = 0; i < selectedCategories.length; i++) {
-                  //   if (expenseDetailList[i].first.id == state.categoryID) {
-                  //     expenseDetailList.removeAt(i);
-                  //   }
-                  // }
-                  // expenseDetailList.removeAt(state.categoryID - 1);
+                  print(selectedCategories.length.toString() + ' selected cat');
+                  print(
+                      expenseDetailList.length.toString() + ' expense detail');
+                  print(expenseList.length.toString() + ' expense list');
+                  // expenseList[index]
+                  //     .removeWhere((element) => element.id == state.categoryID);
+                  // expenseList.removeWhere((element) => element.length == 0);
+                  // expenseList.remove(expenseList[index]);
                   cardItems = convertToCategoryCard(
                       selectedCategories, expenseDetailList);
                 }
@@ -271,46 +305,96 @@ class _ExpensePageState extends State<ExpensePage> {
                       .where((element) => element.id == state.categoryID)
                       .first);
 
-                  expenseDetailList[index]
-                      .add(ExpenseDetail(state.categoryID, true));
-                  // for (int i = 0; i < selectedCategories.length; i++) {
-                  //   if (expenseDetailList[i].first.id == state.categoryID) {
-                  //     expenseDetailList[i].add(
-                  //         ExpenseDetail(expenseDetailList[i].first.id, true));
-                  //     // expenseDetailList.removeAt(i);
-                  //   }
-                  // }
-                  // selectedCategories.add(state.selectedCategory);
-                  // singleCategoryMultipleItems.clear();
-                  // singleCategoryMultipleItems.add(ExpenseDetail(state.selectedCategory.id,true));
-                  // expenseDetailList.add(singleCategoryMultipleItems);
+                  expenseDetailList[index].add(ExpenseDetail(
+                      id: state.categoryID,
+                      expense: Expense(id: state.categoryID),
+                      isLastItem: true));
+                  expenseList[index].add(Expense(
+                      id: state.categoryID,
+                      categoryName: selectedCategories[index].categoryName));
                   print(selectedCategories.length.toString() + 'leen');
                   print(expenseDetailList[index].length.toString() + 'leenee');
                   cardItems = convertToCategoryCard(
                       selectedCategories, expenseDetailList);
+                  print(selectedCategories.length.toString() + ' selected cat');
+                  print(
+                      expenseDetailList.length.toString() + ' expense detail');
+                  print(expenseList.length.toString() + ' expense list');
                 }
-                // if (expenseDetailList.isNotEmpty)
-                //   print(expenseDetailList.first.length.toString() + ' first');
+                if (state is DateAdded) {
+                  int categoryIndex = selectedCategories.indexOf(
+                      selectedCategories
+                          .where((element) => element.id == state.categoryID)
+                          .first);
+                  expenseList[categoryIndex][state.index].date = state.date;
+                  cardItems = convertToCategoryCard(
+                      selectedCategories, expenseDetailList);
+                }
+                if (state is AmountAdded) {
+                  int categoryIndex = selectedCategories.indexOf(
+                      selectedCategories
+                          .where((element) => element.id == state.categoryID)
+                          .first);
+                  print(categoryIndex.toString() + ' indexxxxxxxx');
+                  // expenseList[categoryIndex][state.index].amount = state.amount;
+                  expenseDetailList[categoryIndex][state.index].expense.amount =
+                      state.amount;
+                  // cardItems = convertToCategoryCard(
+                  //    selectedCategories, expenseDetailList);
+                }
+                if (state is ReasonAdded) {
+                  int categoryIndex = selectedCategories.indexOf(
+                      selectedCategories
+                          .where((element) => element.id == state.categoryID)
+                          .first);
+                  expenseList[categoryIndex][state.index].reason = state.reason;
+                  cardItems = convertToCategoryCard(
+                      selectedCategories, expenseDetailList);
+                }
+                if (state is CategoryFinished) {
+                  int index = selectedCategories.indexOf(selectedCategories
+                      .where((element) => element.id == state.id)
+                      .first);
+                  finishedCategory.add(expenseList[index]);
+                  if (selectedCategories.length == 1) {
+                    selectedCategories = [];
+                    expenseDetailList = [];
+                    expenseList = [];
+                  } else {
+                    selectedCategories
+                        .removeWhere((element) => element.id == state.id);
+                    print(selectedCategories.length);
+
+                    expenseDetailList[index]
+                        .removeWhere((element) => element.id == state.id);
+                    expenseDetailList
+                        .removeWhere((element) => element.length == 0);
+                    //
+                    expenseList[index]
+                        .removeWhere((element) => element.id == state.id);
+                    expenseList.removeWhere((element) => element.length == 0);
+                  }
+                  cardItems = convertToCategoryCard(
+                      selectedCategories, expenseDetailList);
+                  // if(selectedCategories==null)selectedCategories=[];
+                  // if(expenseDetailList==null)expenseDetailList=[];
+                  // if(expenseList==null)expenseList=[];
+                  // BlocProvider.of<ExpenseBloc>(context)
+                  //     .add(RemoveExpenseCategory(state.id));
+                  // return AddedExpense(state.expenses);
+                }
                 BlocProvider.of<ExpenseBloc>(context).add(
                   ClearCategory(),
                 );
-                return SelectedCategoryInsertItem(cardItems);
+                return SelectedCategoryInsertItem(cardItems, finishedCategory);
               },
             ),
-
-            // ExpenseDetail(
-            //   categoryTitle: 'Transportation',
-            // ),
             Container(
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton(
-                    // textTheme: ButtonTextTheme.accent,
-                    // shape: RoundedRectangleBorder(
-                    //   borderRadius: BorderRadius.circular(5.0),
-                    // ),
                     style: ButtonStyle(
                         backgroundColor:
                             MaterialStateProperty.all<Color>(Colors.green),
@@ -319,7 +403,6 @@ class _ExpensePageState extends State<ExpensePage> {
                     onPressed: () {},
                     child: Text(
                       'Save',
-                      // style: TextStyle(color: Colors.green),
                     ),
                   ),
                 ],
@@ -345,90 +428,58 @@ class _ExpensePageState extends State<ExpensePage> {
   }
 
   Widget multipleItems(
-      String categoryName, List<ExpenseDetail> multipleExpenses) {
-    // List<Widget> tobeReturned = [];
-    return ListView.separated(
-        itemBuilder: (context, index) => index == multipleExpenses.length - 1
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 20, top: 10),
-                    child: Text(
-                      categoryName,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.brown,
+    String categoryName,
+    List<ExpenseDetail> multipleExpenses,
+  ) {
+    return multipleExpenses.length == 0
+        ? Container()
+        : ListView.separated(
+            itemBuilder: (context, index) =>
+                index == multipleExpenses.length - 1
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(left: 20, top: 10),
+                            child: Text(
+                              categoryName,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.brown,
+                              ),
+                            ),
+                          ),
+                          ExpenseDetail(
+                              id: multipleExpenses.first.id,
+                              index: index,
+                              expense: multipleExpenses[index].expense,
+                              isLastItem: true),
+                        ],
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(left: 20, top: 10),
+                            child: Text(
+                              categoryName,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.brown),
+                            ),
+                          ),
+                          ExpenseDetail(
+                              id: multipleExpenses.first.id,
+                              index: index,
+                              expense: multipleExpenses[index].expense,
+                              isLastItem: false),
+                        ],
                       ),
-                    ),
-                  ),
-                  ExpenseDetail(multipleExpenses.first.id, true),
-                ],
-              )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 20, top: 10),
-                    child: Text(
-                      categoryName,
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.brown),
-                    ),
-                  ),
-                  ExpenseDetail(multipleExpenses.first.id, false),
-                ],
-              ),
-        separatorBuilder: (context, index) => Divider(),
-        itemCount: multipleExpenses.length);
-    // for (int i = 0; i < multipleExpenses.length; i++) {
-    //   if (i == multipleExpenses.length - 1) {
-    //     tobeReturned.add(
-    //         Column(
-    //       crossAxisAlignment: CrossAxisAlignment.start,
-    //       children: [
-    //         Container(
-    //           margin: EdgeInsets.only(left: 20, top: 10),
-    //           child: Text(
-    //             categoryName,
-    //             style: TextStyle(
-    //               fontSize: 18,
-    //               fontWeight: FontWeight.bold,
-    //               color: Colors.brown,
-    //             ),
-    //           ),
-    //         ),
-    //         ExpenseDetail(multipleExpenses[i].first.id, true),
-    //       ],
-    //     ));
-    //   } else {
-    //     tobeReturned.add(
-    //       Column(
-    //         crossAxisAlignment: CrossAxisAlignment.start,
-    //         children: [
-    //           Container(
-    //             margin: EdgeInsets.only(left: 20, top: 10),
-    //             child: Text(
-    //               categoryName,
-    //               style: TextStyle(
-    //                   fontSize: 18,
-    //                   fontWeight: FontWeight.bold,
-    //                   color: Colors.brown),
-    //             ),
-    //           ),
-    //           ExpenseDetail(multipleExpenses[i].first.id, false),
-    //           Divider()
-    //         ],
-    //       ),
-    //     );
-    //   }
-    // }
-    // return ListView(
-    //   // shrinkWrap: true,
-    //   children: tobeReturned,
-    // );
+            separatorBuilder: (context, index) => Divider(
+                  color: Colors.grey,
+                ),
+            itemCount: multipleExpenses.length);
   }
 }

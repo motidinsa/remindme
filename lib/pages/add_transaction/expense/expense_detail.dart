@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mytask/bloc/expense/expense_bloc.dart';
 import 'package:mytask/bloc/expense/expense_event.dart';
+import 'package:mytask/models/expense.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class ExpenseDetail extends StatefulWidget {
   final int id;
+  final int index;
   final bool isLastItem;
+  Expense expense;
 
-  ExpenseDetail(this.id, this.isLastItem);
+  ExpenseDetail({this.id, this.index, this.expense, this.isLastItem});
 
   @override
   _ExpenseDetailState createState() => _ExpenseDetailState();
@@ -50,6 +53,17 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.expense.amount != null) {
+      _expenseAmountController.text = widget.expense.amount.toString();
+    }
+    if (widget.expense.reason != null) {
+      _expenseReasonController.text = widget.expense.reason;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +84,7 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                 width: 20,
               ),
               Text(
-                dateSet,
+                widget.expense.date ?? dateSet,
                 style: TextStyle(fontSize: 18, color: Colors.green),
               ),
               SizedBox(
@@ -116,6 +130,12 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                                           onPressed: () => {
                                             setState(
                                               () {
+                                                BlocProvider.of<ExpenseBloc>(
+                                                        context)
+                                                    .add(AddExpenseDate(
+                                                        widget.id,
+                                                        widget.index,
+                                                        date));
                                                 setDate(date);
                                                 Navigator.pop(context);
                                               },
@@ -168,6 +188,14 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                     ),
                     contentPadding: EdgeInsets.only(left: 20),
                   ),
+                  onChanged: (newValue) =>
+                      BlocProvider.of<ExpenseBloc>(context).add(
+                    AddExpenseAmount(
+                      widget.id,
+                      widget.index,
+                      double.parse(newValue),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -190,6 +218,14 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                       color: Colors.green,
                     ),
                     contentPadding: EdgeInsets.only(left: 20),
+                  ),
+                  onChanged: (newValue) =>
+                      BlocProvider.of<ExpenseBloc>(context).add(
+                    AddExpenseReason(
+                      widget.id,
+                      widget.index,
+                      newValue,
+                    ),
                   ),
                 ),
               ),
@@ -593,7 +629,10 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
               ),
               Expanded(
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    BlocProvider.of<ExpenseBloc>(context)
+                        .add(FinishCategory(widget.id));
+                  },
                   child: Text('Finish'),
                   style: ButtonStyle(
                       foregroundColor:
