@@ -13,6 +13,9 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
     if (event is RemoveExpenseCategory) {
       yield RemoveExpenseCategorySuccess(event.categoryID);
     }
+    if (event is RemoveFinishedCategory) {
+      yield RemoveFinishedCategorySuccess(event.id);
+    }
     if (event is ClearCategory) {
       yield CategoryCleared();
     }

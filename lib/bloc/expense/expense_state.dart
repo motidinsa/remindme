@@ -27,6 +27,15 @@ class RemoveExpenseCategorySuccess extends ExpenseState {
   List<Object> get props => [categoryID];
 }
 
+class RemoveFinishedCategorySuccess extends ExpenseState {
+  final int categoryID;
+
+  const RemoveFinishedCategorySuccess(this.categoryID);
+
+  @override
+  List<Object> get props => [categoryID];
+}
+
 class NoCategoryAdded extends ExpenseState {}
 
 class CategoryCleared extends ExpenseState {}

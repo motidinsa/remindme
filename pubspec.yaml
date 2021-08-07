@@ -45,6 +45,7 @@ dependencies:
   flutter_local_notifications: ^6.0.0
   vibration: ^1.7.3
   carousel_slider: ^4.0.0
+  get: ^4.2.5
 
 
 dev_dependencies:

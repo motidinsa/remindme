@@ -5,8 +5,9 @@ import 'package:mytask/pages/add_transaction/expense/one_row_category.dart';
 
 class CategoryList extends StatefulWidget {
   final List<ExpenseCategoryy> categoryList;
+  final Key key;
 
-  CategoryList(this.categoryList);
+  CategoryList(this.key, this.categoryList);
 
   @override
   _CategoryListState createState() => _CategoryListState();

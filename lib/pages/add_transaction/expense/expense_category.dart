@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mytask/bloc/expense/expense_bloc.dart';
 import 'package:mytask/bloc/expense/expense_event.dart';
+
+import 'expense_controller.dart';
 
 // class ExpenseCategoryy extends StatelessWidget {
 //   final String categoryName;
@@ -52,10 +55,13 @@ import 'package:mytask/bloc/expense/expense_event.dart';
 class ExpenseCategoryy extends StatefulWidget {
   final String categoryName;
   final Icon icon;
-  final bool isSelected;
+  bool isSelected;
+  bool finishedCategory;
   final int id;
+  Key key;
 
-  ExpenseCategoryy(this.categoryName, this.icon, this.isSelected, this.id);
+  ExpenseCategoryy(this.categoryName, this.icon, this.isSelected, this.id,
+      this.finishedCategory, this.key);
 
   @override
   _ExpenseCategoryyState createState() => _ExpenseCategoryyState();
@@ -63,6 +69,8 @@ class ExpenseCategoryy extends StatefulWidget {
 
 class _ExpenseCategoryyState extends State<ExpenseCategoryy> {
   bool isSelected;
+
+  // final ExpenseController expenseController = Get.put(ExpenseController());
 
   @override
   // ignore: must_call_super
@@ -87,18 +95,37 @@ class _ExpenseCategoryyState extends State<ExpenseCategoryy> {
                 () {
                   print('setstate');
                   isSelected = !isSelected;
+
                   if (isSelected) {
                     BlocProvider.of<ExpenseBloc>(context).add(
                       AddExpenseCategory(
                         ExpenseCategoryy(widget.categoryName, widget.icon,
-                            widget.isSelected, widget.id),
+                            widget.isSelected, widget.id, false, UniqueKey()),
                       ),
                     );
+                    // expenseController.addSelectedCategory(widget.id);
                   } else {
                     BlocProvider.of<ExpenseBloc>(context).add(
                       RemoveExpenseCategory(widget.id),
                     );
+                    // if (widget.finishedCategory == true) {
+                    //   BlocProvider.of<ExpenseBloc>(context).add(
+                    //     RemoveFinishedCategory(widget.id),
+                    //   );
+                    // }
+                    // else{
+                    //   BlocProvider.of<ExpenseBloc>(context).add(
+                    //     RemoveExpenseCategory(widget.id),
+                    //   );
+                    // }
+
+                    // expenseController.removeSelectedCategory(widget.id);
                   }
+                  // else {
+                  //   BlocProvider.of<ExpenseBloc>(context).add(
+                  //     RemoveExpenseCategory(widget.id),
+                  //   );
+                  // }
 
                   print(isSelected.toString() + ' in the set');
                 },

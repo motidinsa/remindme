@@ -4,28 +4,51 @@ import 'package:mytask/bloc/expense/expense_bloc.dart';
 import 'package:mytask/bloc/expense/expense_event.dart';
 import 'package:mytask/models/expense.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:get/get.dart';
+
+import 'expense_controller.dart';
 
 class ExpenseDetail extends StatefulWidget {
   final int id;
   final int index;
   final bool isLastItem;
   Expense expense;
+  final Key key;
 
-  ExpenseDetail({this.id, this.index, this.expense, this.isLastItem});
+  ExpenseDetail({this.key, this.id, this.index, this.expense, this.isLastItem});
 
   @override
   _ExpenseDetailState createState() => _ExpenseDetailState();
 }
 
 class _ExpenseDetailState extends State<ExpenseDetail> {
+  // final ExpenseController expenseController = Get.put(ExpenseController());
   TextEditingController _expenseReasonController = TextEditingController();
   TextEditingController _expenseAmountController = TextEditingController();
   String date;
   String _selectedDate;
+  double amount;
+  String reason;
   String _dateCount;
   String _rangeCount;
   String dateSet =
       '${DateTime.now().day > 9 ? DateTime.now().day : '0${DateTime.now().day}'}-${DateTime.now().month > 9 ? DateTime.now().month : '0${DateTime.now().month}'}-${DateTime.now().year}';
+  FocusNode amountFocusNode = FocusNode();
+  FocusNode reasonFocusNode = FocusNode();
+
+  void onAmountFocusChange() {
+    if (!amountFocusNode.hasFocus)
+      // expenseController.addAmount(widget.id, widget.index, amount);
+      BlocProvider.of<ExpenseBloc>(context)
+          .add(AddExpenseAmount(widget.id, widget.index, amount));
+  }
+
+  void onReasonFocusChange() {
+    if (!reasonFocusNode.hasFocus)
+      // expenseController.addReason(widget.id, widget.index, reason);
+      BlocProvider.of<ExpenseBloc>(context)
+          .add(AddExpenseReason(widget.id, widget.index, reason));
+  }
 
   void setDate(String date) {
     setState(() {
@@ -34,10 +57,8 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
   }
 
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
-    setState(
-      () {
-        if (args.value is DateTime) {
-          _selectedDate = args.value.toString();
+    if (args.value is DateTime) {
+      _selectedDate = args.value.toString();
           date =
               '${DateTime.parse(_selectedDate).day > 9 ? DateTime.parse(_selectedDate).day : '0${DateTime.parse(_selectedDate).day}'}-${DateTime.parse(_selectedDate).month > 9 ? DateTime.parse(_selectedDate).month : '0${DateTime.parse(_selectedDate).month}'}-${DateTime.parse(_selectedDate).year}';
           print(_selectedDate);
@@ -48,13 +69,13 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
         } else {
           _rangeCount = args.value.length.toString();
         }
-      },
-    );
   }
 
   @override
   void initState() {
     super.initState();
+    amountFocusNode.addListener(onAmountFocusChange);
+    reasonFocusNode.addListener(onReasonFocusChange);
     if (widget.expense.amount != null) {
       _expenseAmountController.text = widget.expense.amount.toString();
     }
@@ -85,6 +106,7 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
               ),
               Text(
                 widget.expense.date ?? dateSet,
+                // key: UniqueKey(),
                 style: TextStyle(fontSize: 18, color: Colors.green),
               ),
               SizedBox(
@@ -127,19 +149,14 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                                             borderRadius:
                                                 BorderRadius.circular(8.0),
                                           ),
-                                          onPressed: () => {
-                                            setState(
-                                              () {
-                                                BlocProvider.of<ExpenseBloc>(
-                                                        context)
-                                                    .add(AddExpenseDate(
-                                                        widget.id,
-                                                        widget.index,
-                                                        date));
-                                                setDate(date);
-                                                Navigator.pop(context);
-                                              },
-                                            )
+                                          onPressed: () {
+                                            BlocProvider.of<ExpenseBloc>(
+                                                    context)
+                                                .add(AddExpenseDate(widget.id,
+                                                    widget.index, date));
+                                            // setDate(date);
+                                            Navigator.pop(context);
+
                                             // DateTime date = Datetime
                                           },
                                           child: Text(
@@ -176,6 +193,7 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
               SizedBox(
                 width: 150,
                 child: TextField(
+                  focusNode: amountFocusNode,
                   keyboardType: TextInputType.number,
                   cursorHeight: 30,
                   controller: _expenseAmountController,
@@ -188,14 +206,13 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                     ),
                     contentPadding: EdgeInsets.only(left: 20),
                   ),
-                  onChanged: (newValue) =>
-                      BlocProvider.of<ExpenseBloc>(context).add(
-                    AddExpenseAmount(
-                      widget.id,
-                      widget.index,
-                      double.parse(newValue),
-                    ),
-                  ),
+                  onChanged: (newValue) {
+                    amount = double.parse(newValue);
+                  },
+                  onEditingComplete: () {
+                    BlocProvider.of<ExpenseBloc>(context)
+                        .add(AddExpenseAmount(widget.id, widget.index, amount));
+                  },
                 ),
               ),
             ],
@@ -208,26 +225,28 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
               Expanded(
                 flex: 3,
                 child: TextField(
-                  cursorHeight: 30,
-                  controller: _expenseReasonController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Reason',
-                    labelStyle: TextStyle(
-                      fontSize: 18,
-                      color: Colors.green,
+                    focusNode: reasonFocusNode,
+                    cursorHeight: 30,
+                    controller: _expenseReasonController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Reason',
+                      labelStyle: TextStyle(
+                        fontSize: 18,
+                        color: Colors.green,
+                      ),
+                      contentPadding: EdgeInsets.only(left: 20),
                     ),
-                    contentPadding: EdgeInsets.only(left: 20),
-                  ),
-                  onChanged: (newValue) =>
+                    onChanged: (newValue) => reason = newValue,
+                    onEditingComplete: () {
+                      //   expenseController.addReason(
+                      //   widget.id,
+                      //   widget.index,
+                      //   reason,
+                      // );
                       BlocProvider.of<ExpenseBloc>(context).add(
-                    AddExpenseReason(
-                      widget.id,
-                      widget.index,
-                      newValue,
-                    ),
-                  ),
-                ),
+                          AddExpenseReason(widget.id, widget.index, reason));
+                    }),
               ),
               SizedBox(
                 width: 10,
@@ -617,6 +636,7 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
               Expanded(
                 child: TextButton(
                   onPressed: () {
+                    // expenseController.addAnotherItem(widget.id);
                     BlocProvider.of<ExpenseBloc>(context)
                         .add(AddAnotherItem(widget.id));
                   },
@@ -630,6 +650,7 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
               Expanded(
                 child: TextButton(
                   onPressed: () {
+                    // expenseController.finishCategory(widget.id);
                     BlocProvider.of<ExpenseBloc>(context)
                         .add(FinishCategory(widget.id));
                   },

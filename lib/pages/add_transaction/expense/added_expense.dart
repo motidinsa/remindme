@@ -3,8 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mytask/models/expense.dart';
 
+import 'expense_detail.dart';
+
 class AddedExpense extends StatefulWidget {
-  final List<Expense> expenseList;
+  final List<ExpenseDetail> expenseList;
 
   AddedExpense(this.expenseList);
 
@@ -13,17 +15,17 @@ class AddedExpense extends StatefulWidget {
 }
 
 class _AddedExpenseState extends State<AddedExpense> {
-  List<Expense> expenseList;
+  // List<Expense> expenseList;
 
-  @override
-  // ignore: must_call_super
-  void initState() {
-    expenseList = widget.expenseList;
-  }
+  // @override
+  // // ignore: must_call_super
+  // void initState() {
+  //   expenseList = widget.expenseList;
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return expenseList.length != 0
+    return widget.expenseList.length != 0
         ? Card(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -32,7 +34,7 @@ class _AddedExpenseState extends State<AddedExpense> {
                 Padding(
                   padding: const EdgeInsets.only(left: 25, bottom: 10, top: 10),
                   child: Text(
-                    expenseList[0].categoryName,
+                    widget.expenseList[0].expense.categoryName,
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -48,24 +50,25 @@ class _AddedExpenseState extends State<AddedExpense> {
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, index) => index ==
-                            expenseList.length - 1
+                        widget.expenseList.length - 1
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Text(
-                                expenseList[index].date,
+                                widget.expenseList[index].expense.date,
                                 style: TextStyle(
                                   fontSize: 16,
                                 ),
                               ),
                               Text(
-                                expenseList[index].reason,
+                                widget.expenseList[index].expense.reason,
                                 style: TextStyle(
                                   fontSize: 16,
                                 ),
                               ),
                               Text(
-                                expenseList[index].amount.toString(),
+                                widget.expenseList[index].expense.amount
+                                    .toString(),
                                 style: TextStyle(
                                   fontSize: 16,
                                 ),
@@ -74,11 +77,13 @@ class _AddedExpenseState extends State<AddedExpense> {
                                 borderRadius: BorderRadius.circular(100),
                                 // highlightColor: Colors.amber,
                                 onTap: () {
-                                  print(expenseList.toString() + ' before');
+                                  print(widget.expenseList.toString() +
+                                      ' before');
                                   setState(() {
-                                    expenseList.removeAt(index);
+                                    widget.expenseList.removeAt(index);
                                   });
-                                  print(expenseList.toString() + ' after');
+                                  print(
+                                      widget.expenseList.toString() + ' after');
                                 },
                                 child: Ink(
                                     // padding: EdgeInsets.all(),
@@ -101,19 +106,20 @@ class _AddedExpenseState extends State<AddedExpense> {
                                     MainAxisAlignment.spaceAround,
                                 children: [
                                   Text(
-                                    expenseList[index].date,
+                                    widget.expenseList[index].expense.date,
                                     style: TextStyle(
                                       fontSize: 16,
                                     ),
                                   ),
                                   Text(
-                                    expenseList[index].reason,
+                                    widget.expenseList[index].expense.reason,
                                     style: TextStyle(
                                       fontSize: 16,
                                     ),
                                   ),
                                   Text(
-                                    expenseList[index].amount.toString(),
+                                    widget.expenseList[index].expense.amount
+                                        .toString(),
                                     style: TextStyle(
                                       fontSize: 16,
                                     ),
@@ -122,11 +128,13 @@ class _AddedExpenseState extends State<AddedExpense> {
                                     borderRadius: BorderRadius.circular(100),
                                     // highlightColor: Colors.amber,
                                     onTap: () {
-                                      print(expenseList.toString() + ' before');
+                                      print(widget.expenseList.toString() +
+                                          ' before');
                                       setState(() {
-                                        expenseList.removeAt(index);
+                                        widget.expenseList.removeAt(index);
                                       });
-                                      print(expenseList.toString() + ' after');
+                                      print(widget.expenseList.toString() +
+                                          ' after');
                                     },
                                     child: Ink(
                                         // padding: EdgeInsets.all(),
@@ -148,7 +156,7 @@ class _AddedExpenseState extends State<AddedExpense> {
                               )
                             ],
                           ),
-                    itemCount: expenseList.length,
+                    itemCount: widget.expenseList.length,
                   ),
                 ),
               ],

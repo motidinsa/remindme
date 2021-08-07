@@ -75,6 +75,15 @@ class FinishCategory extends ExpenseEvent {
   List<Object> get props => [];
 }
 
+class RemoveFinishedCategory extends ExpenseEvent {
+  final int id;
+
+  const RemoveFinishedCategory(this.id);
+
+  @override
+  List<Object> get props => [];
+}
+
 class NoCategory extends ExpenseEvent {
   const NoCategory();
 

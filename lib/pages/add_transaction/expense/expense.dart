@@ -2,9 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:mytask/bloc/expense/expense_bloc.dart';
 import 'package:mytask/bloc/expense/expense_event.dart';
 import 'package:mytask/bloc/expense/expense_state.dart';
+import 'package:mytask/models/finished_category.dart';
 import 'package:mytask/pages/add_transaction/expense/added_expense.dart';
 import 'package:mytask/pages/add_transaction/expense/added_expense_list.dart';
 import 'package:mytask/pages/add_transaction/expense/expense_detail.dart';
@@ -14,6 +17,8 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'expense_category.dart';
 import 'expense_category_list.dart';
 import 'package:mytask/models/expense.dart';
+
+import 'expense_controller.dart';
 
 class ExpensePage extends StatefulWidget {
   static const routeName = 'AddExpense';
@@ -27,11 +32,14 @@ class _ExpensePageState extends State<ExpensePage> {
       '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
   TextEditingController _expenseReasonController = TextEditingController();
   TextEditingController _expenseAmountController = TextEditingController();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
   List<ExpenseCategoryy> selectedCategories = [];
   List<Widget> cardItems = [];
   List<List<ExpenseDetail>> expenseDetailList = [];
   List<List<Expense>> expenseList = [];
-  List<List<Expense>> finishedCategory = [];
+  List<ExpenseDetail> finishedCategory = [];
+  List<FinishedCategory> finishedCategoryList = [];
   bool expenseAdded = false;
   String _selectedDate;
   String date;
@@ -59,7 +67,9 @@ class _ExpensePageState extends State<ExpensePage> {
           color: Colors.black54,
         ),
         false,
-        1),
+        1,
+        false,
+        UniqueKey()),
     ExpenseCategoryy(
         'Food',
         Icon(
@@ -68,7 +78,9 @@ class _ExpensePageState extends State<ExpensePage> {
           color: Colors.black54,
         ),
         false,
-        2),
+        2,
+        false,
+        UniqueKey()),
     ExpenseCategoryy(
         'Food',
         Icon(
@@ -77,7 +89,9 @@ class _ExpensePageState extends State<ExpensePage> {
           color: Colors.black54,
         ),
         false,
-        3),
+        3,
+        false,
+        UniqueKey()),
     ExpenseCategoryy(
         'Food',
         Icon(
@@ -86,7 +100,9 @@ class _ExpensePageState extends State<ExpensePage> {
           color: Colors.black54,
         ),
         false,
-        4),
+        4,
+        false,
+        UniqueKey()),
     ExpenseCategoryy(
         'Food',
         Icon(
@@ -95,7 +111,9 @@ class _ExpensePageState extends State<ExpensePage> {
           color: Colors.black54,
         ),
         false,
-        5),
+        5,
+        false,
+        UniqueKey()),
     ExpenseCategoryy(
         'Food',
         Icon(
@@ -104,7 +122,9 @@ class _ExpensePageState extends State<ExpensePage> {
           color: Colors.black54,
         ),
         false,
-        6),
+        6,
+        false,
+        UniqueKey()),
     ExpenseCategoryy(
         'Food',
         Icon(
@@ -113,7 +133,9 @@ class _ExpensePageState extends State<ExpensePage> {
           color: Colors.black54,
         ),
         false,
-        7),
+        7,
+        false,
+        UniqueKey()),
     ExpenseCategoryy(
         'Food',
         Icon(
@@ -122,7 +144,9 @@ class _ExpensePageState extends State<ExpensePage> {
           color: Colors.black54,
         ),
         false,
-        8),
+        8,
+        false,
+        UniqueKey()),
     ExpenseCategoryy(
         'Food',
         Icon(
@@ -131,7 +155,9 @@ class _ExpensePageState extends State<ExpensePage> {
           color: Colors.black54,
         ),
         false,
-        9),
+        9,
+        false,
+        UniqueKey()),
     ExpenseCategoryy(
         'Food',
         Icon(
@@ -140,7 +166,9 @@ class _ExpensePageState extends State<ExpensePage> {
           color: Colors.black54,
         ),
         false,
-        10),
+        10,
+        false,
+        UniqueKey()),
     ExpenseCategoryy(
         'Food',
         Icon(
@@ -149,7 +177,9 @@ class _ExpensePageState extends State<ExpensePage> {
           color: Colors.black54,
         ),
         false,
-        11),
+        11,
+        false,
+        UniqueKey()),
     ExpenseCategoryy(
         'Food',
         Icon(
@@ -158,7 +188,9 @@ class _ExpensePageState extends State<ExpensePage> {
           color: Colors.black54,
         ),
         false,
-        12),
+        12,
+        false,
+        UniqueKey()),
     ExpenseCategoryy(
         'Food',
         Icon(
@@ -167,7 +199,9 @@ class _ExpensePageState extends State<ExpensePage> {
           color: Colors.black54,
         ),
         false,
-        13),
+        13,
+        false,
+        UniqueKey()),
     ExpenseCategoryy(
         'Food',
         Icon(
@@ -176,7 +210,9 @@ class _ExpensePageState extends State<ExpensePage> {
           color: Colors.black54,
         ),
         false,
-        13),
+        13,
+        false,
+        UniqueKey()),
   ];
 
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
@@ -198,11 +234,15 @@ class _ExpensePageState extends State<ExpensePage> {
     );
   }
 
+  // final ExpenseController expenseController = Get.put(ExpenseController());
+  // final ExpenseController controller = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
         BlocProvider.of<ExpenseBloc>(context).add(ClearCategory());
+        Get.reset();
         return true;
       },
       child: Scaffold(
@@ -214,26 +254,11 @@ class _ExpensePageState extends State<ExpensePage> {
             FocusScope.of(context).unfocus();
           },
           child: ListView(children: [
-            CategoryList(categoryList),
-
-            // AddedExpense(
-            //   [
-            //     Expense(
-            //         categoryName: 'Transport',
-            //         date: '23/02/2013',
-            //         expenseName: 'some dcghs',
-            //         amount: 23.5),
-            //     Expense(
-            //         categoryName: 'Transport',
-            //         date: '23/02/2013',
-            //         expenseName: 'some dcghs',
-            //         amount: 23.5),
-            //     Expense(
-            //         categoryName: 'Transport',
-            //         date: '23/02/2013',
-            //         expenseName: 'some dcghs',
-            //         amount: 23.5),
-            //   ],
+            // Obx(
+            //   () => expenseController.cardItems.length == 1
+            //       ? Container()
+            //       : SelectedCategoryInsertItem(
+            //       expenseController.cardItems[1], expenseController.finishedCategory),
             // ),
             BlocBuilder<ExpenseBloc, ExpenseState>(
               builder: (_, state) {
@@ -243,24 +268,28 @@ class _ExpensePageState extends State<ExpensePage> {
                       .where(
                           (element) => element.id == state.selectedCategory.id)
                       .first);
+                  categoryList[state.selectedCategory.id - 1].isSelected = true;
                   print(index.toString() + ' new index');
                   List<ExpenseDetail> singleCategoryMultipleItems = [];
                   List<Expense> singleCategoryMultipleExpenses = [];
                   singleCategoryMultipleItems.add(ExpenseDetail(
                       id: state.selectedCategory.id,
-                      expense: Expense(id: state.selectedCategory.id),
+                      expense: Expense(
+                          id: state.selectedCategory.id,
+                          categoryName: state.selectedCategory.categoryName),
                       isLastItem: true));
                   singleCategoryMultipleExpenses.add(Expense(
                       id: state.selectedCategory.id,
                       categoryName: state.selectedCategory.categoryName));
                   expenseDetailList.add(singleCategoryMultipleItems);
-                  expenseList.add(singleCategoryMultipleExpenses);
-                  cardItems = convertToCategoryCard(
-                      selectedCategories, expenseDetailList);
+                  // expenseList.add(singleCategoryMultipleExpenses);
+
                   print(selectedCategories.length.toString() + ' selected cat');
                   print(
                       expenseDetailList.length.toString() + ' expense detail');
                   print(expenseList.length.toString() + ' expense list');
+                  cardItems = convertToCategoryCard(
+                      selectedCategories, expenseDetailList);
                 }
                 if (state is RemoveExpenseCategorySuccess) {
                   int index = selectedCategories.indexOf(selectedCategories
@@ -270,7 +299,7 @@ class _ExpensePageState extends State<ExpensePage> {
                   if (selectedCategories.length == 1) {
                     selectedCategories = [];
                     expenseDetailList = [];
-                    expenseList = [];
+                    // expenseList = [];
                   } else {
                     selectedCategories.removeAt(index);
                     // selectedCategories
@@ -284,9 +313,56 @@ class _ExpensePageState extends State<ExpensePage> {
                     // expenseList[index].removeWhere(
                     //     (element) => element.id == state.categoryID);
                     // expenseList.removeWhere((element) => element.length == 0);
-                    print(expenseList[0][0].amount.toString() + ' previous');
-                    expenseList.removeAt(index);
-                    print(expenseList[0][0].amount.toString() + ' after');
+                    // print(expenseList[0][0].amount.toString() + ' previous');
+                    // expenseList.removeAt(index);
+                    // print(expenseList[0][0].amount.toString() + ' after');
+                  }
+                  categoryList[state.categoryID - 1].isSelected = false;
+                  print(selectedCategories.length.toString() + ' selected cat');
+                  print(
+                      expenseDetailList.length.toString() + ' expense detail');
+                  print(expenseList.length.toString() + ' expense list');
+                  // expenseList[index]
+                  //     .removeWhere((element) => element.id == state.categoryID);
+                  // expenseList.removeWhere((element) => element.length == 0);
+                  // expenseList.remove(expenseList[index]);
+                  cardItems = convertToCategoryCard(
+                      selectedCategories, expenseDetailList);
+                }
+                if (state is RemoveFinishedCategorySuccess) {
+                  int categoryIndex = selectedCategories.indexOf(
+                      selectedCategories
+                          .where((element) => element.id == state.categoryID)
+                          .first);
+                  int finishedCategoryIndex = finishedCategoryList.indexOf(
+                      finishedCategoryList
+                          .where((element) => element.id == state.categoryID)
+                          .first);
+                  // finishedCategory.where((element) => element.where((element) => element.id==))
+                  // int finishedCategoryIndex = finishedCategory.indexOf(finishedCategory
+                  //     .where((element) => element. == state.categoryID)
+                  //     .first);
+                  // print(index.toString() + ' newwwwww index');
+                  if (selectedCategories.length == 1) {
+                    selectedCategories = [];
+                    // expenseDetailList = [];
+                    // expenseList = [];
+                  } else {
+                    selectedCategories.removeAt(categoryIndex);
+                    // selectedCategories
+                    //     .removeWhere((element) => element.id == state.categoryID);
+                    // print(selectedCategories.length);
+                    finishedCategoryList.removeAt(finishedCategoryIndex);
+                    // expenseDetailList[index]
+                    //     .removeWhere((element) => element.id == state.categoryID);
+                    // expenseDetailList
+                    //     .removeWhere((element) => element.length == 0);
+                    // expenseList[index].removeWhere(
+                    //     (element) => element.id == state.categoryID);
+                    // expenseList.removeWhere((element) => element.length == 0);
+                    // print(expenseList[0][0].amount.toString() + ' previous');
+                    // expenseList.removeAt(index);
+                    // print(expenseList[0][0].amount.toString() + ' after');
                   }
 
                   print(selectedCategories.length.toString() + ' selected cat');
@@ -307,11 +383,13 @@ class _ExpensePageState extends State<ExpensePage> {
 
                   expenseDetailList[index].add(ExpenseDetail(
                       id: state.categoryID,
-                      expense: Expense(id: state.categoryID),
+                      expense: Expense(
+                          id: state.categoryID,
+                          categoryName: selectedCategories[index].categoryName),
                       isLastItem: true));
-                  expenseList[index].add(Expense(
-                      id: state.categoryID,
-                      categoryName: selectedCategories[index].categoryName));
+                  // expenseList[index].add(Expense(
+                  //     id: state.categoryID,
+                  //     categoryName: selectedCategories[index].categoryName));
                   print(selectedCategories.length.toString() + 'leen');
                   print(expenseDetailList[index].length.toString() + 'leenee');
                   cardItems = convertToCategoryCard(
@@ -326,7 +404,8 @@ class _ExpensePageState extends State<ExpensePage> {
                       selectedCategories
                           .where((element) => element.id == state.categoryID)
                           .first);
-                  expenseList[categoryIndex][state.index].date = state.date;
+                  expenseDetailList[categoryIndex][state.index].expense.date =
+                      state.date;
                   cardItems = convertToCategoryCard(
                       selectedCategories, expenseDetailList);
                 }
@@ -339,15 +418,17 @@ class _ExpensePageState extends State<ExpensePage> {
                   // expenseList[categoryIndex][state.index].amount = state.amount;
                   expenseDetailList[categoryIndex][state.index].expense.amount =
                       state.amount;
-                  // cardItems = convertToCategoryCard(
-                  //    selectedCategories, expenseDetailList);
+                  cardItems = convertToCategoryCard(
+                      selectedCategories, expenseDetailList);
                 }
                 if (state is ReasonAdded) {
                   int categoryIndex = selectedCategories.indexOf(
                       selectedCategories
                           .where((element) => element.id == state.categoryID)
                           .first);
-                  expenseList[categoryIndex][state.index].reason = state.reason;
+                  // expenseList[categoryIndex][state.index].reason = state.reason;
+                  expenseDetailList[categoryIndex][state.index].expense.reason =
+                      state.reason;
                   cardItems = convertToCategoryCard(
                       selectedCategories, expenseDetailList);
                 }
@@ -355,25 +436,57 @@ class _ExpensePageState extends State<ExpensePage> {
                   int index = selectedCategories.indexOf(selectedCategories
                       .where((element) => element.id == state.id)
                       .first);
-                  finishedCategory.add(expenseList[index]);
+                  print(index.toString() + ' yeeeeeeee');
+                  int catIndex = -1;
+                  // finishedCategory.add(expenseDetailList[index]);
+                  for (int i = 0; i < finishedCategoryList.length; i++) {
+                    if (finishedCategoryList[i].id == state.id) {
+                      catIndex =
+                          finishedCategoryList.indexOf(finishedCategoryList[i]);
+                    }
+                  }
+
+                  print(catIndex.toString() + ' cat iiiiiindex');
+                  if (catIndex == -1)
+                    finishedCategoryList.add(
+                        FinishedCategory(expenseDetailList[index], state.id));
+                  else {
+                    List<ExpenseDetail> expenseDetails =
+                        finishedCategoryList[catIndex].expenseDetail;
+                    // List<ExpenseDetail> addedExpenseDetail = [...expenseDetailList[index]]
+                    expenseDetails.addAll(expenseDetailList[index]);
+                    finishedCategoryList[catIndex].expenseDetail =
+                        expenseDetails;
+                  }
+
+// expenseDetailList.removeAt(index);
+                  print(index.toString() + ' newwwwww index');
                   if (selectedCategories.length == 1) {
                     selectedCategories = [];
                     expenseDetailList = [];
-                    expenseList = [];
+                    // expenseList = [];
                   } else {
-                    selectedCategories
-                        .removeWhere((element) => element.id == state.id);
-                    print(selectedCategories.length);
-
-                    expenseDetailList[index]
-                        .removeWhere((element) => element.id == state.id);
-                    expenseDetailList
-                        .removeWhere((element) => element.length == 0);
-                    //
-                    expenseList[index]
-                        .removeWhere((element) => element.id == state.id);
-                    expenseList.removeWhere((element) => element.length == 0);
+                    selectedCategories.removeAt(index);
+                    // selectedCategories
+                    //     .removeWhere((element) => element.id == state.categoryID);
+                    // print(selectedCategories.length);
+                    expenseDetailList.removeAt(index);
+                    // expenseDetailList[index]
+                    //     .removeWhere((element) => element.id == state.categoryID);
+                    // expenseDetailList
+                    //     .removeWhere((element) => element.length == 0);
+                    // expenseList[index].removeWhere(
+                    //     (element) => element.id == state.categoryID);
+                    // expenseList.removeWhere((element) => element.length == 0);
+                    // print(expenseList[0][0].amount.toString() + ' previous');
+                    // expenseList.removeAt(index);
+                    // print(expenseList[0][0].amount.toString() + ' after');
                   }
+// categoryList.where((element) => element.id==state.id).first.isSelected=false;
+                  categoryList[state.id - 1].isSelected = false;
+                  print(categoryList[state.id - 1].isSelected.toString() +
+                      ' bbbbbbbbbbbbbbbb');
+                  // selectedCategories[index].finishedCategory = true;
                   cardItems = convertToCategoryCard(
                       selectedCategories, expenseDetailList);
                   // if(selectedCategories==null)selectedCategories=[];
@@ -386,7 +499,8 @@ class _ExpensePageState extends State<ExpensePage> {
                 BlocProvider.of<ExpenseBloc>(context).add(
                   ClearCategory(),
                 );
-                return SelectedCategoryInsertItem(cardItems, finishedCategory);
+                return SelectedCategoryInsertItem(
+                    categoryList, cardItems, finishedCategoryList);
               },
             ),
             Container(
@@ -451,6 +565,7 @@ class _ExpensePageState extends State<ExpensePage> {
                             ),
                           ),
                           ExpenseDetail(
+                              key: UniqueKey(),
                               id: multipleExpenses.first.id,
                               index: index,
                               expense: multipleExpenses[index].expense,
@@ -471,6 +586,7 @@ class _ExpensePageState extends State<ExpensePage> {
                             ),
                           ),
                           ExpenseDetail(
+                              key: UniqueKey(),
                               id: multipleExpenses.first.id,
                               index: index,
                               expense: multipleExpenses[index].expense,
