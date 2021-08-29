@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mytask/models/expense.dart';
+import 'package:mytask/models/expense_and_income.dart';
 import 'package:mytask/models/finished_category.dart';
 import 'package:mytask/pages/add_transaction/expense/added_expense.dart';
 import 'package:mytask/pages/add_transaction/expense/expense_detail.dart';

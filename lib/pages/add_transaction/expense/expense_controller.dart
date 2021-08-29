@@ -1,6 +1,6 @@
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
-// import 'package:mytask/models/expense.dart';
+// import 'package:mytask/models/expense_and_income.dart';
 // import 'package:mytask/pages/add_transaction/expense/selected_category.dart';
 //
 // import 'expense_category.dart';

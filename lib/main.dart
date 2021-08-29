@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mytask/bloc/category/category_bloc.dart';
 import 'package:mytask/bloc/completed_task/completed_task_bloc.dart';
 import 'package:mytask/bloc/completed_task/completed_task_event.dart';
 import 'package:mytask/bloc/expense/expense_bloc.dart';
 import 'package:mytask/pages/add_reminder/add_reminder.dart';
-import 'package:mytask/pages/add_transaction/expense/expense.dart';
+import 'package:mytask/pages/add_transaction/expense/expense_and_income.dart';
+import 'package:mytask/pages/add_transaction/expense/expense_detail.dart';
+import 'package:mytask/pages/add_transaction/expense/expense_list.dart';
 import 'package:mytask/pages/completed/completed_task.dart';
 import 'package:mytask/pages/home/drawer/drawer.dart';
 import 'package:mytask/pages/home/homepage.dart';
+import 'package:mytask/pages/setting/add_category/expense_and_income_category_insert.dart';
 import 'package:mytask/pages/setting/setting.dart';
+import 'package:mytask/repository/expense_repository.dart';
 import 'package:mytask/repository/task_repository.dart';
 import 'package:mytask/route/task_route.dart';
 import 'bloc/add_reminder/add_reminder_bloc.dart';
+import 'bloc/category/category_event.dart';
 import 'bloc/expense/expense_event.dart';
 import 'bloc/task/task_bloc.dart';
 import 'bloc/task/task_event.dart';
@@ -20,6 +26,9 @@ import './pages/statics/history.dart';
 
 void main() {
   final TaskRepository taskRepository = TaskRepository(
+    dataProvider: TaskDataProvider.instance,
+  );
+  final ExpenseRepository expenseRepository = ExpenseRepository(
     dataProvider: TaskDataProvider.instance,
   );
   runApp(MultiBlocProvider(
@@ -35,7 +44,11 @@ void main() {
           ..add(CompletedTaskLoad()),
       ),
       BlocProvider<ExpenseBloc>(
-        create: (context) => ExpenseBloc()..add(NoCategory()),
+        create: (context) => ExpenseBloc(expenseRepository: expenseRepository),
+      ),
+      BlocProvider<CategoryBloc>(
+        create: (context) => CategoryBloc(expenseRepository: expenseRepository)
+          ..add(CheckInitialization()),
       )
     ],
     child: MyApp(
@@ -125,7 +138,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       foregroundColor: Colors.white,
       onPressed: () => {
         Navigator.of(context).pushNamed(
-          ExpensePage.routeName,
+          ExpenseAndIncomeCategoryInsert.routeName,
         )
         // Navigator.push(
         //     context,
@@ -198,7 +211,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
             break;
           case 3:
-            body = Setting();
+          // body = Setting();
             appbar = AppBar(
               title: Text('Theme'),
             );

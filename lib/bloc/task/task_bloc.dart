@@ -90,14 +90,14 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         yield TaskOperationFailure();
       }
     }
-    if (event is AddIconCategory) {
-      try {
-        Widget iconCategory = IconSubcategory();
-        yield AddIconCategorySuccess(iconCategory);
-      } catch (_) {
-        yield TaskOperationFailure();
-      }
-    }
+    // if (event is AddIconCategory) {
+    //   try {
+    //     Widget iconCategory = IconSubcategory();
+    //     yield AddIconCategorySuccess(iconCategory);
+    //   } catch (_) {
+    //     yield TaskOperationFailure();
+    //   }
+    // }
 
     if (event is RemoveIconSubcategory) {
       try {

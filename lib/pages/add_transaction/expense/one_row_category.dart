@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'expense_category.dart';
 
 class OneRowCategory extends StatelessWidget {
-  final List<ExpenseCategoryy> list;
+  final List<ExpenseAndIncomeCategory> list;
 
   const OneRowCategory(this.list);
 

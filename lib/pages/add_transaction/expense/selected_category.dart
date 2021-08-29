@@ -1,6 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:mytask/models/expense.dart';
+import 'package:mytask/models/expense_and_income.dart';
 import 'package:mytask/models/finished_category.dart';
 import 'package:mytask/pages/add_transaction/expense/added_expense_list.dart';
 import 'package:mytask/pages/add_transaction/expense/expense_category_list.dart';
@@ -14,7 +14,7 @@ class SelectedCategoryInsertItem extends StatefulWidget {
 
   final List<Widget> categories;
   List<FinishedCategory> finishedCategories;
-  final List<ExpenseCategoryy> categoryList;
+  final List<ExpenseAndIncomeCategory> categoryList;
 
   SelectedCategoryInsertItem(
       this.categoryList, this.categories, this.finishedCategories);

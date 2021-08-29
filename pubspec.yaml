@@ -46,6 +46,7 @@ dependencies:
   vibration: ^1.7.3
   carousel_slider: ^4.0.0
   get: ^4.2.5
+  font_awesome_flutter: ^9.1.0
 
 
 dev_dependencies:

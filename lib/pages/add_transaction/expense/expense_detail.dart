@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mytask/bloc/expense/expense_bloc.dart';
 import 'package:mytask/bloc/expense/expense_event.dart';
-import 'package:mytask/models/expense.dart';
+import 'package:mytask/models/expense_and_income.dart';
+import 'package:mytask/models/reason.dart';
+import 'package:mytask/pages/add_transaction/expense/single_reason.dart';
+import 'package:mytask/pages/add_transaction/expense/reason_list.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:get/get.dart';
 
@@ -12,7 +15,7 @@ class ExpenseDetail extends StatefulWidget {
   final int id;
   final int index;
   final bool isLastItem;
-  Expense expense;
+  ExpenseAndIncome expense;
   final Key key;
 
   ExpenseDetail({this.key, this.id, this.index, this.expense, this.isLastItem});
@@ -22,19 +25,40 @@ class ExpenseDetail extends StatefulWidget {
 }
 
 class _ExpenseDetailState extends State<ExpenseDetail> {
-  // final ExpenseController expenseController = Get.put(ExpenseController());
   TextEditingController _expenseReasonController = TextEditingController();
   TextEditingController _expenseAmountController = TextEditingController();
+  TextEditingController _expenseNumberOfTimesController =
+      TextEditingController();
   String date;
   String _selectedDate;
   double amount;
   String reason;
+  int numberOfTimes;
   String _dateCount;
   String _rangeCount;
   String dateSet =
       '${DateTime.now().day > 9 ? DateTime.now().day : '0${DateTime.now().day}'}-${DateTime.now().month > 9 ? DateTime.now().month : '0${DateTime.now().month}'}-${DateTime.now().year}';
   FocusNode amountFocusNode = FocusNode();
   FocusNode reasonFocusNode = FocusNode();
+  FocusNode numberOfTimesFocusNode = FocusNode();
+  List<Reason> reasonlist = [
+    Reason(
+      amount: 2.toString(),
+      name: 'reason 1',
+      record: 2,
+    ),
+    Reason(
+      amount: 1.toString(),
+      name: 'reason 2',
+      record: 7,
+    ),
+    Reason(
+      amount: 2.toString(),
+      name: 'reason 3',
+      record: 1,
+    ),
+    Reason(amount: 5.toString(), name: 'reason 4')
+  ];
 
   void onAmountFocusChange() {
     if (!amountFocusNode.hasFocus)
@@ -50,6 +74,13 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
           .add(AddExpenseReason(widget.id, widget.index, reason));
   }
 
+  void onNumberOfTimesFocusChange() {
+    if (!numberOfTimesFocusNode.hasFocus)
+      // expenseController.addReason(widget.id, widget.index, reason);
+      BlocProvider.of<ExpenseBloc>(context)
+          .add(AddExpenseNumberOfTimes(widget.id, widget.index, numberOfTimes));
+  }
+
   void setDate(String date) {
     setState(() {
       dateSet = date ?? dateSet;
@@ -59,16 +90,16 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     if (args.value is DateTime) {
       _selectedDate = args.value.toString();
-          date =
-              '${DateTime.parse(_selectedDate).day > 9 ? DateTime.parse(_selectedDate).day : '0${DateTime.parse(_selectedDate).day}'}-${DateTime.parse(_selectedDate).month > 9 ? DateTime.parse(_selectedDate).month : '0${DateTime.parse(_selectedDate).month}'}-${DateTime.parse(_selectedDate).year}';
-          print(_selectedDate);
+      date =
+          '${DateTime.parse(_selectedDate).day > 9 ? DateTime.parse(_selectedDate).day : '0${DateTime.parse(_selectedDate).day}'}-${DateTime.parse(_selectedDate).month > 9 ? DateTime.parse(_selectedDate).month : '0${DateTime.parse(_selectedDate).month}'}-${DateTime.parse(_selectedDate).year}';
+      print(_selectedDate);
 
-          print(date);
-        } else if (args.value is List<DateTime>) {
-          _dateCount = args.value.length.toString();
-        } else {
-          _rangeCount = args.value.length.toString();
-        }
+      print(date);
+    } else if (args.value is List<DateTime>) {
+      _dateCount = args.value.length.toString();
+    } else {
+      _rangeCount = args.value.length.toString();
+    }
   }
 
   @override
@@ -76,11 +107,17 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
     super.initState();
     amountFocusNode.addListener(onAmountFocusChange);
     reasonFocusNode.addListener(onReasonFocusChange);
-    if (widget.expense.amount != null) {
-      _expenseAmountController.text = widget.expense.amount.toString();
+    numberOfTimesFocusNode.addListener(onNumberOfTimesFocusChange);
+    if (widget.expense.netAmount != null) {
+      _expenseAmountController.text = widget.expense.netAmount.toString();
     }
     if (widget.expense.reason != null) {
       _expenseReasonController.text = widget.expense.reason;
+    }
+
+    if (widget.expense.numberOfTimes != 1) {
+      _expenseNumberOfTimesController.text =
+          widget.expense.numberOfTimes.toString();
     }
   }
 
@@ -215,8 +252,52 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                   },
                 ),
               ),
+              SizedBox(
+                width: 20,
+              ),
+              SizedBox(
+                width: 150,
+                child: TextField(
+                  focusNode: numberOfTimesFocusNode,
+                  keyboardType: TextInputType.number,
+                  cursorHeight: 30,
+                  controller: _expenseNumberOfTimesController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Number of times',
+                    labelStyle: TextStyle(
+                      fontSize: 14,
+                      color: Colors.green,
+                    ),
+                    contentPadding: EdgeInsets.only(left: 20),
+                  ),
+                  onChanged: (newValue) {
+                    numberOfTimes = int.parse(newValue);
+                  },
+                  onEditingComplete: () {
+                    BlocProvider.of<ExpenseBloc>(context).add(
+                        AddExpenseNumberOfTimes(
+                            widget.id, widget.index, numberOfTimes));
+                  },
+                ),
+              )
             ],
           ),
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Container(),
+            ),
+            Expanded(
+                child: Align(
+              child: Wrap(
+                  children: [Text('By default number of times is set to 1')]),
+            )),
+          ],
+        ),
+        SizedBox(
+          height: 10,
         ),
         Container(
           margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
@@ -277,7 +358,7 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                                 Row(
                                   children: [
                                     Text(
-                                      'Food',
+                                      widget.expense.categoryName,
                                       style: TextStyle(
                                           fontSize: 20,
                                           color: Colors.brown,
@@ -453,165 +534,7 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Card(
-                                  elevation: 4,
-                                  child: Column(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            _expenseReasonController.text =
-                                                'reason 1 cdbjhb';
-                                            Navigator.pop(context);
-                                          });
-                                        },
-                                        child: Container(
-                                          width: double.infinity,
-                                          padding: EdgeInsets.only(
-                                              left: 20,
-                                              top: 15,
-                                              bottom: 15,
-                                              right: 20),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'reason 1 cdbjhb',
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.grey),
-                                                textAlign: TextAlign.start,
-                                              ),
-                                              Text(
-                                                '15 records',
-                                                style: TextStyle(
-                                                    color: Colors.green),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Divider(
-                                        height: 0,
-                                        color: Colors.black54,
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            _expenseReasonController.text =
-                                                'reason 2 cdbjhb';
-                                            Navigator.pop(context);
-                                          });
-                                        },
-                                        child: Container(
-                                          width: double.infinity,
-                                          padding: EdgeInsets.only(
-                                              left: 20,
-                                              top: 15,
-                                              bottom: 15,
-                                              right: 20),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'reason 2 cdbjhb',
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.grey),
-                                                textAlign: TextAlign.start,
-                                              ),
-                                              Text(
-                                                '13 records',
-                                                style: TextStyle(
-                                                    color: Colors.green),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Divider(
-                                        height: 0,
-                                        color: Colors.black54,
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            _expenseReasonController.text =
-                                                'reason 3 cdbjhb';
-                                            Navigator.pop(context);
-                                          });
-                                        },
-                                        child: Container(
-                                          width: double.infinity,
-                                          padding: EdgeInsets.only(
-                                              left: 20,
-                                              top: 15,
-                                              bottom: 15,
-                                              right: 20),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'reason 3 cdbjhb',
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.grey),
-                                                textAlign: TextAlign.start,
-                                              ),
-                                              Text(
-                                                '16 records',
-                                                style: TextStyle(
-                                                    color: Colors.green),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Divider(
-                                        height: 0,
-                                        color: Colors.black54,
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            _expenseReasonController.text =
-                                                'reason 4 cdbjhb';
-                                            Navigator.pop(context);
-                                          });
-                                        },
-                                        child: Container(
-                                          width: double.infinity,
-                                          padding: EdgeInsets.only(
-                                              left: 20,
-                                              top: 15,
-                                              bottom: 15,
-                                              right: 20),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'reason 4 cdbjhb',
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.grey),
-                                                textAlign: TextAlign.start,
-                                              ),
-                                              Text(
-                                                '12 records',
-                                                style: TextStyle(
-                                                    color: Colors.green),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
+                                ReasonList(reasonlist)
                               ],
                             ),
                           );

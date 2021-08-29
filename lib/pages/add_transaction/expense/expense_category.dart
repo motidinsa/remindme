@@ -52,7 +52,7 @@ import 'expense_controller.dart';
 //     );
 //   }
 // }
-class ExpenseCategoryy extends StatefulWidget {
+class ExpenseAndIncomeCategory extends StatefulWidget {
   final String categoryName;
   final Icon icon;
   bool isSelected;
@@ -60,14 +60,21 @@ class ExpenseCategoryy extends StatefulWidget {
   final int id;
   Key key;
 
-  ExpenseCategoryy(this.categoryName, this.icon, this.isSelected, this.id,
-      this.finishedCategory, this.key);
+  ExpenseAndIncomeCategory(
+    this.categoryName,
+    this.icon,
+    this.isSelected,
+    this.id,
+    this.finishedCategory,
+    this.key,
+  );
 
   @override
-  _ExpenseCategoryyState createState() => _ExpenseCategoryyState();
+  _ExpenseAndIncomeCategoryState createState() =>
+      _ExpenseAndIncomeCategoryState();
 }
 
-class _ExpenseCategoryyState extends State<ExpenseCategoryy> {
+class _ExpenseAndIncomeCategoryState extends State<ExpenseAndIncomeCategory> {
   bool isSelected;
 
   // final ExpenseController expenseController = Get.put(ExpenseController());
@@ -75,6 +82,7 @@ class _ExpenseCategoryyState extends State<ExpenseCategoryy> {
   @override
   // ignore: must_call_super
   void initState() {
+    super.initState();
     isSelected = widget.isSelected;
   }
 
@@ -99,8 +107,13 @@ class _ExpenseCategoryyState extends State<ExpenseCategoryy> {
                   if (isSelected) {
                     BlocProvider.of<ExpenseBloc>(context).add(
                       AddExpenseCategory(
-                        ExpenseCategoryy(widget.categoryName, widget.icon,
-                            widget.isSelected, widget.id, false, UniqueKey()),
+                        ExpenseAndIncomeCategory(
+                            widget.categoryName,
+                            widget.icon,
+                            widget.isSelected,
+                            widget.id,
+                            false,
+                            UniqueKey()),
                       ),
                     );
                     // expenseController.addSelectedCategory(widget.id);

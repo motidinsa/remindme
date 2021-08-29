@@ -4,7 +4,7 @@ import 'package:mytask/pages/add_transaction/expense/expense_category.dart';
 import 'package:mytask/pages/add_transaction/expense/one_row_category.dart';
 
 class CategoryList extends StatefulWidget {
-  final List<ExpenseCategoryy> categoryList;
+  final List<ExpenseAndIncomeCategory> categoryList;
   final Key key;
 
   CategoryList(this.key, this.categoryList);
@@ -114,7 +114,8 @@ class _CategoryListState extends State<CategoryList> {
     );
   }
 
-  List<Widget> multipleOneRowCategory(List<ExpenseCategoryy> categoryList3) {
+  List<Widget> multipleOneRowCategory(
+      List<ExpenseAndIncomeCategory> categoryList3) {
     List<Widget> tobeReturned = [];
     int itemCount = categoryList3.length % 4 == 0
         ? (categoryList3.length ~/ 4)

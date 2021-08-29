@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:mytask/models/expense.dart';
+import 'package:mytask/models/expense_and_income.dart';
 
 import 'expense_detail.dart';
 
@@ -67,8 +67,14 @@ class _AddedExpenseState extends State<AddedExpense> {
                                 ),
                               ),
                               Text(
-                                widget.expenseList[index].expense.amount
-                                    .toString(),
+                                widget.expenseList[index].expense
+                                            .numberOfTimes ==
+                                        1
+                                    ? widget
+                                        .expenseList[index].expense.netAmount
+                                        .toString()
+                                    : '${widget.expenseList[index].expense.totalAmount} (${widget.expenseList[index].expense.numberOfTimes} x ${widget.expenseList[index].expense.netAmount})'
+                                        .toString(),
                                 style: TextStyle(
                                   fontSize: 16,
                                 ),
@@ -118,7 +124,7 @@ class _AddedExpenseState extends State<AddedExpense> {
                                     ),
                                   ),
                                   Text(
-                                    widget.expenseList[index].expense.amount
+                                    widget.expenseList[index].expense.netAmount
                                         .toString(),
                                     style: TextStyle(
                                       fontSize: 16,
