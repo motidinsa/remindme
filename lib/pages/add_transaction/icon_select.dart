@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mytask/bloc/category/category_bloc.dart';
-import 'package:mytask/bloc/category/category_event.dart';
+import 'package:remindme/bloc/category/category_bloc.dart';
+import 'package:remindme/bloc/category/category_event.dart';
+import 'package:remindme/bloc/reason/reason_bloc.dart';
+import 'package:remindme/bloc/reason/reason_event.dart';
 
 class IconSelect extends StatelessWidget {
   final Icon icon;
   final String name;
+  final String subcategoryName;
+  final int subcategoryID;
   final String type;
   final int id;
 
-  IconSelect(this.icon, this.name, this.type, this.id);
+  IconSelect(
+      {this.icon,
+      this.name,
+      this.type,
+      this.id,
+      this.subcategoryName,
+      this.subcategoryID});
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +28,35 @@ class IconSelect extends StatelessWidget {
       // highlightColor: Colors.amber,
       onTap: () {
         type == 'category'
-            ? BlocProvider.of<CategoryBloc>(context)
-                .add(AddCategoryIcon(iconType: 'material', iconName: name))
-            : BlocProvider.of<CategoryBloc>(context)
-                .add(AddSubcategoryIcon(subcategoryIcon: name, tempID: id));
+            ? BlocProvider.of<CategoryBloc>(context).add(
+                AddCategoryIcon(iconType: 'material', iconName: name),
+              )
+            : type == 'subcategory'
+                ? BlocProvider.of<CategoryBloc>(context).add(
+                    AddSubcategoryIcon(
+                        subcategoryIcon: name,
+                        tempID: id,
+                        subcategoryName: subcategoryName,
+                        subcategoryID: subcategoryID),
+                  )
+                : type == 'sub_subcategory_add'
+                    ? BlocProvider.of<CategoryBloc>(context).add(
+                        AddSubcategoryNameForSubSubcategory(
+                            tempID: id,
+                            subcategoryName: subcategoryName,
+                            subcategoryID: subcategoryID),
+                      )
+                    : type == 'add_reason'
+                        ? BlocProvider.of<ReasonBloc>(context).add(
+                            AddReasonCategoryName(id),
+                          )
+                        : type == 'add_subcategory_reason'
+                            ? BlocProvider.of<ReasonBloc>(context).add(
+                                AddReasonSubCategoryName(id),
+                              )
+                            : BlocProvider.of<ReasonBloc>(context).add(
+                                AddReasonSubSubCategoryName(id),
+                              );
         print('yee');
         Navigator.of(context).pop();
       },

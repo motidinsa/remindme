@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mytask/bloc/task/task_bloc.dart';
-import 'package:mytask/bloc/task/task_event.dart';
+import 'package:remindme/bloc/task/task_bloc.dart';
+import 'package:remindme/bloc/task/task_event.dart';
 
 class DeleteDialog extends StatelessWidget {
   final GlobalKey<ScaffoldState> sc;

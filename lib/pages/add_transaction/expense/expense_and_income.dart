@@ -4,35 +4,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:mytask/bloc/expense/expense_bloc.dart';
-import 'package:mytask/bloc/expense/expense_event.dart';
-import 'package:mytask/bloc/expense/expense_state.dart';
-import 'package:mytask/models/expense_and_income_category.dart';
-import 'package:mytask/models/expense_and_income_subcategory.dart';
-import 'package:mytask/models/expense_and_income_subsubcategory.dart';
-import 'package:mytask/models/finished_category.dart';
-import 'package:mytask/pages/add_transaction/expense/added_expense.dart';
-import 'package:mytask/pages/add_transaction/expense/added_expense_list.dart';
-import 'package:mytask/pages/add_transaction/expense/expense_detail.dart';
-import 'package:mytask/pages/add_transaction/expense/selected_category.dart';
-import 'package:mytask/utility/icons_helper.dart';
+import 'package:remindme/bloc/expense/expense_bloc.dart';
+import 'package:remindme/bloc/expense/expense_event.dart';
+import 'package:remindme/bloc/expense/expense_state.dart';
+import 'package:remindme/bloc/expense_and_income/expense_and_income_bloc.dart';
+import 'package:remindme/bloc/expense_and_income/expense_and_income_event.dart';
+import 'package:remindme/data_provider/task_data.dart';
+import 'package:remindme/models/expense_and_income_category.dart';
+import 'package:remindme/models/expense_and_income_subcategory.dart';
+import 'package:remindme/models/expense_and_income_subsubcategory.dart';
+import 'package:remindme/models/finished_category.dart';
+import 'package:remindme/pages/add_transaction/expense/added_expense.dart';
+import 'package:remindme/pages/add_transaction/expense/added_expense_list.dart';
+import 'package:remindme/pages/add_transaction/expense/expense_detail.dart';
+import 'package:remindme/pages/add_transaction/expense/selected_category.dart';
+import 'package:remindme/repository/expense_repository.dart';
+import 'package:remindme/utility/icons_helper.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
+import '../../../main.dart';
 import 'expense_category.dart';
 import 'expense_category_list.dart';
-import 'package:mytask/models/expense_and_income.dart';
-import 'package:mytask/utility/icons_helper.dart';
-
+import 'package:remindme/models/expense_and_income.dart';
+import 'package:remindme/utility/icons_helper.dart';
+import 'package:intl/src/intl/date_format.dart';
 import 'expense_controller.dart';
 
 class ExpenseAndIncomePage extends StatefulWidget {
   static const routeName = 'AddExpense';
+  final String type;
   final List<ExpenseAndIncomeCategoryModel> categories;
   final List<ExpenseAndIncomeSubCategoryModel> subcategories;
   final List<ExpenseAndIncomeSubSubCategoryModel> subSubcategories;
 
   ExpenseAndIncomePage(
-      {this.categories, this.subSubcategories, this.subcategories});
+      {this.categories, this.subSubcategories, this.subcategories, this.type});
 
   @override
   _ExpenseAndIncomePageState createState() => _ExpenseAndIncomePageState();
@@ -48,14 +54,14 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
   List<ExpenseAndIncomeCategory> selectedCategories = [];
   List<Widget> cardItems = [];
   List<List<ExpenseDetail>> expenseDetailList = [];
-  List<List<ExpenseAndIncome>> expenseList = [];
+
+  // List<List<ExpenseAndIncome>> expenseList = [];
   List<ExpenseDetail> finishedCategory = [];
   List<FinishedCategory> finishedCategoryList = [];
   bool expenseAdded = false;
   String _selectedDate;
   String date;
-  String dateAdded =
-      '${DateTime.now().year}-${DateTime.now().month > 9 ? DateTime.now().month : '0${DateTime.now().month}'}-${DateTime.now().day > 9 ? DateTime.now().day : '0${DateTime.now().day}'}';
+  String dateAdded = DateFormat("dd-MM-yy").format(DateTime.now());
 
   // String dateSet =
   //     '${DateTime.now().day > 9 ? DateTime.now().day : '0${DateTime.now().day}'}-${DateTime.now().month > 9 ? DateTime.now().month : '0${DateTime.now().month}'}-${DateTime.now().year}';
@@ -80,7 +86,7 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
       categoryList.add(ExpenseAndIncomeCategory(
           element.categoryName,
           Icon(
-            IconsHelper.getIconUsingPrefix(name: element.iconName),
+            IconsHelper.getIconGuessFavorFA(name: element.iconName),
             color: Colors.black54,
             size: 25,
           ),
@@ -118,12 +124,12 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
     return WillPopScope(
       onWillPop: () async {
         BlocProvider.of<ExpenseBloc>(context).add(ClearCategory());
-        Get.reset();
+        // Get.reset();
         return true;
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Add Expense'),
+          title: Text('Add ${widget.type}'),
         ),
         body: GestureDetector(
           onTap: () {
@@ -143,21 +149,27 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
                     selectedCategories.add(state.selectedCategory);
                     int index = selectedCategories.indexOf(selectedCategories
                         .where((element) =>
-                            element.id == state.selectedCategory.id)
+                            element.categoryID ==
+                            state.selectedCategory.categoryID)
                         .first);
-                    categoryList[state.selectedCategory.id - 1].isSelected =
-                        true;
+                    // categoryList[state.selectedCategory.categoryID - 1]
+                    //     .isSelected = true;
+                    categoryList
+                        .firstWhere((element) =>
+                            element.categoryID ==
+                            state.selectedCategory.categoryID)
+                        .isSelected = true;
                     print(index.toString() + ' new index');
                     List<ExpenseDetail> singleCategoryMultipleItems = [];
                     List<ExpenseAndIncome> singleCategoryMultipleExpenses = [];
 
                     singleCategoryMultipleItems.add(
                       ExpenseDetail(
-                          id: state.selectedCategory.id,
+                          categoryID: state.selectedCategory.categoryID,
                           expense: ExpenseAndIncome(
                               numberOfTimes: 1,
                               date: dateAdded,
-                              categoryID: state.selectedCategory.id,
+                              categoryID: state.selectedCategory.categoryID,
                               categoryName: state.selectedCategory.categoryName,
                               dateType: 'gr'),
                           isLastItem: true),
@@ -166,7 +178,7 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
                       ExpenseAndIncome(
                           numberOfTimes: 1,
                           date: dateAdded,
-                          categoryID: state.selectedCategory.id,
+                          categoryID: state.selectedCategory.categoryID,
                           categoryName: state.selectedCategory.categoryName,
                           dateType: 'gr'),
                     );
@@ -177,13 +189,14 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
                         selectedCategories.length.toString() + ' selected cat');
                     print(expenseDetailList.length.toString() +
                         ' expense detail');
-                    print(expenseList.length.toString() + ' expense list');
+                    // print(expenseList.length.toString() + ' expense list');
                     cardItems = convertToCategoryCard(
                         selectedCategories, expenseDetailList);
                   }
                   if (state is RemoveExpenseCategorySuccess) {
                     int index = selectedCategories.indexOf(selectedCategories
-                        .where((element) => element.id == state.categoryID)
+                        .where(
+                            (element) => element.categoryID == state.categoryID)
                         .first);
                     print(index.toString() + ' newwwwww index');
                     if (selectedCategories.length == 1) {
@@ -212,7 +225,7 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
                         selectedCategories.length.toString() + ' selected cat');
                     print(expenseDetailList.length.toString() +
                         ' expense detail');
-                    print(expenseList.length.toString() + ' expense list');
+                    // print(expenseList.length.toString() + ' expense list');
                     // expenseList[index]
                     //     .removeWhere((element) => element.id == state.categoryID);
                     // expenseList.removeWhere((element) => element.length == 0);
@@ -223,7 +236,8 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
                   if (state is RemoveFinishedCategorySuccess) {
                     int categoryIndex = selectedCategories.indexOf(
                         selectedCategories
-                            .where((element) => element.id == state.categoryID)
+                            .where((element) =>
+                                element.categoryID == state.categoryID)
                             .first);
                     int finishedCategoryIndex = finishedCategoryList.indexOf(
                         finishedCategoryList
@@ -260,7 +274,7 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
                         selectedCategories.length.toString() + ' selected cat');
                     print(expenseDetailList.length.toString() +
                         ' expense detail');
-                    print(expenseList.length.toString() + ' expense list');
+                    // print(expenseList.length.toString() + ' expense list');
                     // expenseList[index]
                     //     .removeWhere((element) => element.id == state.categoryID);
                     // expenseList.removeWhere((element) => element.length == 0);
@@ -270,11 +284,12 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
                   }
                   if (state is AnotherItemAdded) {
                     int index = selectedCategories.indexOf(selectedCategories
-                        .where((element) => element.id == state.categoryID)
+                        .where(
+                            (element) => element.categoryID == state.categoryID)
                         .first);
 
                     expenseDetailList[index].add(ExpenseDetail(
-                        id: state.categoryID,
+                        categoryID: state.categoryID,
                         expense: ExpenseAndIncome(
                             numberOfTimes: 1,
                             date: dateAdded,
@@ -295,12 +310,13 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
                         selectedCategories.length.toString() + ' selected cat');
                     print(expenseDetailList.length.toString() +
                         ' expense detail');
-                    print(expenseList.length.toString() + ' expense list');
+                    // print(expenseList.length.toString() + ' expense list');
                   }
                   if (state is DateAdded) {
                     int categoryIndex = selectedCategories.indexOf(
                         selectedCategories
-                            .where((element) => element.id == state.categoryID)
+                            .where((element) =>
+                                element.categoryID == state.categoryID)
                             .first);
                     expenseDetailList[categoryIndex][state.index].expense.date =
                         state.date;
@@ -310,20 +326,30 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
                   if (state is AmountAdded) {
                     int categoryIndex = selectedCategories.indexOf(
                         selectedCategories
-                            .where((element) => element.id == state.categoryID)
+                            .where((element) =>
+                                element.categoryID == state.categoryID)
                             .first);
                     print(categoryIndex.toString() + ' indexxxxxxxx');
                     // expenseList[categoryIndex][state.index].amount = state.amount;
                     expenseDetailList[categoryIndex][state.index]
                         .expense
                         .netAmount = state.amount;
+                    expenseDetailList[categoryIndex][state.index]
+                        .expense
+                        .totalAmount = (expenseDetailList[categoryIndex]
+                                    [state.index]
+                                .expense
+                                .numberOfTimes *
+                            double.parse(state.amount))
+                        .toString();
                     cardItems = convertToCategoryCard(
                         selectedCategories, expenseDetailList);
                   }
                   if (state is NumberOfTimesAdded) {
                     int categoryIndex = selectedCategories.indexOf(
                         selectedCategories
-                            .where((element) => element.id == state.categoryID)
+                            .where((element) =>
+                                element.categoryID == state.categoryID)
                             .first);
                     print(categoryIndex.toString() + ' indexxxxxxxx');
                     // expenseList[categoryIndex][state.index].amount = state.amount;
@@ -338,29 +364,90 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
                         .netAmount;
                     expenseDetailList[categoryIndex][state.index]
                         .expense
-                        .totalAmount = expenseDetailList[categoryIndex]
-                                [state.index]
-                            .expense
-                            .netAmount *
-                        state.numberOfTimes;
+                        .totalAmount = (double.parse(
+                                expenseDetailList[categoryIndex][state.index]
+                                    .expense
+                                    .netAmount) *
+                            state.numberOfTimes)
+                        .toString();
                     cardItems = convertToCategoryCard(
                         selectedCategories, expenseDetailList);
                   }
                   if (state is ReasonAdded) {
                     int categoryIndex = selectedCategories.indexOf(
                         selectedCategories
-                            .where((element) => element.id == state.categoryID)
+                            .where((element) =>
+                                element.categoryID == state.categoryID)
                             .first);
                     // expenseList[categoryIndex][state.index].reason = state.reason;
                     expenseDetailList[categoryIndex][state.index]
                         .expense
                         .reason = state.reason;
+
+                    cardItems = convertToCategoryCard(
+                        selectedCategories, expenseDetailList);
+                  }
+                  if (state is ReasonAddedFromList) {
+                    int categoryIndex = selectedCategories.indexOf(
+                        selectedCategories
+                            .where((element) =>
+                                element.categoryID == state.categoryID)
+                            .first);
+                    print('zzzzzzz before $categoryIndex');
+                    print(state.amount + ' opopoppopopopopop');
+                    // expenseList[categoryIndex][state.index].reason = state.reason;
+                    if (state.categoryID != null &&
+                        state.subcategoryID == null &&
+                        state.subSubcategoryID == null) {
+                      expenseDetailList[categoryIndex][state.index]
+                          .expense
+                          .categoryID = state.categoryID;
+                    } else if (state.subcategoryID != null &&
+                        state.subSubcategoryID == null) {
+                      print('zzzzzzz after $categoryIndex');
+                      expenseDetailList[categoryIndex][state.index]
+                          .expense
+                          .categoryID = state.categoryID;
+                      expenseDetailList[categoryIndex][state.index]
+                          .expense
+                          .subcategoryID = state.subcategoryID;
+                    } else if (state.subSubcategoryID != null) {
+                      print('zzzzzzz after $categoryIndex');
+                      expenseDetailList[categoryIndex][state.index]
+                          .expense
+                          .categoryID = state.categoryID;
+                      expenseDetailList[categoryIndex][state.index]
+                          .expense
+                          .subcategoryID = state.subcategoryID;
+                      expenseDetailList[categoryIndex][state.index]
+                          .expense
+                          .subsubcategoryID = state.subSubcategoryID;
+                    }
+                    expenseDetailList[categoryIndex][state.index]
+                        .expense
+                        .reason = state.reason;
+                    expenseDetailList[categoryIndex][state.index]
+                        .expense
+                        .netAmount = state.amount;
+                    expenseDetailList[categoryIndex][state.index]
+                        .expense
+                        .totalAmount = (expenseDetailList[categoryIndex]
+                                    [state.index]
+                                .expense
+                                .numberOfTimes *
+                            double.parse(state.amount))
+                        .toString();
+                    print('reason id ${state.reasonID}');
+                    expenseDetailList[categoryIndex][state.index]
+                        .expense
+                        .reasonID = state.reasonID;
+
                     cardItems = convertToCategoryCard(
                         selectedCategories, expenseDetailList);
                   }
                   if (state is CategoryFinished) {
                     int index = selectedCategories.indexOf(selectedCategories
-                        .where((element) => element.id == state.id)
+                        .where((element) => element.categoryID == state.id)
                         .first);
                     print(index.toString() + ' yeeeeeeee');
                     int catIndex = -1;
@@ -423,7 +510,9 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
                     // return AddedExpense(state.expenses);
                   }
                   if (state is ExpenseAddedSuccessfully) {
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
+                    // Navigator.pop(context);
+                    // return Container();
                   }
                   BlocProvider.of<ExpenseBloc>(context).add(
                     ClearCategory(),
@@ -444,9 +533,33 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
                           foregroundColor:
                               MaterialStateProperty.all<Color>(Colors.white)),
                       onPressed: () {
-                        // BlocProvider.of<ExpenseBloc>(context).add(
-                        //   AddExpense(finishedCategoryList, expenseDetailList),
-                        // );
+                        DateTime now = DateTime.now();
+
+                        DateFormat dateFormat = DateFormat("dd-MM-yy");
+                        DateFormat timeFormat = DateFormat("HH:mm:ss");
+                        String currentDate = dateFormat.format(now);
+                        String currentTime = timeFormat.format(now);
+                        finishedCategoryList.forEach((element) {
+                          element.expenseDetail.forEach((element) {
+                            element.expense.addedDate = currentDate;
+                            element.expense.addedTime = currentTime;
+                          });
+                        });
+                        expenseDetailList.forEach((element) {
+                          element.forEach((element) {
+                            element.expense.addedDate = currentDate;
+                            element.expense.addedTime = currentTime;
+                          });
+                        });
+                        BlocProvider.of<ExpenseAndIncomeBloc>(context).add(
+                          AddExpense(
+                              finishedCategories: finishedCategoryList,
+                              expenseDetails: expenseDetailList,
+                              type: widget.type),
+                        );
+
+                        Navigator.pop(context);
+                        Navigator.pop(context);
                         // context.read<ExpenseBloc>().add(
                         //       AddExpense(finishedCategoryList, expenseDetailList),
                         //     );
@@ -503,7 +616,7 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
                           ),
                           ExpenseDetail(
                               key: UniqueKey(),
-                              id: multipleExpenses.first.id,
+                              categoryID: multipleExpenses.first.categoryID,
                               index: index,
                               expense: multipleExpenses[index].expense,
                               isLastItem: true),
@@ -524,7 +637,7 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
                           ),
                           ExpenseDetail(
                               key: UniqueKey(),
-                              id: multipleExpenses.first.id,
+                              categoryID: multipleExpenses.first.categoryID,
                               index: index,
                               expense: multipleExpenses[index].expense,
                               isLastItem: false),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mytask/bloc/completed_task/completed_task_event.dart';
-import 'package:mytask/bloc/completed_task/completed_task_state.dart';
-import 'package:mytask/repository/task_repository.dart';
+import 'package:remindme/bloc/completed_task/completed_task_event.dart';
+import 'package:remindme/bloc/completed_task/completed_task_state.dart';
+import 'package:remindme/repository/task_repository.dart';
 
 class CompletedTaskBloc extends Bloc<CompletedTaskEvent, CompletedTaskState> {
   final TaskRepository taskRepository;

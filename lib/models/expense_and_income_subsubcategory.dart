@@ -1,17 +1,16 @@
 class ExpenseAndIncomeSubSubCategoryModel {
   String subSubcategoryName;
-  final String iconName;
-  final String iconType;
-  final String dateAdded;
-  final String timeAdded;
+
+  String dateAdded;
+  String timeAdded;
   final String changedDate;
   final String changedTime;
-  final String dateType;
+  String dateType;
   final int id;
   final int userID;
   int subcategoryID;
   int categoryID;
-  final String subSubcategoryType;
+  String subSubcategoryType;
 
   ExpenseAndIncomeSubSubCategoryModel(
       {this.subSubcategoryName,
@@ -21,8 +20,6 @@ class ExpenseAndIncomeSubSubCategoryModel {
       this.dateType,
       this.id,
       this.changedTime,
-      this.iconName,
-      this.iconType,
       this.timeAdded,
       this.categoryID,
       this.subcategoryID,
@@ -30,10 +27,8 @@ class ExpenseAndIncomeSubSubCategoryModel {
 
   Map<String, dynamic> toMap() {
     return {
-      // 'user_id':userID,
+      'user_id': userID,
       'name': subSubcategoryName,
-      'icon_name': iconName,
-      'icon_type': iconType,
       'date': dateAdded,
       'time': timeAdded,
       'category_id': categoryID,

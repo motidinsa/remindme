@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mytask/pages/home/single_custom_day_and_time.dart';
+import 'package:remindme/pages/home/single_custom_day_and_time.dart';
 
 class CustomDayAndTime extends StatelessWidget {
   final Map<String, dynamic> daysWithTime;

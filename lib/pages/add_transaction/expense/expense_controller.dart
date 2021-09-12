@@ -1,7 +1,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
-// import 'package:mytask/models/expense_and_income.dart';
-// import 'package:mytask/pages/add_transaction/expense/selected_category.dart';
+// import 'package:remindme/models/expense_and_income.dart';
+// import 'package:remindme/pages/add_transaction/expense/selected_category.dart';
 //
 // import 'expense_category.dart';
 // import 'expense_detail.dart';

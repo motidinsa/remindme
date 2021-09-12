@@ -26,7 +26,7 @@ class ExpenseAndIncomeCategoryModel {
 
   Map<String, dynamic> toMap() {
     return {
-      // 'user_id': userID,
+      'user_id': userID,
       'name': categoryName,
       'icon_name': iconName,
       'icon_type': iconType,

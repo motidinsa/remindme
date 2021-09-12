@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mytask/bloc/category/category_bloc.dart';
-import 'package:mytask/bloc/category/category_event.dart';
-import 'package:mytask/bloc/category/category_state.dart';
-import 'package:mytask/models/expense_and_income_subsubcategory.dart';
-import 'package:mytask/pages/add_transaction/icon_select.dart';
-import 'package:mytask/pages/setting/add_category/expense_and_income_category_insert.dart';
-import 'package:mytask/pages/setting/add_category/single_row_category_icon_list.dart';
-import 'package:mytask/pages/setting/add_category/sub_subcategory.dart';
-import 'package:mytask/utility/icons_helper.dart';
+import 'package:remindme/bloc/category/category_bloc.dart';
+import 'package:remindme/bloc/category/category_event.dart';
+import 'package:remindme/bloc/category/category_state.dart';
+import 'package:remindme/models/expense_and_income_subsubcategory.dart';
+import 'package:remindme/pages/add_transaction/icon_select.dart';
+import 'package:remindme/pages/setting/add_category/expense_and_income_category_insert.dart';
+import 'package:remindme/pages/setting/add_category/single_row_category_icon_list.dart';
+import 'package:remindme/pages/setting/add_category/sub_subcategory.dart';
+import 'package:remindme/utility/icons_helper.dart';
 
 class Subcategory extends StatefulWidget {
   int id;
@@ -58,7 +58,7 @@ class _SubcategoryState extends State<Subcategory> {
   Widget build(BuildContext context) {
     return BlocBuilder<CategoryBloc, CategoryState>(builder: (_, state) {
       if (state is SubSubcategoryRemoved) {
-        subSubcategoryWidgets.removeAt(state.id);
+        subSubcategoryWidgets.removeWhere((element) => element.id == state.id);
         for (int i = 0; i < subSubcategoryWidgets.length; i++) {
           subSubcategoryWidgets[i].id = i;
         }
@@ -172,14 +172,21 @@ class _SubcategoryState extends State<Subcategory> {
                           //   id: id,
                           // ));
                           // tempSubSubcategoryID.add(0);
-                          subSubcategories
-                              .add(ExpenseAndIncomeSubSubCategoryModel(
-                            id: tempSubSubcategoryID,
-                            subcategoryID: widget.id,
-                            dateType: 'gr',
-                          ));
+                          subSubcategories.add(
+                            ExpenseAndIncomeSubSubCategoryModel(
+                              userID: 1,
+                              id: tempSubSubcategoryID,
+                              subcategoryID: widget.id,
+                              dateType: 'gr',
+                            ),
+                          );
                           BlocProvider.of<CategoryBloc>(context).add(
-                            AddSubSubCategory(subcategories: subSubcategories),
+                            AddSubSubCategory(
+                                subcategories: subSubcategories,
+                                categoryID: widget.id,
+                                isUpdate: subSubcategories.length == 1
+                                    ? false
+                                    : true),
                           );
                           subSubcategoryWidgets.add(
                             SubSubcategory(
@@ -245,10 +252,15 @@ class _IconSubcategoryState extends State<IconSubcategory> {
               shrinkWrap: true,
               itemBuilder: (context, index) =>
                   index == (widget.iconList.length ~/ 5)
-                      ? SingleRowIconList(widget.iconList.sublist(
-                          5 * index, 5 * index + (widget.iconList.length % 5)))
+                      ? SingleRowIconList(
+                          widget.iconList.sublist(
+                            5 * index,
+                            5 * index + (widget.iconList.length % 5),
+                          ),
+                        )
                       : SingleRowIconList(
-                          widget.iconList.sublist(5 * index, 5 * index + 5)),
+                          widget.iconList.sublist(5 * index, 5 * index + 5),
+                        ),
               itemCount: itemCount,
               separatorBuilder: (context, index) => SizedBox(
                 height: 5,

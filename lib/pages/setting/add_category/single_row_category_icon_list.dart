@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mytask/pages/add_transaction/icon_select.dart';
+import 'package:remindme/pages/add_transaction/icon_select.dart';
 
 class SingleRowIconList extends StatelessWidget {
-  final List<IconSelect> iconList;
+  final List<Widget> iconList;
 
   SingleRowIconList(this.iconList);
 

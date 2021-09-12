@@ -2,18 +2,20 @@ class ExpenseAndIncome {
   String categoryName;
   String subcategoryName;
   String date;
+  String addedDate;
   String dateType;
   String changedDate;
   String changedTime;
-  String time;
+  String addedTime;
   String reason;
   String categoryType;
-  double netAmount;
-  double totalAmount;
+  String netAmount;
+  String totalAmount;
   int id;
   int userID;
   int categoryID;
   int subcategoryID;
+  int subsubcategoryID;
   int numberOfTimes;
   int reasonID;
 
@@ -27,12 +29,14 @@ class ExpenseAndIncome {
       this.id,
       this.categoryID,
       this.subcategoryID,
-      this.time,
+      this.addedDate,
       this.changedDate,
       this.changedTime,
       this.dateType,
       this.categoryType,
       this.numberOfTimes,
       this.reasonID,
-      this.userID});
+      this.userID,
+      this.subsubcategoryID,
+      this.addedTime});
 }

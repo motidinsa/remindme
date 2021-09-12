@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
-import 'package:mytask/models/expense_tobe_added.dart';
-import 'package:mytask/models/expense_and_income.dart';
-import 'package:mytask/models/finished_category.dart';
-import 'package:mytask/pages/add_transaction/expense/expense_category.dart';
-import 'package:mytask/pages/add_transaction/expense/expense_detail.dart';
+import 'package:remindme/models/expense_tobe_added.dart';
+import 'package:remindme/models/expense_and_income.dart';
+import 'package:remindme/models/finished_category.dart';
+import 'package:remindme/pages/add_transaction/expense/expense_category.dart';
+import 'package:remindme/pages/add_transaction/expense/expense_detail.dart';
 
 abstract class ExpenseEvent extends Equatable {
   const ExpenseEvent();
@@ -50,12 +50,12 @@ class AddExpenseDate extends ExpenseEvent {
 class AddExpenseAmount extends ExpenseEvent {
   final int categoryID;
   final int index;
-  final double amount;
+  final String amount;
 
   const AddExpenseAmount(this.categoryID, this.index, this.amount);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [categoryID, index, amount];
 }
 
 class AddExpenseNumberOfTimes extends ExpenseEvent {
@@ -79,6 +79,29 @@ class AddExpenseReason extends ExpenseEvent {
 
   @override
   List<Object> get props => [];
+}
+
+class AddExpenseReasonFromList extends ExpenseEvent {
+  final int categoryID;
+  final int subcategoryID;
+  final int subSubcategoryID;
+  final int index;
+  final int reasonID;
+  final String reason;
+  final String amount;
+
+  const AddExpenseReasonFromList({
+    this.categoryID,
+    this.index,
+    this.reason,
+    this.subcategoryID,
+    this.subSubcategoryID,
+    this.amount,
+    this.reasonID,
+  });
+
+  @override
+  List<Object> get props => [reason, amount];
 }
 
 class AddExpenseReasonAndAmount extends ExpenseEvent {
@@ -131,15 +154,16 @@ class ClearCategory extends ExpenseEvent {
   List<Object> get props => [];
 }
 
-class AddExpense extends ExpenseEvent {
-  final List<FinishedCategory> finishedCategories;
-  final List<List<ExpenseDetail>> expenseDetails;
-
-  const AddExpense({this.finishedCategories, this.expenseDetails});
-
-  @override
-  List<Object> get props => [];
-}
+// class AddExpense extends ExpenseEvent {
+//   final List<FinishedCategory> finishedCategories;
+//   final List<List<ExpenseDetail>> expenseDetails;
+//   final String type;
+//
+//   const AddExpense({this.finishedCategories, this.expenseDetails, this.type});
+//
+//   @override
+//   List<Object> get props => [finishedCategories,expenseDetails];
+// }
 
 class LoadAllExpense extends ExpenseEvent {
   const LoadAllExpense();
@@ -175,3 +199,37 @@ class InitializeCategoryAndSubcategory extends ExpenseEvent {
   @override
   List<Object> get props => [];
 }
+
+class GetCategoryReasons extends ExpenseEvent {
+  final int categoryID;
+
+  const GetCategoryReasons(this.categoryID);
+
+  @override
+  List<Object> get props => [];
+}
+
+class GetSubCategoryReasons extends ExpenseEvent {
+  final int subcategoryID;
+
+  const GetSubCategoryReasons(this.subcategoryID);
+
+  @override
+  List<Object> get props => [subcategoryID];
+}
+
+class GetSubSubCategoryReasons extends ExpenseEvent {
+  final int subsubcategoryID;
+
+  const GetSubSubCategoryReasons(this.subsubcategoryID);
+
+  @override
+  List<Object> get props => [subsubcategoryID];
+}
+// class GetAllIncomeAndExpense extends ExpenseEvent {
+//
+//   const GetAllIncomeAndExpense();
+//
+//   @override
+//   List<Object> get props => [];
+// }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mytask/pages/add_reminder/selected_datetime_textfield.dart';
+import 'package:remindme/pages/add_reminder/selected_datetime_textfield.dart';
 
 class SelectedDateAndTime extends StatelessWidget {
   final List<String> values;

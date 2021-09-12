@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mytask/models/expense_and_income_subcategory.dart';
-import 'package:mytask/models/expense_and_income_subsubcategory.dart';
-import 'package:mytask/repository/expense_repository.dart';
+import 'package:remindme/models/expense_and_income_subcategory.dart';
+import 'package:remindme/models/expense_and_income_subsubcategory.dart';
+import 'package:remindme/repository/expense_repository.dart';
 
 import 'category_event.dart';
 import 'category_state.dart';
@@ -43,7 +43,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
           iconName: event.iconName, iconType: event.iconType);
       // yield CategoryIconCleared();
     }
-    if (event is Clear) {
+    if (event is ClearCategory) {
       yield Cleared();
     }
     if (event is AddCategoryType) {
@@ -51,17 +51,29 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     }
     if (event is AddSubcategoryName) {
       yield SubcategoryNameAdded(
-          subcategoryName: event.subcategoryName, tempID: event.tempID);
+          subcategoryName: event.subcategoryName,
+          tempID: event.tempID,
+          subcategoryID: event.subcategoryID);
+    }
+    if (event is AddSubcategoryNameForSubSubcategory) {
+      yield SubcategoryNameAddedForSubSubcategory(
+          subcategoryName: event.subcategoryName,
+          tempID: event.tempID,
+          subcategoryID: event.subcategoryID);
     }
     if (event is AddSubcategoryIcon) {
       yield SubcategoryIconAdded(
-          tempID: event.tempID, subcategoryIcon: event.subcategoryIcon);
+          tempID: event.tempID,
+          subcategoryIcon: event.subcategoryIcon,
+          subcategoryName: event.subcategoryName,
+          subcategoryID: event.subcategoryID);
     }
     if (event is AddSubSubcategoryName) {
       yield SubSubcategoryNameAdded(
           tempID: event.tempID,
           subSubcategoryName: event.subSubcategoryName,
-          tempCategoryID: event.tempSubCategoryID);
+          tempCategoryID: event.tempSubCategoryID,
+          subCategoryID: event.subCategoryID);
     }
     if (event is AddSubSubcategoryIcon) {
       yield SubSubcategoryIconAdded(
@@ -76,7 +88,10 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       yield SubSubcategoryRemoved(id: event.id, categoryID: event.categoryID);
     }
     if (event is AddSubSubCategory) {
-      yield SubSubcategoryAdded(subcategories: event.subcategories);
+      yield SubSubcategoryAdded(
+          subcategories: event.subcategories,
+          categoryID: event.categoryID,
+          isUpdate: event.isUpdate);
     }
     if (event is InsertCategory) {
       try {
@@ -122,6 +137,35 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
         yield CategoryInserted();
       } catch (e) {
         print(e);
+        yield CategoryInsertErrorOccurred();
+      }
+    }
+    if (event is UpdateCategory) {
+      try {
+        print('lll ${event.subcategories.length}');
+        event.subcategories.forEach((element) {
+          print(element.length);
+        });
+        if (event.subcategories.length > 0) {
+          // List<ExpenseAndIncomeSubCategoryModel> subcategories = [
+          //   ...event.subcategories
+          // ];
+
+          print(event.subSubcategories.length);
+          for (int i = 0; i < event.subcategories.length; i++) {
+            await expenseRepository.updateSubCategory(event.subcategories[i]);
+          }
+        }
+        if (event.subSubcategories.length > 0) {
+          for (int i = 0; i < event.subSubcategories.length; i++) {
+            await expenseRepository
+                .updateSubSubCategory(event.subSubcategories[i]);
+          }
+        }
+
+        yield CategoryInserted();
+      } catch (e) {
+        print('$e eeeeee');
         yield CategoryInsertErrorOccurred();
       }
     }

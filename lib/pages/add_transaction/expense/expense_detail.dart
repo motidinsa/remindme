@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mytask/bloc/expense/expense_bloc.dart';
-import 'package:mytask/bloc/expense/expense_event.dart';
-import 'package:mytask/models/expense_and_income.dart';
-import 'package:mytask/models/reason.dart';
-import 'package:mytask/pages/add_transaction/expense/single_reason.dart';
-import 'package:mytask/pages/add_transaction/expense/reason_list.dart';
+import 'package:remindme/bloc/expense/expense_bloc.dart';
+import 'package:remindme/bloc/expense/expense_event.dart';
+import 'package:remindme/bloc/expense/expense_state.dart';
+import 'package:remindme/bloc/reason/reason_bloc.dart';
+import 'package:remindme/bloc/reason/reason_event.dart';
+import 'package:remindme/bloc/reason/reason_state.dart';
+import 'package:remindme/models/expense_and_income.dart';
+import 'package:remindme/models/expense_and_income_subcategory.dart';
+import 'package:remindme/models/reason.dart';
+import 'package:remindme/pages/add_transaction/expense/single_reason.dart';
+import 'package:remindme/pages/add_transaction/expense/reason_list.dart';
+import 'package:remindme/pages/add_transaction/expense/subcategory_reason_select.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:get/get.dart';
 
 import 'expense_controller.dart';
+import 'package:intl/src/intl/date_format.dart';
 
 class ExpenseDetail extends StatefulWidget {
-  final int id;
+  final int categoryID;
   final int index;
   final bool isLastItem;
   ExpenseAndIncome expense;
   final Key key;
 
-  ExpenseDetail({this.key, this.id, this.index, this.expense, this.isLastItem});
+  ExpenseDetail(
+      {this.key, this.categoryID, this.index, this.expense, this.isLastItem});
 
   @override
   _ExpenseDetailState createState() => _ExpenseDetailState();
@@ -29,18 +37,27 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
   TextEditingController _expenseAmountController = TextEditingController();
   TextEditingController _expenseNumberOfTimesController =
       TextEditingController();
-  String date;
+
+  // DateTime now = DateTime.now();
+  //
+  // DateFormat dateFormat = DateFormat("dd-MM-yy");
+  // DateFormat timeFormat = DateFormat("HH:mm:ss");
+  // String currentDate = dateFormat.format(now);
+  // String currentTime = timeFormat.format(now);
+  String date = DateFormat("dd-MM-yy").format(DateTime.now());
   String _selectedDate;
-  double amount;
+  String amount;
   String reason;
   int numberOfTimes;
   String _dateCount;
   String _rangeCount;
-  String dateSet =
-      '${DateTime.now().day > 9 ? DateTime.now().day : '0${DateTime.now().day}'}-${DateTime.now().month > 9 ? DateTime.now().month : '0${DateTime.now().month}'}-${DateTime.now().year}';
+  String dateSet = DateFormat("dd-MM-yy").format(DateTime.now());
   FocusNode amountFocusNode = FocusNode();
   FocusNode reasonFocusNode = FocusNode();
   FocusNode numberOfTimesFocusNode = FocusNode();
+
+  List<ExpenseAndIncomeSubCategoryModel> subcategories = [];
+  List<Reason> categoryReasonList = [];
   List<Reason> reasonlist = [
     Reason(
       amount: 2.toString(),
@@ -64,21 +81,21 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
     if (!amountFocusNode.hasFocus)
       // expenseController.addAmount(widget.id, widget.index, amount);
       BlocProvider.of<ExpenseBloc>(context)
-          .add(AddExpenseAmount(widget.id, widget.index, amount));
+          .add(AddExpenseAmount(widget.categoryID, widget.index, amount));
   }
 
   void onReasonFocusChange() {
     if (!reasonFocusNode.hasFocus)
       // expenseController.addReason(widget.id, widget.index, reason);
       BlocProvider.of<ExpenseBloc>(context)
-          .add(AddExpenseReason(widget.id, widget.index, reason));
+          .add(AddExpenseReason(widget.categoryID, widget.index, reason));
   }
 
   void onNumberOfTimesFocusChange() {
     if (!numberOfTimesFocusNode.hasFocus)
       // expenseController.addReason(widget.id, widget.index, reason);
-      BlocProvider.of<ExpenseBloc>(context)
-          .add(AddExpenseNumberOfTimes(widget.id, widget.index, numberOfTimes));
+      BlocProvider.of<ExpenseBloc>(context).add(AddExpenseNumberOfTimes(
+          widget.categoryID, widget.index, numberOfTimes));
   }
 
   void setDate(String date) {
@@ -89,10 +106,11 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
 
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     if (args.value is DateTime) {
-      _selectedDate = args.value.toString();
-      date =
-          '${DateTime.parse(_selectedDate).day > 9 ? DateTime.parse(_selectedDate).day : '0${DateTime.parse(_selectedDate).day}'}-${DateTime.parse(_selectedDate).month > 9 ? DateTime.parse(_selectedDate).month : '0${DateTime.parse(_selectedDate).month}'}-${DateTime.parse(_selectedDate).year}';
-      print(_selectedDate);
+      // _selectedDate = args.value;
+      // date =
+      //     '${DateTime.parse(_selectedDate).day > 9 ? DateTime.parse(_selectedDate).day : '0${DateTime.parse(_selectedDate).day}'}-${DateTime.parse(_selectedDate).month > 9 ? DateTime.parse(_selectedDate).month : '0${DateTime.parse(_selectedDate).month}'}-${DateTime.parse(_selectedDate).year}';
+      date = DateFormat("dd-MM-yy").format(args.value);
+      print(date);
 
       print(date);
     } else if (args.value is List<DateTime>) {
@@ -142,7 +160,7 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                 width: 20,
               ),
               Text(
-                widget.expense.date ?? dateSet,
+                widget.expense.date,
                 // key: UniqueKey(),
                 style: TextStyle(fontSize: 18, color: Colors.green),
               ),
@@ -189,8 +207,10 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                                           onPressed: () {
                                             BlocProvider.of<ExpenseBloc>(
                                                     context)
-                                                .add(AddExpenseDate(widget.id,
-                                                    widget.index, date));
+                                                .add(AddExpenseDate(
+                                                    widget.categoryID,
+                                                    widget.index,
+                                                    date));
                                             // setDate(date);
                                             Navigator.pop(context);
 
@@ -244,11 +264,11 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                     contentPadding: EdgeInsets.only(left: 20),
                   ),
                   onChanged: (newValue) {
-                    amount = double.parse(newValue);
+                    amount = newValue;
                   },
                   onEditingComplete: () {
-                    BlocProvider.of<ExpenseBloc>(context)
-                        .add(AddExpenseAmount(widget.id, widget.index, amount));
+                    BlocProvider.of<ExpenseBloc>(context).add(AddExpenseAmount(
+                        widget.categoryID, widget.index, amount));
                   },
                 ),
               ),
@@ -277,7 +297,7 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                   onEditingComplete: () {
                     BlocProvider.of<ExpenseBloc>(context).add(
                         AddExpenseNumberOfTimes(
-                            widget.id, widget.index, numberOfTimes));
+                            widget.categoryID, widget.index, numberOfTimes));
                   },
                 ),
               )
@@ -326,7 +346,8 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                       //   reason,
                       // );
                       BlocProvider.of<ExpenseBloc>(context).add(
-                          AddExpenseReason(widget.id, widget.index, reason));
+                          AddExpenseReason(
+                              widget.categoryID, widget.index, reason));
                     }),
               ),
               SizedBox(
@@ -340,6 +361,11 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                   onPressed: () {
+                    print('on pressed ${widget.categoryID}');
+                    BlocProvider.of<ReasonBloc>(context).add(
+                        GetAllSubCategoriesWithCategoryID(widget.categoryID));
+                    BlocProvider.of<ExpenseBloc>(context)
+                        .add(GetCategoryReasons(widget.categoryID));
                     showModalBottomSheet(
                       isScrollControlled: false,
                       shape: RoundedRectangleBorder(
@@ -350,10 +376,11 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                         builder: (context, setState) {
                           return Container(
                             margin: EdgeInsets.only(
-                                left: 20, top: 20, right: 20, bottom: 30),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisSize: MainAxisSize.min,
+                              left: 20,
+                              top: 20,
+                              right: 20,
+                            ),
+                            child: ListView(
                               children: [
                                 Row(
                                   children: [
@@ -364,182 +391,56 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                                           color: Colors.brown,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    OutlinedButton(
-                                        onPressed: () {
-                                          showDialog<bool>(
-                                            context: context,
-                                            builder: (context) {
-                                              return Center(
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 30),
-                                                  child: Card(
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .symmetric(
-                                                                  vertical: 5),
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Expanded(
-                                                                child: Align(
-                                                                  child: Icon(
-                                                                    Icons
-                                                                        .alt_route_outlined,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                child: Align(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .centerLeft,
-                                                                  child:
-                                                                      TextButton(
-                                                                    child: Text(
-                                                                      'Anbessa',
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              16,
-                                                                          color:
-                                                                              Colors.black),
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .start,
-                                                                    ),
-                                                                    onPressed:
-                                                                        () {},
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        Divider(
-                                                          color: Colors.grey,
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .symmetric(
-                                                                  vertical: 5),
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Expanded(
-                                                                child: Align(
-                                                                  child: Icon(
-                                                                    Icons
-                                                                        .alt_route_outlined,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                child: Align(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .centerLeft,
-                                                                  child:
-                                                                      TextButton(
-                                                                    child: Text(
-                                                                      'Anbessa',
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              16,
-                                                                          color:
-                                                                              Colors.black),
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .start,
-                                                                    ),
-                                                                    onPressed:
-                                                                        () {},
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        Divider(
-                                                          color: Colors.grey,
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .symmetric(
-                                                                  vertical: 5),
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Expanded(
-                                                                child: Align(
-                                                                  child: Icon(
-                                                                    Icons
-                                                                        .alt_route_outlined,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                child: Align(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .centerLeft,
-                                                                  child:
-                                                                      TextButton(
-                                                                    child: Text(
-                                                                      'Anbessa',
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              16,
-                                                                          color:
-                                                                              Colors.black),
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .start,
-                                                                    ),
-                                                                    onPressed:
-                                                                        () {},
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: Text('Sub Category'))
                                   ],
                                 ),
                                 SizedBox(
                                   height: 20,
                                 ),
-                                ReasonList(reasonlist)
+                                BlocBuilder<ReasonBloc, ReasonState>(
+                                  builder: (_, state) {
+                                    if (state
+                                        is AllSubCategoriesWithCategoryIDFetched) {
+                                      print(
+                                          'called called ${widget.categoryID}');
+                                      state.subcategories.forEach((element) {
+                                        print(element.subcategoryName);
+                                      });
+                                      subcategories = state.subcategories;
+                                    }
+
+                                    return ListView.builder(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index) =>
+                                          SubcategoryReasonSelect(
+                                        subCategoryModel: subcategories[index],
+                                        index: widget.index,
+                                        categoryID: widget.categoryID,
+                                        subcategoryID: subcategories[index].id,
+                                      ),
+                                      itemCount: subcategories.length,
+                                    );
+                                  },
+                                ),
+                                BlocBuilder<ExpenseBloc, ExpenseState>(
+                                  builder: (_, state) {
+                                    if (state is CategoryReasonsFetched) {
+                                      categoryReasonList =
+                                          state.categoryReasons;
+                                    }
+
+                                    return ReasonList(
+                                      reasonList: categoryReasonList,
+                                      categoryID: widget.categoryID,
+                                      index: widget.index,
+                                    );
+                                  },
+                                ),
                               ],
-                            ),
-                          );
-                        },
-                      ),
+                                ),
+                              );
+                            },
+                          ),
                     );
                   },
                   child: Text(
@@ -561,7 +462,7 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                   onPressed: () {
                     // expenseController.addAnotherItem(widget.id);
                     BlocProvider.of<ExpenseBloc>(context)
-                        .add(AddAnotherItem(widget.id));
+                        .add(AddAnotherItem(widget.categoryID));
                   },
                   child: Text('Add another'),
                   style: ButtonStyle(
@@ -575,7 +476,7 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                   onPressed: () {
                     // expenseController.finishCategory(widget.id);
                     BlocProvider.of<ExpenseBloc>(context)
-                        .add(FinishCategory(widget.id));
+                        .add(FinishCategory(widget.categoryID));
                   },
                   child: Text('Finish'),
                   style: ButtonStyle(

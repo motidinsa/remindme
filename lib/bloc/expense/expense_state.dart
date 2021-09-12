@@ -1,12 +1,13 @@
 import 'package:equatable/equatable.dart';
-import 'package:mytask/models/expense_and_income_category.dart';
-import 'package:mytask/models/expense_and_income_subcategory.dart';
-import 'package:mytask/models/expense_and_income_subsubcategory.dart';
-import 'package:mytask/models/expense_tobe_added.dart';
-import 'package:mytask/models/expense_and_income.dart';
-import 'package:mytask/models/finished_category.dart';
-import 'package:mytask/pages/add_transaction/expense/expense_category.dart';
-import 'package:mytask/pages/add_transaction/expense/expense_detail.dart';
+import 'package:remindme/models/expense_and_income_category.dart';
+import 'package:remindme/models/expense_and_income_subcategory.dart';
+import 'package:remindme/models/expense_and_income_subsubcategory.dart';
+import 'package:remindme/models/expense_tobe_added.dart';
+import 'package:remindme/models/expense_and_income.dart';
+import 'package:remindme/models/finished_category.dart';
+import 'package:remindme/models/reason.dart';
+import 'package:remindme/pages/add_transaction/expense/expense_category.dart';
+import 'package:remindme/pages/add_transaction/expense/expense_detail.dart';
 
 class ExpenseState extends Equatable {
   const ExpenseState();
@@ -69,12 +70,12 @@ class DateAdded extends ExpenseState {
 class AmountAdded extends ExpenseState {
   final int categoryID;
   final int index;
-  final double amount;
+  final String amount;
 
   AmountAdded(this.categoryID, this.index, this.amount);
 
   @override
-  List<Object> get props => [categoryID];
+  List<Object> get props => [categoryID, amount, index];
 }
 
 class NumberOfTimesAdded extends ExpenseState {
@@ -97,6 +98,37 @@ class ReasonAdded extends ExpenseState {
 
   @override
   List<Object> get props => [categoryID];
+}
+
+class ReasonAddedFromList extends ExpenseState {
+  final int categoryID;
+  final int subcategoryID;
+  final int subSubcategoryID;
+  final int index;
+  final int reasonID;
+  final String reason;
+  final String amount;
+
+  ReasonAddedFromList({
+    this.categoryID,
+    this.index,
+    this.reason,
+    this.subSubcategoryID,
+    this.subcategoryID,
+    this.amount,
+    this.reasonID,
+  });
+
+  @override
+  List<Object> get props => [
+        categoryID,
+        reason,
+        subcategoryID,
+        subSubcategoryID,
+        index,
+        amount,
+        reasonID
+      ];
 }
 
 class ReasonAndAmountAdded extends ExpenseState {
@@ -192,3 +224,46 @@ class ExpenseAndIncomeAdded extends ExpenseState {
   @override
   List<Object> get props => [];
 }
+
+class CategoryReasonsFetched extends ExpenseState {
+  final List<Reason> categoryReasons;
+
+  CategoryReasonsFetched(this.categoryReasons);
+
+  @override
+  List<Object> get props => [categoryReasons];
+}
+
+class SubCategoryReasonsFetched extends ExpenseState {
+  final List<Reason> subcategoryReasons;
+
+  SubCategoryReasonsFetched(this.subcategoryReasons);
+
+  @override
+  List<Object> get props => [subcategoryReasons];
+}
+
+class SubSubCategoryReasonsFetched extends ExpenseState {
+  final List<Reason> subsubcategoryReasons;
+
+  SubSubCategoryReasonsFetched(this.subsubcategoryReasons);
+
+  @override
+  List<Object> get props => [subsubcategoryReasons];
+}
+
+// class AllIncomeAndExpenseFetched extends ExpenseState {
+//   final List<ExpenseAndIncome> allIncomeAndExpense;
+//
+//   const AllIncomeAndExpenseFetched(this.allIncomeAndExpense);
+//
+//   @override
+//   List<Object> get props => [allIncomeAndExpense,allIncomeAndExpense.length];
+// }
+//
+// class AllIncomeAndExpenseFailed extends ExpenseState {
+//   const AllIncomeAndExpenseFailed();
+//
+//   @override
+//   List<Object> get props => [];
+// }

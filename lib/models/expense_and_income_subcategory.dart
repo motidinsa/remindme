@@ -1,4 +1,4 @@
-import 'package:mytask/models/expense_and_income_subsubcategory.dart';
+import 'package:remindme/models/expense_and_income_subsubcategory.dart';
 
 class ExpenseAndIncomeSubCategoryModel {
   String subcategoryName;
@@ -12,7 +12,7 @@ class ExpenseAndIncomeSubCategoryModel {
   final int id;
   final int userID;
   int categoryID;
-  final String subcategoryType;
+  String subcategoryType;
 
   // List<ExpenseAndIncomeSubSubCategoryModel> subcategories =[];
 
@@ -33,7 +33,7 @@ class ExpenseAndIncomeSubCategoryModel {
 
   Map<String, dynamic> toMap() {
     return {
-      // 'user_id': userID,
+      'user_id': userID,
       'name': subcategoryName,
       'icon_name': iconName,
       'icon_type': iconType,

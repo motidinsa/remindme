@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mytask/bloc/category/category_bloc.dart';
-import 'package:mytask/bloc/category/category_event.dart';
-import 'package:mytask/bloc/category/category_state.dart';
-import 'package:mytask/bloc/expense/expense_bloc.dart';
-import 'package:mytask/models/expense_and_income_category.dart';
-import 'package:mytask/models/expense_and_income_subcategory.dart';
-import 'package:mytask/models/expense_and_income_subsubcategory.dart';
-import 'package:mytask/pages/add_transaction/icon_select.dart';
-import 'package:mytask/pages/setting/add_category/single_row_category_icon_list.dart';
-import 'package:mytask/pages/setting/add_category/sub_subcategory.dart';
-import 'package:mytask/pages/setting/add_subcategory/subcategory.dart';
-import 'package:mytask/utility/icons_helper.dart';
+import 'package:remindme/bloc/category/category_bloc.dart';
+import 'package:remindme/bloc/category/category_event.dart';
+import 'package:remindme/bloc/category/category_state.dart';
+import 'package:remindme/bloc/expense/expense_bloc.dart';
+import 'package:remindme/models/expense_and_income_category.dart';
+import 'package:remindme/models/expense_and_income_subcategory.dart';
+import 'package:remindme/models/expense_and_income_subsubcategory.dart';
+import 'package:remindme/pages/add_transaction/icon_select.dart';
+import 'package:remindme/pages/home/homepage.dart';
+import 'package:remindme/pages/setting/add_category/single_row_category_icon_list.dart';
+import 'package:remindme/pages/setting/add_category/sub_subcategory.dart';
+import 'package:remindme/pages/setting/add_subcategory/subcategory.dart';
+import 'package:remindme/utility/icons_helper.dart';
 import 'package:intl/src/intl/date_format.dart';
 
 class ExpenseAndIncomeCategoryInsert extends StatefulWidget {
@@ -40,10 +41,10 @@ class _ExpenseAndIncomeCategoryInsertState
   Icon categoryIcon;
   Icon subCategoryIcon;
 
-  List<ExpenseAndIncomeCategoryModel> categories = [];
+  // List<ExpenseAndIncomeCategoryModel> categories = [];
   List<ExpenseAndIncomeSubCategoryModel> subcategories = [];
   List<List<ExpenseAndIncomeSubSubCategoryModel>> subSubcategories = [];
-  String categoryType = 'Not selected';
+  String categoryType;
   List<Subcategory> subcategoryWidgets = [];
 
   // List<SubSubcategory> subSubcategoryWidgets = [];
@@ -55,7 +56,8 @@ class _ExpenseAndIncomeCategoryInsertState
   void initState() {
     super.initState();
     iconList = IconsHelper.iconsMap.entries
-        .map((e) => IconSelect(Icon(e.value), e.key, 'category', -1))
+        .map((e) => IconSelect(
+            icon: Icon(e.value), name: e.key, type: 'category', id: -1))
         .toList();
 
     // subcategoryIconList = [...iconList];
@@ -106,6 +108,9 @@ class _ExpenseAndIncomeCategoryInsertState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Add Category'),
+      ),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -121,7 +126,7 @@ class _ExpenseAndIncomeCategoryInsertState
               print(state.iconName);
               categoryIconName = state.iconName;
               categoryIconType = 'material';
-              BlocProvider.of<CategoryBloc>(context).add(Clear());
+              BlocProvider.of<CategoryBloc>(context).add(ClearCategory());
             }
             if (state is SubcategoryIconAdded) {
               print('sub icccccccccccccccccccccc');
@@ -129,13 +134,13 @@ class _ExpenseAndIncomeCategoryInsertState
               subcategoryWidgets[state.tempID].icon = Icon(
                   IconsHelper.getIconUsingPrefix(name: state.subcategoryIcon));
 
-              BlocProvider.of<CategoryBloc>(context).add(Clear());
+              BlocProvider.of<CategoryBloc>(context).add(ClearCategory());
             }
             if (state is SubcategoryNameAdded) {
               subcategories[state.tempID].subcategoryName =
                   state.subcategoryName;
               print(subcategories[state.tempID].subcategoryName);
-              BlocProvider.of<CategoryBloc>(context).add(Clear());
+              BlocProvider.of<CategoryBloc>(context).add(ClearCategory());
               // print(state.tempID);
             }
             if (state is SubSubcategoryAdded) {
@@ -156,9 +161,16 @@ class _ExpenseAndIncomeCategoryInsertState
               //       // categoryID: state.categoryID,
               //       subcategoryID: state.categoryID,
               //       subSubcategoryType: categoryType),
-              subSubcategories.add(state.subcategories);
+              state.isUpdate
+                  ? subSubcategories[state.categoryID] = state.subcategories
+                  : subSubcategories.add(state.subcategories);
+              // if (subSubcategories.length == 0) {
+              //   subSubcategories.add(state.subcategories);
+              // } else {
+              //   subSubcategories[state.categoryID] = state.subcategories;
+              // }
 
-              BlocProvider.of<CategoryBloc>(context).add(Clear());
+              BlocProvider.of<CategoryBloc>(context).add(ClearCategory());
               // print(state.tempID);
             }
             if (state is SubcategoryRemoved) {
@@ -169,12 +181,13 @@ class _ExpenseAndIncomeCategoryInsertState
 
               subcategories.removeAt(index);
               subcategoryWidgets.removeAt(index);
+              // BlocProvider.of<CategoryBloc>(context).add(Clear());
               for (int i = 0; i < subcategories.length; i++) {
                 // subcategories[i].id = i;
                 subcategoryWidgets[i].id = i;
               }
               tempSubcategoryID = subcategoryWidgets.length;
-              BlocProvider.of<CategoryBloc>(context).add(Clear());
+              BlocProvider.of<CategoryBloc>(context).add(ClearCategory());
               // print(state.tempID);
               // print(subcategories[0].subcategoryName);
             }
@@ -187,7 +200,7 @@ class _ExpenseAndIncomeCategoryInsertState
               // subcategories[state.categoryID].subcategories.removeAt(index);
               subSubcategories[state.categoryID].removeAt(state.id);
               // subSubcategories.removeAt(index);
-              BlocProvider.of<CategoryBloc>(context).add(Clear());
+              BlocProvider.of<CategoryBloc>(context).add(ClearCategory());
             }
             if (state is SubSubcategoryNameAdded) {
               print(' sub r0');
@@ -202,11 +215,16 @@ class _ExpenseAndIncomeCategoryInsertState
               // subSubcategories[state.tempCategoryID][state.tempID]
               //     .subSubcategoryName =
               //     state.subSubcategoryName;
+              print('temp id ${state.tempID}');
+              print('temp catid ${state.tempCategoryID}');
+              print(subSubcategories.length);
+              print(subSubcategories[state.tempCategoryID].length);
+
               subSubcategories[state.tempCategoryID][state.tempID]
                   .subSubcategoryName = state.subSubcategoryName;
               // subSubcategories[index].subSubcategoryName =
               //     state.subSubcategoryName;
-              BlocProvider.of<CategoryBloc>(context).add(Clear());
+              BlocProvider.of<CategoryBloc>(context).add(ClearCategory());
             }
             print(tempSubcategoryID);
             return ListView(
@@ -284,7 +302,7 @@ class _ExpenseAndIncomeCategoryInsertState
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Text('Category type'),
-                              Text(categoryType),
+                              Text(categoryType ?? 'Not selected'),
                               DropdownButton<String>(
                                 // value: 'select',
                                 // icon: const Icon(Icons.arrow_downward),
@@ -301,7 +319,7 @@ class _ExpenseAndIncomeCategoryInsertState
                                     categoryType = newValue;
                                   });
                                 },
-                                items: <String>['expense', 'income', 'both']
+                                items: <String>['Expense', 'Income', 'both']
                                     .map((String value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
@@ -320,19 +338,21 @@ class _ExpenseAndIncomeCategoryInsertState
                               setState(() {
                                 subcategories.add(
                                   ExpenseAndIncomeSubCategoryModel(
+                                    userID: 1,
                                     id: tempSubcategoryID,
                                     dateType: 'gr',
-                                    timeAdded: 'now',
                                     iconType: 'material',
                                     subcategoryType: categoryType,
-                                    dateAdded: 'now',
                                     iconName: categoryIconName,
                                   ),
                                 );
                                 subcategoryIconList = IconsHelper
                                     .iconsMap.entries
-                                    .map((e) => IconSelect(Icon(e.value), e.key,
-                                        'subcategory', tempSubcategoryID))
+                                    .map((e) => IconSelect(
+                                        icon: Icon(e.value),
+                                        name: e.key,
+                                        type: 'subcategory',
+                                        id: tempSubcategoryID))
                                     .toList();
                                 subcategoryWidgets.add(Subcategory(
                                   id: tempSubcategoryID,
@@ -345,11 +365,11 @@ class _ExpenseAndIncomeCategoryInsertState
                             child: Text('Add Subcategory'),
                             style: ButtonStyle(
                                 backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.green),
+                                MaterialStateProperty.all<Color>(
+                                    Colors.green),
                                 foregroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.white)),
+                                MaterialStateProperty.all<Color>(
+                                    Colors.white)),
                           ),
                         )
                       ],
@@ -376,6 +396,20 @@ class _ExpenseAndIncomeCategoryInsertState
                         DateFormat timeFormat = DateFormat("HH:mm:ss");
                         String currentDate = dateFormat.format(now);
                         String currentTime = timeFormat.format(now);
+                        subSubcategories.forEach((element) {
+                          element.forEach((element) {
+                            element.timeAdded = currentTime;
+                            element.dateAdded = currentDate;
+                            element.dateType = 'gr';
+                            element.subSubcategoryType = categoryType;
+                          });
+                        });
+                        subcategories.forEach((element) {
+                          element.dateAdded = currentDate;
+                          element.timeAdded = currentTime;
+                          element.dateType = 'gr';
+                          element.subcategoryType = categoryType;
+                        });
                         BlocProvider.of<CategoryBloc>(context).add(
                           InsertCategory(
                               category: ExpenseAndIncomeCategoryModel(
@@ -390,8 +424,17 @@ class _ExpenseAndIncomeCategoryInsertState
                               subcategories: subcategories,
                               subSubcategories: subSubcategories),
                         );
-
+                        BlocProvider.of<CategoryBloc>(context)
+                            .add(CheckInitialization());
                         Navigator.pop(context);
+                        // Navigator.pop(context) ;
+                        // Navigator.pushReplacement(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => HomePage(
+                        //                 tabController: TabController(
+                        //               length: 2,
+                        //             ))));
                       },
                     ),
                   ),

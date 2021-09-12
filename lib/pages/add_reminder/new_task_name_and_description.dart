@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mytask/pages/add_reminder/new_task_textfield.dart';
+import 'package:remindme/pages/add_reminder/new_task_textfield.dart';
 
 class NewTaskNameAndDescription extends StatefulWidget {
   @override

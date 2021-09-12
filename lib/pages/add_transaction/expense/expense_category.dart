@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mytask/bloc/expense/expense_bloc.dart';
-import 'package:mytask/bloc/expense/expense_event.dart';
+import 'package:remindme/bloc/expense/expense_bloc.dart';
+import 'package:remindme/bloc/expense/expense_event.dart';
 
 import 'expense_controller.dart';
 
@@ -57,14 +57,14 @@ class ExpenseAndIncomeCategory extends StatefulWidget {
   final Icon icon;
   bool isSelected;
   bool finishedCategory;
-  final int id;
+  final int categoryID;
   Key key;
 
   ExpenseAndIncomeCategory(
     this.categoryName,
     this.icon,
     this.isSelected,
-    this.id,
+    this.categoryID,
     this.finishedCategory,
     this.key,
   );
@@ -111,7 +111,7 @@ class _ExpenseAndIncomeCategoryState extends State<ExpenseAndIncomeCategory> {
                             widget.categoryName,
                             widget.icon,
                             widget.isSelected,
-                            widget.id,
+                            widget.categoryID,
                             false,
                             UniqueKey()),
                       ),
@@ -119,7 +119,7 @@ class _ExpenseAndIncomeCategoryState extends State<ExpenseAndIncomeCategory> {
                     // expenseController.addSelectedCategory(widget.id);
                   } else {
                     BlocProvider.of<ExpenseBloc>(context).add(
-                      RemoveExpenseCategory(widget.id),
+                      RemoveExpenseCategory(widget.categoryID),
                     );
                     // if (widget.finishedCategory == true) {
                     //   BlocProvider.of<ExpenseBloc>(context).add(

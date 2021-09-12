@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
-import 'package:mytask/data_provider/task_data.dart';
-import 'package:mytask/models/task.dart';
+import 'package:remindme/data_provider/task_data.dart';
+import 'package:remindme/models/task.dart';
 
 class TaskRepository {
   final TaskDataProvider dataProvider;

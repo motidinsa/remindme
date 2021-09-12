@@ -1,4 +1,4 @@
-import 'package:mytask/pages/add_transaction/expense/expense_detail.dart';
+import 'package:remindme/pages/add_transaction/expense/expense_detail.dart';
 
 class FinishedCategory {
   List<ExpenseDetail> expenseDetail;

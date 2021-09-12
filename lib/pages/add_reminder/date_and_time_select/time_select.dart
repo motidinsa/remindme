@@ -1,8 +1,8 @@
 import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mytask/bloc/add_reminder/add_reminder_bloc.dart';
-import 'package:mytask/bloc/add_reminder/add_reminder_event.dart';
+import 'package:remindme/bloc/add_reminder/add_reminder_bloc.dart';
+import 'package:remindme/bloc/add_reminder/add_reminder_event.dart';
 
 class SelectTime extends StatefulWidget {
   @override

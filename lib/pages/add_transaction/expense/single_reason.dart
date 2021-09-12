@@ -1,42 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:remindme/bloc/expense/expense_bloc.dart';
+import 'package:remindme/bloc/expense/expense_event.dart';
 
 class SingleReason extends StatelessWidget {
   final String name;
   final String amount;
-  final int record;
-  final int id;
 
-  SingleReason({
-    this.amount,
-    this.name,
-    this.record,
-    this.id,
-  });
+  final int reasonID;
+  final int categoryID;
+  final int subcategoryID;
+  final int subSubcategoryID;
+  final int index;
+
+  SingleReason(
+      {this.amount,
+      this.name,
+      this.subcategoryID,
+      this.categoryID,
+      this.subSubcategoryID,
+      this.index,
+      this.reasonID});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.only(left: 20, top: 15, bottom: 15, right: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            name,
-            style: TextStyle(fontSize: 18, color: Colors.grey),
-            textAlign: TextAlign.start,
-          ),
-          Text('Amount: $amount'),
-          Text(
-            record == null
-                ? '0 record'
-                : record == 1
-                    ? '$record record'
-                    : '$record records',
-            style: TextStyle(color: Colors.green),
-          )
-        ],
+    return ListTile(
+      leading: Text(
+        name,
+        style: TextStyle(fontSize: 18, color: Colors.grey),
+        textAlign: TextAlign.start,
       ),
+      trailing: Text(
+        amount,
+        style: TextStyle(fontSize: 18, color: Colors.grey),
+        textAlign: TextAlign.start,
+      ),
+      onTap: () {
+        print('single reason id $reasonID');
+        BlocProvider.of<ExpenseBloc>(context).add(AddExpenseReasonFromList(
+            reasonID: reasonID,
+            index: index,
+            reason: name,
+            subcategoryID: subSubcategoryID,
+            subSubcategoryID: subSubcategoryID,
+            categoryID: categoryID,
+            amount: amount));
+        Navigator.pop(context);
+      },
     );
   }
 }

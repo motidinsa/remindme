@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mytask/models/task.dart';
+import 'package:remindme/models/task.dart';
 
 class CompletedTaskState extends Equatable {
   const CompletedTaskState();

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:group_button/group_button.dart';
-import 'package:mytask/bloc/add_reminder/add_reminder_state.dart';
+import 'package:remindme/bloc/add_reminder/add_reminder_state.dart';
 import 'custom_time.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mytask/bloc/add_reminder/add_reminder_bloc.dart';
-import 'package:mytask/bloc/add_reminder/add_reminder_event.dart';
+import 'package:remindme/bloc/add_reminder/add_reminder_bloc.dart';
+import 'package:remindme/bloc/add_reminder/add_reminder_event.dart';
 
 // class CustomFrequency extends StatefulWidget {
 //   final String customTime;

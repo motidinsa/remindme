@@ -1,10 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:mytask/models/expense_and_income.dart';
-import 'package:mytask/models/finished_category.dart';
-import 'package:mytask/pages/add_transaction/expense/added_expense_list.dart';
-import 'package:mytask/pages/add_transaction/expense/expense_category_list.dart';
-import 'package:mytask/pages/add_transaction/expense/expense_detail.dart';
+import 'package:remindme/models/expense_and_income.dart';
+import 'package:remindme/models/finished_category.dart';
+import 'package:remindme/pages/add_transaction/expense/added_expense_list.dart';
+import 'package:remindme/pages/add_transaction/expense/expense_category_list.dart';
+import 'package:remindme/pages/add_transaction/expense/expense_detail.dart';
 
 import 'expense_category.dart';
 import 'expense_detail_list.dart';

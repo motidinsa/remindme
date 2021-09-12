@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mytask/bloc/task/task_event.dart';
-import 'package:mytask/bloc/task/task_state.dart';
-import 'package:mytask/models/task.dart';
-import 'package:mytask/pages/setting/add_subcategory/subcategory.dart';
-import 'package:mytask/repository/task_repository.dart';
+import 'package:remindme/bloc/task/task_event.dart';
+import 'package:remindme/bloc/task/task_state.dart';
+import 'package:remindme/models/task.dart';
+import 'package:remindme/pages/setting/add_subcategory/subcategory.dart';
+import 'package:remindme/repository/task_repository.dart';
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final TaskRepository taskRepository;

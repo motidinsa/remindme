@@ -1,28 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mytask/bloc/category/category_bloc.dart';
-import 'package:mytask/bloc/completed_task/completed_task_bloc.dart';
-import 'package:mytask/bloc/completed_task/completed_task_event.dart';
-import 'package:mytask/bloc/expense/expense_bloc.dart';
-import 'package:mytask/pages/add_reminder/add_reminder.dart';
-import 'package:mytask/pages/add_transaction/expense/expense_and_income.dart';
-import 'package:mytask/pages/add_transaction/expense/expense_detail.dart';
-import 'package:mytask/pages/add_transaction/expense/expense_list.dart';
-import 'package:mytask/pages/completed/completed_task.dart';
-import 'package:mytask/pages/home/drawer/drawer.dart';
-import 'package:mytask/pages/home/homepage.dart';
-import 'package:mytask/pages/setting/add_category/expense_and_income_category_insert.dart';
-import 'package:mytask/pages/setting/setting.dart';
-import 'package:mytask/repository/expense_repository.dart';
-import 'package:mytask/repository/task_repository.dart';
-import 'package:mytask/route/task_route.dart';
+import 'package:remindme/bloc/category/category_bloc.dart';
+import 'package:remindme/bloc/completed_task/completed_task_bloc.dart';
+import 'package:remindme/bloc/completed_task/completed_task_event.dart';
+import 'package:remindme/bloc/expense/expense_bloc.dart';
+import 'package:remindme/pages/add_reminder/add_reminder.dart';
+import 'package:remindme/pages/add_transaction/expense/expense_and_income.dart';
+import 'package:remindme/pages/add_transaction/expense/expense_detail.dart';
+import 'package:remindme/pages/add_transaction/expense/expense_list.dart';
+import 'package:remindme/pages/completed/completed_task.dart';
+import 'package:remindme/pages/home/drawer/drawer.dart';
+import 'package:remindme/pages/home/homepage.dart';
+import 'package:remindme/pages/setting/add_category/expense_and_income_category_insert.dart';
+import 'package:remindme/pages/setting/setting.dart';
+import 'package:remindme/repository/expense_repository.dart';
+import 'package:remindme/repository/task_repository.dart';
+import 'package:remindme/route/task_route.dart';
 import 'bloc/add_reminder/add_reminder_bloc.dart';
 import 'bloc/category/category_event.dart';
 import 'bloc/expense/expense_event.dart';
+import 'bloc/expense_and_income/expense_and_income_bloc.dart';
+import 'bloc/expense_and_income/expense_and_income_event.dart';
+import 'bloc/reason/reason_bloc.dart';
+import 'bloc/reason/reason_event.dart';
 import 'bloc/task/task_bloc.dart';
 import 'bloc/task/task_event.dart';
 import 'data_provider/task_data.dart';
 import './pages/statics/history.dart';
+import 'models/expense_and_income_category.dart';
 
 void main() {
   final TaskRepository taskRepository = TaskRepository(
@@ -49,6 +54,15 @@ void main() {
       BlocProvider<CategoryBloc>(
         create: (context) => CategoryBloc(expenseRepository: expenseRepository)
           ..add(CheckInitialization()),
+      ),
+      BlocProvider<ReasonBloc>(
+        create: (context) => ReasonBloc(expenseRepository: expenseRepository)
+          ..add(GetAllCategories()),
+      ),
+      BlocProvider<ExpenseAndIncomeBloc>(
+        create: (context) =>
+            ExpenseAndIncomeBloc(expenseRepository: expenseRepository)
+              ..add(GetAllIncomeAndExpense()),
       )
     ],
     child: MyApp(
@@ -89,8 +103,10 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
+  final ExpenseRepository expenseRepository;
+
+  MyHomePage({Key key, this.title, this.expenseRepository}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -118,17 +134,20 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     // database = SqliteDB.instance;
     // tasks = await database.tasks();
 
-    body = HomePage(tabController: _tabController, sc: scaffoldKey);
+    body = HomePage(
+      tabController: _tabController,
+      sc: scaffoldKey,
+    );
     appbar = AppBar(
       title: Text('Home'),
       bottom: TabBar(
         controller: _tabController,
         tabs: <Widget>[
           Tab(
-            text: 'Tasks',
+            text: 'Transaction',
           ),
           Tab(
-            text: 'Transaction',
+            text: 'Tasks',
           ),
         ],
       ),
@@ -136,17 +155,75 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     floatingActionButton = FloatingActionButton(
       backgroundColor: Colors.green,
       foregroundColor: Colors.white,
-      onPressed: () => {
-        Navigator.of(context).pushNamed(
-          ExpenseAndIncomeCategoryInsert.routeName,
+      onPressed: () =>
+      {
+        showModalBottomSheet(
+          isScrollControlled: true,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
+            ),
+          ),
+          context: context,
+          builder: (context) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextButton(
+                    onPressed: () async {
+                      List<ExpenseAndIncomeCategoryModel> categories =
+                          await fetchExpenseCategories();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ExpenseAndIncomePage(
+                            type: 'Expense',
+                            categories: categories,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Expense',
+                      style: TextStyle(color: Colors.red, fontSize: 16),
+                    )),
+                TextButton(
+                    onPressed: () async {
+                      List<ExpenseAndIncomeCategoryModel> categories =
+                          await fetchIncomeCategories();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ExpenseAndIncomePage(
+                            type: 'Income',
+                            categories: categories,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Income',
+                      style: TextStyle(color: Colors.green, fontSize: 16),
+                    ))
+              ],
+            ),
+          ),
         )
+        // Navigator.of(context).pushNamed(
+        //   ExpenseAndIncomeCategoryInsert.routeName,
+        // )
         // Navigator.push(
         //     context,
         //     MaterialPageRoute(
         //         builder: (context) => AddReminder(
         //               type: 'Add',
         //             )))
-      },
+      }
+      // Navigator.of(context).pushNamed(AddReminder.routeName,
+      //     arguments: TaskArgument(edit: false))
+      ,
       tooltip: 'Add',
       child: Icon(Icons.add),
     );
@@ -183,9 +260,74 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               backgroundColor: Colors.green,
               foregroundColor: Colors.white,
               onPressed: () => {
-                Navigator.of(context).pushNamed(AddReminder.routeName,
-                    arguments: TaskArgument(edit: false))
-              },
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                    ),
+                  ),
+                  context: context,
+                  builder: (context) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextButton(
+                            onPressed: () async {
+                              List<ExpenseAndIncomeCategoryModel> categories =
+                                  await fetchExpenseCategories();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ExpenseAndIncomePage(
+                                    type: 'Expense',
+                                    categories: categories,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Expense',
+                              style: TextStyle(color: Colors.red, fontSize: 16),
+                            )),
+                        TextButton(
+                            onPressed: () async {
+                              List<ExpenseAndIncomeCategoryModel> categories =
+                                  await fetchIncomeCategories();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ExpenseAndIncomePage(
+                                    type: 'Income',
+                                    categories: categories,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Income',
+                              style:
+                                  TextStyle(color: Colors.green, fontSize: 16),
+                            ))
+                      ],
+                    ),
+                  ),
+                )
+                // Navigator.of(context).pushNamed(
+                //   ExpenseAndIncomeCategoryInsert.routeName,
+                // )
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => AddReminder(
+                //               type: 'Add',
+                //             )))
+              }
+              // Navigator.of(context).pushNamed(AddReminder.routeName,
+              //     arguments: TaskArgument(edit: false))
+              ,
               tooltip: 'Add',
               child: Icon(Icons.add),
             );
@@ -211,7 +353,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
             break;
           case 3:
-          // body = Setting();
+            body = Setting();
             appbar = AppBar(
               title: Text('Theme'),
             );
@@ -221,6 +363,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         _selectedIndex = index;
       },
     );
+  }
+
+  Future<List<ExpenseAndIncomeCategoryModel>> fetchExpenseCategories() async {
+    return await widget.expenseRepository.getAllExpenseCategory();
+  }
+
+  Future<List<ExpenseAndIncomeCategoryModel>> fetchIncomeCategories() async {
+    return await widget.expenseRepository.getAllIncomeCategory();
   }
 
   @override

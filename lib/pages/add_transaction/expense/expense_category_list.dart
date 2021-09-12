@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:mytask/pages/add_transaction/expense/expense_category.dart';
-import 'package:mytask/pages/add_transaction/expense/one_row_category.dart';
+import 'package:remindme/pages/add_transaction/expense/expense_category.dart';
+import 'package:remindme/pages/add_transaction/expense/one_row_category.dart';
 
 class CategoryList extends StatefulWidget {
   final List<ExpenseAndIncomeCategory> categoryList;

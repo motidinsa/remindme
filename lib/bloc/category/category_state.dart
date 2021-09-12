@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:mytask/models/expense_and_income_category.dart';
-import 'package:mytask/models/expense_and_income_subcategory.dart';
-import 'package:mytask/models/expense_and_income_subsubcategory.dart';
+import 'package:remindme/models/expense_and_income_category.dart';
+import 'package:remindme/models/expense_and_income_subcategory.dart';
+import 'package:remindme/models/expense_and_income_subsubcategory.dart';
 
 class CategoryState extends Equatable {
   const CategoryState();
@@ -56,33 +56,56 @@ class CategoryTypeAdded extends CategoryState {
 class SubcategoryNameAdded extends CategoryState {
   final String subcategoryName;
   final int tempID;
+  final int subcategoryID;
 
-  SubcategoryNameAdded({this.subcategoryName, this.tempID});
+  SubcategoryNameAdded({this.subcategoryName, this.tempID, this.subcategoryID});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [tempID, subcategoryName];
+}
+
+class SubcategoryNameAddedForSubSubcategory extends CategoryState {
+  final String subcategoryName;
+  final int tempID;
+  final int subcategoryID;
+
+  SubcategoryNameAddedForSubSubcategory(
+      {this.subcategoryName, this.tempID, this.subcategoryID});
+
+  @override
+  List<Object> get props => [tempID, subcategoryName];
 }
 
 class SubcategoryIconAdded extends CategoryState {
   final String subcategoryIcon;
+  final String subcategoryName;
+  final int subcategoryID;
   final int tempID;
 
-  SubcategoryIconAdded({this.subcategoryIcon, this.tempID});
+  SubcategoryIconAdded(
+      {this.subcategoryIcon,
+      this.tempID,
+      this.subcategoryName,
+      this.subcategoryID});
 
   @override
-  List<Object> get props => [tempID];
+  List<Object> get props => [tempID, subcategoryIcon];
 }
 
 class SubSubcategoryNameAdded extends CategoryState {
   final String subSubcategoryName;
   final int tempID;
   final int tempCategoryID;
+  final int subCategoryID;
 
   SubSubcategoryNameAdded(
-      {this.subSubcategoryName, this.tempID, this.tempCategoryID});
+      {this.subSubcategoryName,
+      this.tempID,
+      this.tempCategoryID,
+      this.subCategoryID});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [subCategoryID, subSubcategoryName];
 }
 
 class SubSubcategoryIconAdded extends CategoryState {
@@ -118,8 +141,10 @@ class SubSubcategoryRemoved extends CategoryState {
 
 class SubSubcategoryAdded extends CategoryState {
   final List<ExpenseAndIncomeSubSubCategoryModel> subcategories;
+  final int categoryID;
+  final bool isUpdate;
 
-  SubSubcategoryAdded({this.subcategories});
+  SubSubcategoryAdded({this.subcategories, this.categoryID, this.isUpdate});
 
   @override
   List<Object> get props => [];

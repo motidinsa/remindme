@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mytask/bloc/completed_task/completed_task_bloc.dart';
-import 'package:mytask/bloc/completed_task/completed_task_state.dart';
+import 'package:remindme/bloc/completed_task/completed_task_bloc.dart';
+import 'package:remindme/bloc/completed_task/completed_task_state.dart';
 
 import '../home/empty_todo.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mytask/pages/add_reminder/date_and_time_select/date_and_time_select.dart';
+import 'package:remindme/pages/add_reminder/date_and_time_select/date_and_time_select.dart';
 
 class SetTimeButton extends StatelessWidget {
   @override

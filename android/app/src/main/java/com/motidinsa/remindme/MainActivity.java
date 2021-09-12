@@ -1,4 +1,4 @@
-package com.motidinsa.mytodo;
+package com.motidinsa.remindme;
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity;

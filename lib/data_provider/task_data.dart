@@ -1,15 +1,19 @@
-import 'package:mytask/models/expense_and_income.dart';
-import 'package:mytask/models/expense_and_income_category.dart';
-import 'package:mytask/models/expense_and_income_subcategory.dart';
-import 'package:mytask/models/expense_and_income_subsubcategory.dart';
-import 'package:mytask/models/expense_tobe_added.dart';
-import 'package:mytask/models/finished_category.dart';
-import 'package:mytask/models/setting_configuration.dart';
-import 'package:mytask/models/task.dart';
-import 'package:mytask/pages/add_transaction/expense/expense_detail.dart';
+import 'package:remindme/models/expense_and_income.dart';
+import 'package:remindme/models/expense_and_income_category.dart';
+import 'package:remindme/models/expense_and_income_subcategory.dart';
+import 'package:remindme/models/expense_and_income_subsubcategory.dart';
+import 'package:remindme/models/expense_tobe_added.dart';
+import 'package:remindme/models/finished_category.dart';
+import 'package:remindme/models/reason.dart';
+import 'package:remindme/models/setting_configuration.dart';
+import 'package:remindme/models/task.dart';
+import 'package:remindme/pages/add_transaction/expense/expense_detail.dart';
+import 'package:remindme/pages/setting/add_reason/sub_subcategory_reason_page.dart';
+import 'package:remindme/pages/setting/add_reason/subcategory_reason_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import "package:path/path.dart";
+import 'package:intl/src/intl/date_format.dart';
 
 class TaskDataProvider {
   TaskDataProvider._internal();
@@ -38,7 +42,7 @@ class TaskDataProvider {
         "CREATE TABLE days(id INTEGER PRIMARY KEY AUTOINCREMENT,monday TEXT, tuesday TEXT, wednesday TEXT, thursday TEXT, friday TEXT,saturday TEXT,sunday TEXT)",
       );
       db.execute(
-        "CREATE TABLE expense_and_income(id INTEGER PRIMARY KEY AUTOINCREMENT,user_id INTEGER,category_id INTEGER,category_name TEXT, net_amount TEXT,total_amount TEXT, reason TEXT, reason_id INTEGER, subcategory_id INTEGER, subcategory_name TEXT,date TEXT, time TEXT, changed_date TEXT,changed_time TEXT,date_type TEXT, category_type TEXT, number_of_times INTEGER)",
+        "CREATE TABLE expense_and_income(id INTEGER PRIMARY KEY AUTOINCREMENT,user_id INTEGER,category_id INTEGER,category_name TEXT, net_amount TEXT,total_amount TEXT, reason TEXT, reason_id INTEGER, subcategory_id INTEGER, sub_subcategory_id INTEGER,date TEXT,added_date TEXT, added_time TEXT, changed_date TEXT,changed_time TEXT,date_type TEXT, category_type TEXT, number_of_times INTEGER)",
       );
       db.execute(
         "CREATE TABLE category(id INTEGER PRIMARY KEY AUTOINCREMENT,user_id INTEGER,name TEXT, icon_name TEXT, icon_type TEXT, date TEXT, time TEXT, changed_date TEXT,changed_time TEXT,date_type TEXT, category_type TEXT)",
@@ -47,13 +51,13 @@ class TaskDataProvider {
         "CREATE TABLE subcategory(id INTEGER PRIMARY KEY AUTOINCREMENT,user_id INTEGER,name TEXT, icon_name TEXT, icon_type TEXT, date TEXT, time TEXT, category_id INTEGER, changed_date TEXT,changed_time TEXT,date_type TEXT, subcategory_type TEXT)",
       );
       db.execute(
-        "CREATE TABLE sub_subcategory(id INTEGER PRIMARY KEY AUTOINCREMENT,user_id INTEGER,name TEXT, icon_name TEXT, icon_type TEXT, date TEXT, time TEXT, category_id INTEGER,sub_category_id INTEGER, changed_date TEXT,changed_time TEXT,date_type TEXT, sub_subcategory_type TEXT)",
+        "CREATE TABLE sub_subcategory(id INTEGER PRIMARY KEY AUTOINCREMENT,user_id INTEGER,name TEXT, date TEXT, time TEXT, category_id INTEGER,sub_category_id INTEGER, changed_date TEXT,changed_time TEXT,date_type TEXT, sub_subcategory_type TEXT)",
       );
       db.execute(
-        "CREATE TABLE reason(id INTEGER PRIMARY KEY AUTOINCREMENT,user_id INTEGER,name TEXT, category_ID INTEGER,subcategory_ID INTEGER, date TEXT, time TEXT, current_amount TEXT, changed_date TEXT,date_type TEXT,previous_reason_id INTEGER)",
+        "CREATE TABLE reason(id INTEGER PRIMARY KEY AUTOINCREMENT,user_id INTEGER,name TEXT, category_id INTEGER,subcategory_id INTEGER,sub_subcategory_id INTEGER, date TEXT, time TEXT, current_amount TEXT, date_type TEXT)",
       );
       db.execute(
-        "CREATE TABLE previous_reason(id INTEGER PRIMARY KEY AUTOINCREMENT,user_id INTEGER,reason_id INTEGER,name TEXT, category_ID INTEGER,subcategory_ID INTEGER, date TEXT, time TEXT, amount TEXT,date_type TEXT)",
+        "CREATE TABLE previous_reason(id INTEGER PRIMARY KEY AUTOINCREMENT,user_id INTEGER,reason_id INTEGER,name TEXT, category_id INTEGER,subcategory_id INTEGER,sub_subcategory_id INTEGER, date TEXT, time TEXT, amount TEXT,date_type TEXT)",
       );
       db.execute(
         "CREATE TABLE setting_configuration(id INTEGER PRIMARY KEY AUTOINCREMENT,user_id INTEGER, name TEXT, parameter_setting TEXT)",
@@ -76,14 +80,14 @@ class TaskDataProvider {
   Future<List<Task>> tasks() async {
     final Database db = await instance.db;
     final List<Map<String, dynamic>> tasks =
-    await db.rawQuery('''SELECT * FROM task WHERE isCompleted ISNULL''');
+        await db.rawQuery('''SELECT * FROM task WHERE isCompleted ISNULL''');
     print(tasks);
     final List<Map<String, dynamic>> daysWithTime =
-    await db.rawQuery('''SELECT * FROM days''');
+        await db.rawQuery('''SELECT * FROM days''');
     print(daysWithTime);
     return List.generate(
       tasks.length,
-          (i) {
+      (i) {
         return Task(
             id: tasks[i]['id'],
             name: tasks[i]['name'],
@@ -132,15 +136,15 @@ class TaskDataProvider {
     print('${task.name} name');
     return task.description != null
         ? await db.update(
-      'task',
-      task.toMap(),
-      where: "id = ?",
-      whereArgs: [task.id],
-    )
+            'task',
+            task.toMap(),
+            where: "id = ?",
+            whereArgs: [task.id],
+          )
         : await db.rawUpdate(
-      '''UPDATE task SET name = '${task.name}', description = null, date = '${task.date}', time = '${task.time}', importance = '${task.importance}' WHERE id = ${task.id}''',
-      // conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+            '''UPDATE task SET name = '${task.name}', description = null, date = '${task.date}', time = '${task.time}', importance = '${task.importance}' WHERE id = ${task.id}''',
+            // conflictAlgorithm: ConflictAlgorithm.replace,
+          );
   }
 
   Future<int> markCompleted(int id) async {
@@ -183,17 +187,17 @@ class TaskDataProvider {
   Future<void> insertExpense(ExpenseTobeAdded expense) async {
     final Database db = await instance.db;
     await db.insert(
-      'expense',
+      'expense_and_income',
       expense.toMap(),
     );
   }
 
   Future<void> insertExpenses(List<FinishedCategory> finishedCategories,
-      List<List<ExpenseDetail>> expenseDetails) async {
+      List<List<ExpenseDetail>> expenseDetails, String type) async {
     List<ExpenseTobeAdded> expense1 =
-        finishedCategoryToExpenseTobeAdded(finishedCategories);
+        finishedCategoryToExpenseTobeAdded(finishedCategories, type);
     List<ExpenseTobeAdded> expense2 =
-        expenseDetailToExpenseTobeAdded(expenseDetails);
+        expenseDetailToExpenseTobeAdded(expenseDetails, type);
     // final Database db = await instance.db;
     for (int i = 0; i < expense1.length; i++) {
       await insertExpense(expense1[i]);
@@ -218,8 +222,8 @@ class TaskDataProvider {
           id: expenses[i]['id'],
           categoryID: expenses[i]['category_ID'],
           categoryName: expenses[i]['category_name'],
-          netAmount: double.parse(expenses[i]['net_amount']),
-          totalAmount: double.parse(expenses[i]['total_amount']),
+          netAmount: expenses[i]['net_amount'],
+          totalAmount: expenses[i]['total_amount'],
           numberOfTimes: expenses[i]['number_of_times'],
           reason: expenses[i]['reason'],
           reasonID: expenses[i]['reason_id'],
@@ -227,9 +231,43 @@ class TaskDataProvider {
           subcategoryName: expenses[i]['subcategory_name'],
           dateType: expenses[i]['date_type'],
           date: expenses[i]['date'],
-          time: expenses[i]['time'],
+          addedTime: expenses[i]['added_time'],
+          addedDate: expenses[i]['added_date'],
           changedDate: expenses[i]['changed_date'],
         );
+      },
+    );
+  }
+
+  Future<List<ExpenseAndIncome>> getAllIncomeAndExpense() async {
+    final Database db = await instance.db;
+
+    final List<Map<String, dynamic>> expenses = await db
+        .rawQuery('''SELECT * FROM expense_and_income ORDER BY id desc''');
+    // final List<Map<String, dynamic>> daysWithTime =
+    // await db.rawQuery('''SELECT * FROM days''');
+    print('inside all ${expenses.length}');
+    return List.generate(
+      expenses.length,
+      (i) {
+        return ExpenseAndIncome(
+            id: expenses[i]['id'],
+            categoryID: expenses[i]['category_id'],
+            categoryName: expenses[i]['category_name'],
+            netAmount: expenses[i]['net_amount'],
+            totalAmount: expenses[i]['total_amount'],
+            numberOfTimes: expenses[i]['number_of_times'],
+            reason: expenses[i]['reason'],
+            reasonID: expenses[i]['reason_id'],
+            subcategoryID: expenses[i]['subcategory_id'],
+            subsubcategoryID: expenses[i]['sub_subcategory_id'],
+            subcategoryName: expenses[i]['subcategory_name'],
+            dateType: expenses[i]['date_type'],
+            date: expenses[i]['date'],
+            addedTime: expenses[i]['added_time'],
+            addedDate: expenses[i]['added_date'],
+            changedDate: expenses[i]['changed_date'],
+            categoryType: expenses[i]['category_type']);
       },
     );
   }
@@ -261,7 +299,8 @@ class TaskDataProvider {
           subcategoryName: expenses[i]['subcategory_name'],
           dateType: expenses[i]['date_type'],
           date: expenses[i]['date'],
-          time: expenses[i]['time'],
+          addedTime: expenses[i]['added_time'],
+          addedDate: expenses[i]['added_date'],
           changedDate: expenses[i]['changed_date'],
           numberOfTimes: expenses[i]['number_of_times'],
         );
@@ -271,64 +310,80 @@ class TaskDataProvider {
 
   Future<void> initializeCategoryAndSubcategory() async {
     final Database db = await instance.db;
-    String today =
-        '${DateTime.now().year}-${DateTime.now().month > 9 ? DateTime.now().month : '0${DateTime.now().month}'}-${DateTime.now().day > 9 ? DateTime.now().day : '0${DateTime.now().day}'}';
+    // String today =
+    //     '${DateTime.now().year}-${DateTime.now().month > 9 ? DateTime.now().month : '0${DateTime.now().month}'}-${DateTime.now().day > 9 ? DateTime.now().day : '0${DateTime.now().day}'}';
+    DateTime now = DateTime.now();
+
+    DateFormat dateFormat = DateFormat("dd-MM-yy");
+    DateFormat timeFormat = DateFormat("HH:mm:ss");
+    String currentDate = dateFormat.format(now);
+    String currentTime = timeFormat.format(now);
     List<ExpenseAndIncomeCategoryModel> expenseAndIncomeCategory = [
       ExpenseAndIncomeCategoryModel(
-        categoryType: 'expense',
+        userID: 1,
+        categoryType: 'Expense',
         categoryName: 'Transport',
         dateType: 'gr',
-        dateAdded: today,
+        dateAdded: currentDate,
         iconName: 'directions_bus',
         iconType: 'material',
-        timeAdded: 'now',
+        timeAdded: currentTime,
       )
     ];
     List<ExpenseAndIncomeSubCategoryModel> expenseAndIncomeSubcategory = [
       ExpenseAndIncomeSubCategoryModel(
-          subcategoryType: 'expense',
+          userID: 1,
+          subcategoryType: 'Expense',
           subcategoryName: 'Bus',
           dateType: 'gr',
-          dateAdded: today,
+          dateAdded: currentDate,
           iconName: 'directions_bus',
           iconType: 'material',
-          timeAdded: 'now',
+          timeAdded: currentTime,
           categoryID: 1),
       ExpenseAndIncomeSubCategoryModel(
-          subcategoryType: 'expense',
+          userID: 1,
+          subcategoryType: 'Expense',
           subcategoryName: 'Taxi',
           dateType: 'gr',
-          dateAdded: today,
+          dateAdded: currentDate,
           iconName: 'local_taxi',
           iconType: 'material',
-          timeAdded: 'now',
+          timeAdded: currentTime,
           categoryID: 1)
     ];
     List<ExpenseAndIncomeSubSubCategoryModel> expenseAndIncomeSubSubcategory = [
       ExpenseAndIncomeSubSubCategoryModel(
-          subSubcategoryType: 'expense',
+          userID: 1,
+          subSubcategoryType: 'Expense',
           subSubcategoryName: 'Anbessa',
           dateType: 'gr',
-          dateAdded: today,
-          iconName: 'directions_bus',
-          iconType: 'material',
-          timeAdded: 'now',
+          dateAdded: currentDate,
+          timeAdded: currentTime,
           categoryID: 1,
           subcategoryID: 1),
       ExpenseAndIncomeSubSubCategoryModel(
-          subSubcategoryType: 'expense',
+          userID: 1,
+          subSubcategoryType: 'Expense',
           subSubcategoryName: 'Sheger',
           dateType: 'gr',
-          dateAdded: today,
-          iconName: 'directions_bus',
-          iconType: 'material',
-          timeAdded: 'now',
+          dateAdded: currentDate,
+          timeAdded: currentTime,
           categoryID: 1,
-          subcategoryID: 2)
+          subcategoryID: 1),
+      ExpenseAndIncomeSubSubCategoryModel(
+          userID: 1,
+          subSubcategoryType: 'Expense',
+          subSubcategoryName: 'Public service',
+          dateType: 'gr',
+          dateAdded: currentDate,
+          timeAdded: currentTime,
+          categoryID: 1,
+          subcategoryID: 1)
     ];
     List<SettingConfiguration> settings = [
       SettingConfiguration(
-          name: 'isCategoryInitialized', parameterSetting: 'yes')
+          name: 'isCategoryInitialized', parameterSetting: 'yes', userID: 1)
     ];
     await initializeCategory(expenseAndIncomeCategory);
     await initializeSubCategory(expenseAndIncomeSubcategory);
@@ -417,12 +472,97 @@ class TaskDataProvider {
     });
   }
 
+  Future<List<ExpenseAndIncomeCategoryModel>> getAllExpenseCategory() async {
+    final Database db = await instance.db;
+    final categories = await db.rawQuery(
+        '''SELECT * FROM category where category_type = 'Expense' or category_type = 'both' ''');
+
+    return List.generate(categories.length, (i) {
+      return ExpenseAndIncomeCategoryModel(
+          id: categories[i]['id'],
+          categoryName: categories[i]['name'],
+          timeAdded: categories[i]['time'],
+          iconType: categories[i]['icon_type'],
+          iconName: categories[i]['icon_name'],
+          dateAdded: categories[i]['date'],
+          dateType: categories[i]['date_type'],
+          categoryType: categories[i]['category_type'],
+          changedDate: categories[i]['changed_date'],
+          changedTime: categories[i]['changed_time']);
+    });
+  }
+
+  Future<List<ExpenseAndIncomeCategoryModel>> getAllIncomeCategory() async {
+    final Database db = await instance.db;
+    final categories = await db.rawQuery(
+        '''SELECT * FROM category where category_type = 'Income' or category_type = 'both' ''');
+
+    return List.generate(categories.length, (i) {
+      return ExpenseAndIncomeCategoryModel(
+          id: categories[i]['id'],
+          categoryName: categories[i]['name'],
+          timeAdded: categories[i]['time'],
+          iconType: categories[i]['icon_type'],
+          iconName: categories[i]['icon_name'],
+          dateAdded: categories[i]['date'],
+          dateType: categories[i]['date_type'],
+          categoryType: categories[i]['category_type'],
+          changedDate: categories[i]['changed_date'],
+          changedTime: categories[i]['changed_time']);
+    });
+  }
+
   Future<List<ExpenseAndIncomeSubCategoryModel>> getAllSubCategories() async {
     final Database db = await instance.db;
     final subCategories = await db.rawQuery('''SELECT * FROM subcategory''');
 
     return List.generate(subCategories.length, (i) {
       return ExpenseAndIncomeSubCategoryModel(
+          id: subCategories[i]['id'],
+          subcategoryName: subCategories[i]['name'],
+          timeAdded: subCategories[i]['time'],
+          iconType: subCategories[i]['icon_type'],
+          iconName: subCategories[i]['icon_name'],
+          dateAdded: subCategories[i]['date'],
+          dateType: subCategories[i]['date_type'],
+          subcategoryType: subCategories[i]['subcategory_type'],
+          changedDate: subCategories[i]['changed_date'],
+          changedTime: subCategories[i]['changed_time'],
+          categoryID: subCategories[i]['category_id']);
+    });
+  }
+
+  Future<List<ExpenseAndIncomeSubCategoryModel>>
+      getAllSubCategoriesWithCategoryID(int categoryID) async {
+    final Database db = await instance.db;
+    final subCategories = await db.rawQuery(
+        '''SELECT * FROM subcategory where category_id = $categoryID''');
+
+    return List.generate(subCategories.length, (i) {
+      return ExpenseAndIncomeSubCategoryModel(
+          id: subCategories[i]['id'],
+          subcategoryName: subCategories[i]['name'],
+          timeAdded: subCategories[i]['time'],
+          iconType: subCategories[i]['icon_type'],
+          iconName: subCategories[i]['icon_name'],
+          dateAdded: subCategories[i]['date'],
+          dateType: subCategories[i]['date_type'],
+          subcategoryType: subCategories[i]['subcategory_type'],
+          changedDate: subCategories[i]['changed_date'],
+          changedTime: subCategories[i]['changed_time'],
+          categoryID: subCategories[i]['category_id']);
+    });
+  }
+
+  Future<List<ExpenseAndIncomeSubCategoryModel>>
+      getSubcategoryWithSubcategoryID(int subcategoryID) async {
+    final Database db = await instance.db;
+    final subCategories = await db
+        .rawQuery('''SELECT * FROM subcategory where id = $subcategoryID''');
+
+    return List.generate(subCategories.length, (i) {
+      return ExpenseAndIncomeSubCategoryModel(
+          id: subCategories[i]['id'],
           subcategoryName: subCategories[i]['name'],
           timeAdded: subCategories[i]['time'],
           iconType: subCategories[i]['icon_type'],
@@ -437,16 +577,36 @@ class TaskDataProvider {
   }
 
   Future<List<ExpenseAndIncomeSubSubCategoryModel>>
+      getAllSubSubCategoriesWithSubCategoryID(int subcategoryID) async {
+    final Database db = await instance.db;
+    final subCategories = await db.rawQuery(
+        '''SELECT * FROM sub_subcategory where sub_category_id = $subcategoryID''');
+
+    return List.generate(subCategories.length, (i) {
+      return ExpenseAndIncomeSubSubCategoryModel(
+          id: subCategories[i]['id'],
+          subSubcategoryName: subCategories[i]['name'],
+          timeAdded: subCategories[i]['time'],
+          dateAdded: subCategories[i]['date'],
+          dateType: subCategories[i]['date_type'],
+          subSubcategoryType: subCategories[i]['subcategory_type'],
+          changedDate: subCategories[i]['changed_date'],
+          changedTime: subCategories[i]['changed_time'],
+          categoryID: subCategories[i]['category_id']);
+    });
+  }
+
+  Future<List<ExpenseAndIncomeSubSubCategoryModel>>
       getAllSubSubCategories() async {
     final Database db = await instance.db;
-    final subSubCategories = await db.rawQuery('''SELECT * FROM subcategory''');
+    final subSubCategories =
+        await db.rawQuery('''SELECT * FROM sub_subcategory''');
 
     return List.generate(subSubCategories.length, (i) {
       return ExpenseAndIncomeSubSubCategoryModel(
+          id: subSubCategories[i]['id'],
           subSubcategoryName: subSubCategories[i]['name'],
           timeAdded: subSubCategories[i]['time'],
-          iconType: subSubCategories[i]['icon_type'],
-          iconName: subSubCategories[i]['icon_name'],
           dateAdded: subSubCategories[i]['date'],
           dateType: subSubCategories[i]['date_type'],
           subSubcategoryType: subSubCategories[i]['sub_subcategory_type'],
@@ -485,6 +645,13 @@ class TaskDataProvider {
     return lastCategoryID[0]['id'];
   }
 
+  Future<void> updateSubCategory(
+      List<ExpenseAndIncomeSubCategoryModel> subcategory) async {
+    final Database db = await instance.db;
+    for (int i = 0; i < subcategory.length; i++)
+      await db.insert('subcategory', subcategory[i].toMap());
+  }
+
   Future<void> insertSubSubCategory(
       List<ExpenseAndIncomeSubSubCategoryModel> subSubcategory,
       int categoryID,
@@ -514,25 +681,129 @@ class TaskDataProvider {
     // return lastCategoryID[0]['id'];
   }
 
+  Future<void> updateSubSubCategory(
+      List<ExpenseAndIncomeSubSubCategoryModel> subcategory) async {
+    final Database db = await instance.db;
+    for (int i = 0; i < subcategory.length; i++)
+      await db.insert('sub_subcategory', subcategory[i].toMap());
+  }
+
+  Future<void> insertCategoryReason(
+    List<Reason> categoryReason,
+  ) async {
+    final Database db = await instance.db;
+    for (int i = 0; i < categoryReason.length; i++) {
+      await db.insert('reason', categoryReason[i].toMap());
+    }
+  }
+
+  Future<void> insertSubCategoryReason(
+    List<SubCategoryReasonPage> subcategoryReason,
+  ) async {
+    final Database db = await instance.db;
+    for (int i = 0; i < subcategoryReason.length; i++) {
+      for (int j = 0;
+          j < subcategoryReason[i].subcategoryReasonModelList.length;
+          j++) {
+        await db.insert('reason',
+            subcategoryReason[i].subcategoryReasonModelList[j].toMap());
+      }
+    }
+  }
+
+  Future<void> insertSubSubCategoryReason(
+    List<List<Reason>> subsubcategoryReason,
+  ) async {
+    final Database db = await instance.db;
+
+    for (int i = 0; i < subsubcategoryReason.length; i++) {
+      for (int j = 0; j < subsubcategoryReason[i].length; j++) {
+        await db.insert('reason', subsubcategoryReason[i][j].toMap());
+      }
+    }
+    // for (int i = 0; i < subsubcategoryReason.length; i++) {
+    //   for (int j = 0;
+    //   j < subsubcategoryReason[i].subcategoryReasonModelList.length;
+    //   j++) {
+    //     await db.insert('reason',
+    //         subsubcategoryReason[i].subcategoryReasonModelList[j].toMap());
+    //   }
+    // }
+  }
+
+  Future<List<Reason>> getCategoryReasons(int categoryID) async {
+    final Database db = await instance.db;
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
+        '''SELECT * FROM reason WHERE category_id = $categoryID and subcategory_id is NULL and sub_subcategory_id is NULL''');
+    return List.generate(
+      maps.length,
+      (i) {
+        return Reason(
+          id: maps[i]['id'],
+          name: maps[i]['name'],
+          categoryID: maps[i]['category_id'],
+          date: maps[i]['date'],
+          time: maps[i]['time'],
+          amount: maps[i]['current_amount'],
+        );
+      },
+    );
+  }
+
+  Future<List<Reason>> getSubCategoryReasons(int subcategoryID) async {
+    final Database db = await instance.db;
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
+        '''SELECT * FROM reason WHERE subcategory_id = $subcategoryID and sub_subcategory_id is NULL''');
+    return List.generate(
+      maps.length,
+      (i) {
+        return Reason(
+          id: maps[i]['id'],
+          name: maps[i]['name'],
+          categoryID: maps[i]['category_id'],
+          subcategoryID: maps[i]['subcategory_id'],
+          date: maps[i]['date'],
+          time: maps[i]['time'],
+          amount: maps[i]['current_amount'],
+        );
+      },
+    );
+  }
+
+  Future<List<Reason>> getSubSubCategoryReasons(int subsubcategoryID) async {
+    final Database db = await instance.db;
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
+        '''SELECT * FROM reason WHERE sub_subcategory_id = $subsubcategoryID''');
+    return List.generate(
+      maps.length,
+      (i) {
+        return Reason(
+          id: maps[i]['id'],
+          name: maps[i]['name'],
+          categoryID: maps[i]['category_id'],
+          subcategoryID: maps[i]['subcategory_id'],
+          date: maps[i]['date'],
+          time: maps[i]['time'],
+          amount: maps[i]['current_amount'],
+        );
+      },
+    );
+  }
+
   List<ExpenseTobeAdded> finishedCategoryToExpenseTobeAdded(
-      List<FinishedCategory> finishedCategories) {
+      List<FinishedCategory> finishedCategories, String type) {
     List<ExpenseTobeAdded> tobeReturned = [];
     for (int i = 0; i < finishedCategories.length; i++) {
       for (int j = 0; j < finishedCategories[i].expenseDetail.length; j++) {
         tobeReturned.add(
           ExpenseTobeAdded(
+              userID: 001,
               date: finishedCategories[i].expenseDetail[j].expense.date,
               dateType: finishedCategories[i].expenseDetail[j].expense.dateType,
-              netAmount: finishedCategories[i]
-                  .expenseDetail[j]
-                  .expense
-                  .netAmount
-                  .toString(),
-              totalAmount: finishedCategories[i]
-                  .expenseDetail[j]
-                  .expense
-                  .totalAmount
-                  .toString(),
+              netAmount:
+                  finishedCategories[i].expenseDetail[j].expense.netAmount,
+              totalAmount:
+                  finishedCategories[i].expenseDetail[j].expense.totalAmount,
               numberOfTimes:
                   finishedCategories[i].expenseDetail[j].expense.numberOfTimes,
               reason: finishedCategories[i].expenseDetail[j].expense.reason,
@@ -543,13 +814,17 @@ class TaskDataProvider {
                   finishedCategories[i].expenseDetail[j].expense.categoryName,
               subcategoryID:
                   finishedCategories[i].expenseDetail[j].expense.subcategoryID,
-              subcategoryName: finishedCategories[i]
+              subsubcategoryID: finishedCategories[i]
                   .expenseDetail[j]
                   .expense
-                  .subcategoryName,
-              time: finishedCategories[i].expenseDetail[j].expense.time,
+                  .subsubcategoryID,
+              addedTime:
+                  finishedCategories[i].expenseDetail[j].expense.addedTime,
+              addedDate:
+                  finishedCategories[i].expenseDetail[j].expense.addedDate,
               changedDate:
-                  finishedCategories[i].expenseDetail[j].expense.changedDate),
+                  finishedCategories[i].expenseDetail[j].expense.changedDate,
+              categoryType: type),
         );
       }
     }
@@ -557,25 +832,29 @@ class TaskDataProvider {
   }
 
   List<ExpenseTobeAdded> expenseDetailToExpenseTobeAdded(
-      List<List<ExpenseDetail>> expenseDetails) {
+      List<List<ExpenseDetail>> expenseDetails, String type) {
     List<ExpenseTobeAdded> tobeReturned = [];
     for (int i = 0; i < expenseDetails.length; i++) {
       for (int j = 0; j < expenseDetails[i].length; j++) {
         tobeReturned.add(
           ExpenseTobeAdded(
-              date: expenseDetails[i][j].expense.date,
-              dateType: expenseDetails[i][j].expense.dateType,
-              netAmount: expenseDetails[i][j].expense.netAmount.toString(),
-              totalAmount: expenseDetails[i][j].expense.totalAmount.toString(),
-              numberOfTimes: expenseDetails[i][j].expense.numberOfTimes,
-              reason: expenseDetails[i][j].expense.reason,
-              reasonID: expenseDetails[i][j].expense.reasonID,
-              categoryID: expenseDetails[i][j].expense.categoryID,
-              categoryName: expenseDetails[i][j].expense.categoryName,
-              subcategoryID: expenseDetails[i][j].expense.subcategoryID,
-              subcategoryName: expenseDetails[i][j].expense.subcategoryName,
-              time: expenseDetails[i][j].expense.time,
-              changedDate: expenseDetails[i][j].expense.changedDate),
+            userID: 001,
+            date: expenseDetails[i][j].expense.date,
+            dateType: expenseDetails[i][j].expense.dateType,
+            netAmount: expenseDetails[i][j].expense.netAmount,
+            totalAmount: expenseDetails[i][j].expense.totalAmount,
+            numberOfTimes: expenseDetails[i][j].expense.numberOfTimes,
+            reason: expenseDetails[i][j].expense.reason,
+            reasonID: expenseDetails[i][j].expense.reasonID,
+            categoryID: expenseDetails[i][j].expense.categoryID,
+            categoryName: expenseDetails[i][j].expense.categoryName,
+            subcategoryID: expenseDetails[i][j].expense.subcategoryID,
+            subsubcategoryID: expenseDetails[i][j].expense.subsubcategoryID,
+            addedTime: expenseDetails[i][j].expense.addedTime,
+            addedDate: expenseDetails[i][j].expense.addedDate,
+            changedDate: expenseDetails[i][j].expense.changedDate,
+            categoryType: type,
+          ),
         );
       }
     }
