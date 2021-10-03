@@ -86,7 +86,7 @@ class Report extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'Total expense: ',
+                                    'Total income_and_expense: ',
                                     style: TextStyle(fontSize: 18),
                                   ),
                                   Text(

@@ -6,7 +6,7 @@ import 'package:remindme/bloc/expense/expense_state.dart';
 import 'package:remindme/models/expense_and_income.dart';
 import 'package:remindme/models/expense_and_income_subcategory.dart';
 import 'package:remindme/models/expense_and_income_subsubcategory.dart';
-import 'package:remindme/pages/add_transaction/expense/single_expense_detail.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/single_expense_detail.dart';
 
 class ExpenseList extends StatefulWidget {
   static const routeName = 'ExpenseList';

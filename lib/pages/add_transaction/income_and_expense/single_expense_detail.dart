@@ -34,11 +34,11 @@ class _SingleExpenseDetailState extends State<SingleExpenseDetail> {
   void initState() {
     super.initState();
 
-    // getSubcategoryWithSubcategoryID(widget.expense.subcategoryID);
+    // getSubcategoryWithSubcategoryID(widget.income_and_expense.subcategoryID);
     // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   getSubcategoryWithSubcategoryID(widget.expense.subcategoryID);
+    //   getSubcategoryWithSubcategoryID(widget.income_and_expense.subcategoryID);
     // });
-    // subcategorymodel = await getSubcategoryWithSubcategoryID(widget.expense.subcategoryID);
+    // subcategorymodel = await getSubcategoryWithSubcategoryID(widget.income_and_expense.subcategoryID);
   }
 
   //

@@ -592,7 +592,7 @@ class _HistoryState extends State<History> {
                   Padding(
                       padding: EdgeInsets.only(left: 10, bottom: 10),
                       child: Text(
-                        'This is a short description for the expense',
+                        'This is a short description for the income_and_expense',
                         style: TextStyle(fontSize: 18, color: Colors.grey),
                       ))
                 ],

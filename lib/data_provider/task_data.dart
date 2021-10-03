@@ -7,7 +7,7 @@ import 'package:remindme/models/finished_category.dart';
 import 'package:remindme/models/reason.dart';
 import 'package:remindme/models/setting_configuration.dart';
 import 'package:remindme/models/task.dart';
-import 'package:remindme/pages/add_transaction/expense/expense_detail.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/expense_detail.dart';
 import 'package:remindme/pages/setting/add_reason/sub_subcategory_reason_page.dart';
 import 'package:remindme/pages/setting/add_reason/subcategory_reason_page.dart';
 import 'package:path_provider/path_provider.dart';
@@ -211,7 +211,7 @@ class TaskDataProvider {
     final Database db = await instance.db;
 
     final List<Map<String, dynamic>> expenses =
-        await db.rawQuery('''SELECT * FROM expense''');
+        await db.rawQuery('''SELECT * FROM income_and_expense''');
     // final List<Map<String, dynamic>> daysWithTime =
     // await db.rawQuery('''SELECT * FROM days''');
     print('inside all ${expenses.length}');
@@ -279,8 +279,8 @@ class TaskDataProvider {
 
     // await expenses();
     //  Future<List<Expense>> allExpenses =await expenses();
-    final List<Map<String, dynamic>> expenses =
-        await db.rawQuery('''SELECT * FROM expense WHERE date = oi''');
+    final List<Map<String, dynamic>> expenses = await db
+        .rawQuery('''SELECT * FROM income_and_expense WHERE date = oi''');
     // final List<Map<String, dynamic>> daysWithTime =
     // await db.rawQuery('''SELECT * FROM days''');
     // print(daysWithTime);

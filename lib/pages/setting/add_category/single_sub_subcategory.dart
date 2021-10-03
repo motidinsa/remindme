@@ -5,7 +5,7 @@ import 'package:remindme/bloc/category/category_event.dart';
 import 'package:remindme/bloc/category/category_state.dart';
 import 'package:remindme/pages/add_transaction/icon_select.dart';
 import 'package:remindme/pages/setting/add_subcategory/subcategory.dart';
-import 'package:remindme/utility/icons_helper.dart';
+import 'package:remindme/helper/icons_helper.dart';
 
 class SingleSubSubcategory extends StatefulWidget {
   final int id;

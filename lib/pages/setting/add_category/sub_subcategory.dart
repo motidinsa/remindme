@@ -4,7 +4,7 @@ import 'package:remindme/bloc/category/category_bloc.dart';
 import 'package:remindme/bloc/category/category_event.dart';
 import 'package:remindme/models/expense_and_income_subsubcategory.dart';
 import 'package:remindme/pages/add_transaction/icon_select.dart';
-import 'package:remindme/utility/icons_helper.dart';
+import 'package:remindme/helper/icons_helper.dart';
 
 class SubSubcategory extends StatefulWidget {
   int id;

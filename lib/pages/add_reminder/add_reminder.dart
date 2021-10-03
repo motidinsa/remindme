@@ -9,7 +9,7 @@ import 'package:remindme/pages/add_reminder/recur_period.dart';
 import 'package:remindme/pages/add_reminder/reminder_importance.dart';
 import 'package:remindme/pages/add_reminder/selected_date_and_time.dart';
 import 'package:remindme/pages/add_reminder/set_time_button.dart';
-import 'package:remindme/route/task_route.dart';
+import 'package:remindme/route/routes.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../bloc/add_reminder/add_reminder_bloc.dart';
 import '../../bloc/add_reminder/add_reminder_event.dart';

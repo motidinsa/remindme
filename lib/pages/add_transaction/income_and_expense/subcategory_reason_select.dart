@@ -9,10 +9,9 @@ import 'package:remindme/bloc/reason/reason_state.dart';
 import 'package:remindme/models/expense_and_income_subcategory.dart';
 import 'package:remindme/models/expense_and_income_subsubcategory.dart';
 import 'package:remindme/models/reason.dart';
-import 'package:remindme/pages/add_transaction/expense/reason_list.dart';
-import 'package:remindme/utility/icons_helper.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/reason_list.dart';
 
-import 'expense_and_income.dart';
+import 'income_and_expense.dart';
 
 class SubcategoryReasonSelect extends StatelessWidget {
   final int categoryID;

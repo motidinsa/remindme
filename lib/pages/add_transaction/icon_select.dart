@@ -24,7 +24,14 @@ class IconSelect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(100),
+      child: Ink(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100),
+            border: Border.all(color: Colors.green),
+          ),
+          child: icon),
+      borderRadius: BorderRadius.circular(50),
       // highlightColor: Colors.amber,
       onTap: () {
         type == 'category'
@@ -60,13 +67,6 @@ class IconSelect extends StatelessWidget {
         print('yee');
         Navigator.of(context).pop();
       },
-      child: Ink(
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            border: Border.all(color: Colors.grey),
-          ),
-          child: icon),
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:remindme/models/finished_category.dart';
-import 'package:remindme/pages/add_transaction/expense/expense_detail.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/expense_detail.dart';
 
 abstract class ExpenseAndIncomeEvent extends Equatable {
   const ExpenseAndIncomeEvent();

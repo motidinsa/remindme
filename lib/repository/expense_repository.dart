@@ -9,7 +9,7 @@ import 'package:remindme/models/finished_category.dart';
 import 'package:remindme/models/reason.dart';
 import 'package:remindme/models/setting_configuration.dart';
 import 'package:remindme/models/task.dart';
-import 'package:remindme/pages/add_transaction/expense/expense_detail.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/expense_detail.dart';
 import 'package:remindme/pages/setting/add_reason/sub_subcategory_reason_page.dart';
 import 'package:remindme/pages/setting/add_reason/subcategory_reason_page.dart';
 

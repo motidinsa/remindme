@@ -3,8 +3,8 @@ import 'package:remindme/models/expense_tobe_added.dart';
 import 'package:remindme/models/expense_and_income.dart';
 import 'package:remindme/models/finished_category.dart';
 import 'package:remindme/models/reason.dart';
-import 'package:remindme/pages/add_transaction/expense/expense_category.dart';
-import 'package:remindme/pages/add_transaction/expense/expense_detail.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/income_and_expense_category.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/expense_detail.dart';
 import 'package:remindme/pages/setting/add_reason/sub_subcategory_reason_page.dart';
 import 'package:remindme/pages/setting/add_reason/subcategory_reason_page.dart';
 

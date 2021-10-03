@@ -8,11 +8,11 @@ import 'package:remindme/models/expense_and_income_category.dart';
 import 'package:remindme/models/expense_and_income_subcategory.dart';
 import 'package:remindme/models/expense_and_income_subsubcategory.dart';
 import 'package:remindme/pages/add_transaction/icon_select.dart';
-import 'package:remindme/pages/home/homepage.dart';
+import 'package:remindme/pages/home/homepage/homepage.dart';
 import 'package:remindme/pages/setting/add_category/single_row_category_icon_list.dart';
 import 'package:remindme/pages/setting/add_category/sub_subcategory.dart';
 import 'package:remindme/pages/setting/add_subcategory/subcategory.dart';
-import 'package:remindme/utility/icons_helper.dart';
+import 'package:remindme/helper/icons_helper.dart';
 import 'package:intl/src/intl/date_format.dart';
 
 class ExpenseAndIncomeCategoryInsert extends StatefulWidget {

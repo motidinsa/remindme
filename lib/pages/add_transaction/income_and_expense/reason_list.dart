@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:remindme/models/reason.dart';
-import 'package:remindme/pages/add_transaction/expense/single_reason.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/single_reason.dart';
 
 class ReasonList extends StatelessWidget {
   final List<Reason> reasonList;

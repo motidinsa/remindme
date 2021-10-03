@@ -2,11 +2,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:remindme/models/expense_and_income.dart';
 import 'package:remindme/models/finished_category.dart';
-import 'package:remindme/pages/add_transaction/expense/added_expense_list.dart';
-import 'package:remindme/pages/add_transaction/expense/expense_category_list.dart';
-import 'package:remindme/pages/add_transaction/expense/expense_detail.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/added_expense_list.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/category_list.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/expense_detail.dart';
 
-import 'expense_category.dart';
+import 'income_and_expense_category.dart';
 import 'expense_detail_list.dart';
 
 class SelectedCategoryInsertItem extends StatefulWidget {
@@ -14,7 +14,7 @@ class SelectedCategoryInsertItem extends StatefulWidget {
 
   final List<Widget> categories;
   List<FinishedCategory> finishedCategories;
-  final List<ExpenseAndIncomeCategory> categoryList;
+  final List<Widget> categoryList;
 
   SelectedCategoryInsertItem(
       this.categoryList, this.categories, this.finishedCategories);
@@ -30,11 +30,10 @@ class _SelectedCategoryInsertItemState
 
   @override
   Widget build(BuildContext context) {
-    // print(widget.categories.length.toString() + ' cat length');
-    return ListView(
-      physics: NeverScrollableScrollPhysics(),
+    return Column(
+      // physics: const NeverScrollableScrollPhysics(),
       // key: UniqueKey(),
-      shrinkWrap: true,
+      // shrinkWrap: true,
       children: [
         // if (widget.finishedCategories.length > 1)
         CategoryList(UniqueKey(), widget.categoryList),
@@ -44,7 +43,6 @@ class _SelectedCategoryInsertItemState
             alignment: Alignment.bottomCenter,
             children: [
               CarouselSlider(
-                // key: UniqueKey(),
                 items: widget.categories,
                 options: CarouselOptions(
                   // height: double.maxFinite,
@@ -72,13 +70,13 @@ class _SelectedCategoryInsertItemState
                       width: 8.0,
                       height: 8.0,
                       margin:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                          EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color:
-                        _current == index || widget.categories.length == 1
-                            ? Colors.green
-                            : Colors.grey,
+                            _current == index || widget.categories.length == 1
+                                ? Colors.green
+                                : Colors.grey,
                       ),
                     );
                   },

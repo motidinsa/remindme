@@ -1,9 +1,9 @@
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
-// import 'package:remindme/models/expense_and_income.dart';
-// import 'package:remindme/pages/add_transaction/expense/selected_category.dart';
+// import 'package:remindme/models/income_and_expense.dart';
+// import 'package:remindme/pages/add_transaction/income_and_expense/selected_category.dart';
 //
-// import 'expense_category.dart';
+// import 'income_and_expense_category.dart';
 // import 'expense_detail.dart';
 //
 // class ExpenseController extends GetxController {
@@ -165,7 +165,7 @@
 //     List<ExpenseDetail> singleCategoryMultipleItems = [];
 //     singleCategoryMultipleItems.add(ExpenseDetail(
 //         id: categoryID,
-//         expense: Expense(id: categoryID, date: dateSet),
+//         income_and_expense: Expense(id: categoryID, date: dateSet),
 //         isLastItem: true));
 //     expenseDetailList.add(singleCategoryMultipleItems);
 //     if (cardItems.length > 1) {
@@ -176,7 +176,7 @@
 //       cardItems.add(convertToCategoryCard(
 //           selectedCategories.sublist(1), expenseDetailList.sublist(1)));
 //     }
-//     print(expenseDetailList.length.toString()+' expense length');
+//     print(expenseDetailList.length.toString()+' income_and_expense length');
 //     // cardItems = convertToCategoryCard(selectedCategories, expenseDetailList);
 //   }
 //
@@ -211,7 +211,7 @@
 //   addAmount(int categoryID, int index, double amount) {
 //     int categoryIndex = selectedCategories.indexOf(
 //         selectedCategories.where((element) => element.id == categoryID).first);
-//     expenseDetailList[categoryIndex][index].expense.amount = amount;
+//     expenseDetailList[categoryIndex][index].income_and_expense.amount = amount;
 //     cardItems[categoryIndex] = convertToCategoryCard(
 //         selectedCategories.sublist(1), expenseDetailList.sublist(1));
 //   }
@@ -219,7 +219,7 @@
 //   addReason(int categoryID, int index, String reason) {
 //     int categoryIndex = selectedCategories.indexOf(
 //         selectedCategories.where((element) => element.id == categoryID).first);
-//     expenseDetailList[categoryIndex][index].expense.reason = reason;
+//     expenseDetailList[categoryIndex][index].income_and_expense.reason = reason;
 //     cardItems[categoryIndex] = convertToCategoryCard(
 //         selectedCategories.sublist(1), expenseDetailList.sublist(1));
 //   }
@@ -227,7 +227,7 @@
 //   addDate(int categoryID, int index, String date) {
 //     int categoryIndex = selectedCategories.indexOf(
 //         selectedCategories.where((element) => element.id == categoryID).first);
-//     expenseDetailList[categoryIndex][index].expense.date = date;
+//     expenseDetailList[categoryIndex][index].income_and_expense.date = date;
 //     cardItems[categoryIndex] = convertToCategoryCard(
 //         selectedCategories.sublist(1), expenseDetailList.sublist(1));
 //   }
@@ -238,7 +238,7 @@
 //     print(categoryIndex.toString()+' cattttt index');
 //     print(expenseDetailList.length.toString()+' cattttt len');
 //     expenseDetailList[categoryIndex].add(ExpenseDetail(
-//         id: id, expense: Expense(id: id, date: dateSet), isLastItem: true));
+//         id: id, income_and_expense: Expense(id: id, date: dateSet), isLastItem: true));
 //     cardItems[categoryIndex] = convertToCategoryCard(
 //         selectedCategories.sublist(1), expenseDetailList.sublist(1));
 //     print(id.toString() + ' another id');
@@ -291,7 +291,7 @@
 //                           ExpenseDetail(
 //                               id: multipleExpenses.first.id,
 //                               index: index,
-//                               expense: multipleExpenses[index].expense,
+//                               income_and_expense: multipleExpenses[index].income_and_expense,
 //                               isLastItem: true),
 //                         ],
 //                       )
@@ -311,7 +311,7 @@
 //                           ExpenseDetail(
 //                               id: multipleExpenses.first.id,
 //                               index: index,
-//                               expense: multipleExpenses[index].expense,
+//                               income_and_expense: multipleExpenses[index].income_and_expense,
 //                               isLastItem: false),
 //                         ],
 //                       ),

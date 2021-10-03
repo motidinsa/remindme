@@ -8,7 +8,7 @@ import 'package:remindme/pages/add_transaction/icon_select.dart';
 import 'package:remindme/pages/setting/add_category/expense_and_income_category_insert.dart';
 import 'package:remindme/pages/setting/add_category/single_row_category_icon_list.dart';
 import 'package:remindme/pages/setting/add_category/sub_subcategory.dart';
-import 'package:remindme/utility/icons_helper.dart';
+import 'package:remindme/helper/icons_helper.dart';
 
 class Subcategory extends StatefulWidget {
   int id;

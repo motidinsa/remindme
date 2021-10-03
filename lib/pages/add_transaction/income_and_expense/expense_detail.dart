@@ -9,13 +9,10 @@ import 'package:remindme/bloc/reason/reason_state.dart';
 import 'package:remindme/models/expense_and_income.dart';
 import 'package:remindme/models/expense_and_income_subcategory.dart';
 import 'package:remindme/models/reason.dart';
-import 'package:remindme/pages/add_transaction/expense/single_reason.dart';
-import 'package:remindme/pages/add_transaction/expense/reason_list.dart';
-import 'package:remindme/pages/add_transaction/expense/subcategory_reason_select.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/single_reason.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/reason_list.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/subcategory_reason_select.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import 'package:get/get.dart';
-
-import 'expense_controller.dart';
 import 'package:intl/src/intl/date_format.dart';
 
 class ExpenseDetail extends StatefulWidget {
@@ -33,17 +30,13 @@ class ExpenseDetail extends StatefulWidget {
 }
 
 class _ExpenseDetailState extends State<ExpenseDetail> {
-  TextEditingController _expenseReasonController = TextEditingController();
-  TextEditingController _expenseAmountController = TextEditingController();
-  TextEditingController _expenseNumberOfTimesController =
+  final TextEditingController _expenseReasonController =
+      TextEditingController();
+  final TextEditingController _expenseAmountController =
+      TextEditingController();
+  final TextEditingController _expenseNumberOfTimesController =
       TextEditingController();
 
-  // DateTime now = DateTime.now();
-  //
-  // DateFormat dateFormat = DateFormat("dd-MM-yy");
-  // DateFormat timeFormat = DateFormat("HH:mm:ss");
-  // String currentDate = dateFormat.format(now);
-  // String currentTime = timeFormat.format(now);
   String date = DateFormat("dd-MM-yy").format(DateTime.now());
   String _selectedDate;
   String amount;
@@ -160,7 +153,7 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                 width: 20,
               ),
               Text(
-                widget.expense.date,
+                'widget.expense.date',
                 // key: UniqueKey(),
                 style: TextStyle(fontSize: 18, color: Colors.green),
               ),
@@ -385,7 +378,7 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
                                 Row(
                                   children: [
                                     Text(
-                                      widget.expense.categoryName,
+                                      'widget.expense.categoryName',
                                       style: TextStyle(
                                           fontSize: 20,
                                           color: Colors.brown,

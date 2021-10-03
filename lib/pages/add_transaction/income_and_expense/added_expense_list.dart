@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:remindme/models/expense_and_income.dart';
 import 'package:remindme/models/finished_category.dart';
-import 'package:remindme/pages/add_transaction/expense/added_expense.dart';
-import 'package:remindme/pages/add_transaction/expense/expense_detail.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/added_expense.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/expense_detail.dart';
 
 class AddedExpenseList extends StatefulWidget {
   final List<FinishedCategory> addedExpense;

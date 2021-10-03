@@ -15,7 +15,7 @@ import 'package:remindme/pages/setting/add_category/single_sub_subcategory.dart'
 import 'package:remindme/pages/setting/add_category/single_subcategory.dart';
 import 'package:remindme/pages/setting/add_reason/category_reason.dart';
 import 'package:remindme/pages/setting/add_reason/sub_subcategory_reason_page.dart';
-import 'package:remindme/utility/icons_helper.dart';
+import 'package:remindme/helper/icons_helper.dart';
 
 class SubCategoryEditPage extends StatefulWidget {
   int id;
