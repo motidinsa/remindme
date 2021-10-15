@@ -23,9 +23,9 @@ class ExpenseAndIncomeBloc
       try {
         List<ExpenseAndIncome> allTransaction =
             await expenseRepository.getAllIncomeAndExpense();
-        List<ExpenseAndIncomeSubCategoryModel> allSubcategories =
+        List<IncomeAndExpenseSubCategoryModel> allSubcategories =
             await expenseRepository.getAllSubCategories();
-        List<ExpenseAndIncomeSubSubCategoryModel> allSubSubcategories =
+        List<IncomeAndExpenseSubSubCategoryModel> allSubSubcategories =
             await expenseRepository.getAllSubSubCategories();
         print('the len ${allTransaction.length}');
         yield AllIncomeAndExpenseFetched(
@@ -43,9 +43,9 @@ class ExpenseAndIncomeBloc
             event.finishedCategories, event.expenseDetails, event.type);
         List<ExpenseAndIncome> allTransaction =
             await expenseRepository.getAllIncomeAndExpense();
-        List<ExpenseAndIncomeSubCategoryModel> allSubcategories =
+        List<IncomeAndExpenseSubCategoryModel> allSubcategories =
             await expenseRepository.getAllSubCategories();
-        List<ExpenseAndIncomeSubSubCategoryModel> allSubSubcategories =
+        List<IncomeAndExpenseSubSubCategoryModel> allSubSubcategories =
             await expenseRepository.getAllSubSubCategories();
         print('the len ${allTransaction.length}');
         yield AllIncomeAndExpenseFetched(

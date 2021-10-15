@@ -1,4 +1,4 @@
-class ExpenseAndIncomeCategoryModel {
+class IncomeAndExpenseCategoryModel {
   final String categoryName;
   final String iconName;
   final String iconType;
@@ -11,7 +11,7 @@ class ExpenseAndIncomeCategoryModel {
   final int userID;
   final String categoryType;
 
-  ExpenseAndIncomeCategoryModel(
+  IncomeAndExpenseCategoryModel(
       {this.categoryType,
       this.dateAdded,
       this.categoryName,

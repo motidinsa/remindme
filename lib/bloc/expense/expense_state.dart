@@ -17,7 +17,7 @@ class ExpenseState extends Equatable {
 }
 
 class AddExpenseCategorySuccess extends ExpenseState {
-  final IncomeAndExpenseCategory selectedCategory;
+  final IncomeAndExpenseCategorySelect selectedCategory;
 
   const AddExpenseCategorySuccess(this.selectedCategory);
 

@@ -17,10 +17,10 @@ class SubCategoryReasonPage extends StatefulWidget {
   int id;
   int categoryID;
   List<CategoryReason> subcategoryReasonList = [];
-  List<ExpenseAndIncomeSubCategoryModel> subcategoryModels = [];
+  List<IncomeAndExpenseSubCategoryModel> subcategoryModels = [];
   List<Reason> subcategoryReasonModelList = [];
   List<SubSubCategoryReasonPage> subsubcategoryReasonPage = [];
-  final ExpenseAndIncomeCategoryModel category;
+  final IncomeAndExpenseCategoryModel category;
 
   SubCategoryReasonPage({this.id, this.category, this.categoryID});
 
@@ -34,7 +34,7 @@ class _SubCategoryReasonPageState extends State<SubCategoryReasonPage> {
 
   // List<SubSubCategoryReasonPage> subSubcategoryReasonList = [];
   List<Widget> subcategoryList = [];
-  List<ExpenseAndIncomeSubCategoryModel> subcategoryModels = [];
+  List<IncomeAndExpenseSubCategoryModel> subcategoryModels = [];
   int tempSubSubCategoryID = 0;
   int tempSubCategoryID = 0;
 
@@ -45,7 +45,7 @@ class _SubCategoryReasonPageState extends State<SubCategoryReasonPage> {
   // }
 
   Future<void> _showMyDialog() async {
-    List<ExpenseAndIncomeCategoryModel> categories = [];
+    List<IncomeAndExpenseCategoryModel> categories = [];
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {

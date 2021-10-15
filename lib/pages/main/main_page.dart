@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:remindme/bloc/completed_task/completed_task_bloc.dart';
 import 'package:remindme/bloc/completed_task/completed_task_event.dart';
+import 'package:remindme/models/expense_and_income_category.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/income_and_expense.dart';
 import 'package:remindme/pages/completed/completed_task.dart';
 import 'package:remindme/pages/home/drawer/drawer.dart';
 import 'package:remindme/pages/home/homepage/homepage.dart';
@@ -28,6 +32,26 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   FloatingActionButton floatingActionButton;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   MainPageFunctions mainPageFunctions;
+  List<IncomeAndExpenseCategoryModel> categories = [
+    IncomeAndExpenseCategoryModel(
+        categoryType: 'Expense',
+        id: 1,
+        categoryName: 'Transport',
+        iconType: 'material',
+        iconName: 'account_balance'),
+    IncomeAndExpenseCategoryModel(
+        categoryType: 'Expense',
+        id: 2,
+        categoryName: 'Food',
+        iconType: 'material',
+        iconName: 'account_balance'),
+    IncomeAndExpenseCategoryModel(
+        categoryType: 'Expense',
+        id: 3,
+        categoryName: 'Other',
+        iconType: 'material',
+        iconName: 'account_balance'),
+  ];
 
   init() {
     _tabController = TabController(length: 2, vsync: this);
@@ -57,7 +81,10 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       elevation: 4,
       backgroundColor: Colors.white,
       foregroundColor: Colors.green,
-      onPressed: () => mainPageFunctions.showModal(context),
+      onPressed: () => Get.to(() => ExpenseAndIncomePage(
+            type: 'Expense',
+            categories: categories,
+          )),
       child: const Icon(Icons.add),
     );
   }
@@ -70,7 +97,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   void _onItemTapped(int index) {
     setState(
-      () {
+          () {
         switch (index) {
           case 0:
             body = HomePage(tabController: _tabController, sc: scaffoldKey);
@@ -92,7 +119,10 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               elevation: 4,
               backgroundColor: Colors.white,
               foregroundColor: Colors.green,
-              onPressed: () => mainPageFunctions.showModal(context),
+              onPressed: () => Get.to(() => ExpenseAndIncomePage(
+                    type: 'Expense',
+                    categories: categories,
+                  )),
               child: const Icon(Icons.add),
             );
             break;

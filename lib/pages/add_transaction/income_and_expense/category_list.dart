@@ -20,11 +20,14 @@ class _CategoryListState extends State<CategoryList> {
   double height;
   bool makeScrollable = false;
   bool isFirstHeightSet = false;
+  int count = 0;
 
   @override
   Widget build(BuildContext context) {
     return WidgetSize(
       onChange: (Size size) {
+        count++;
+        print('on change size $count');
         setState(() {
           if (!isFirstHeightSet) {
             height = size.height;
@@ -35,27 +38,32 @@ class _CategoryListState extends State<CategoryList> {
           }
         });
       },
-      child: Card(
-        elevation: 2,
-        child: Center(
-            child: SizedBox(
-          height: makeScrollable
-              ? MediaQuery.of(context).size.height * .25
-              : height,
-          child: ListView(
-            physics: const BouncingScrollPhysics(),
-            shrinkWrap: true,
-            children: [
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 5,
-                runSpacing: 5,
-                children: widget.categoryList,
+      child: widget.categoryList.isEmpty
+          ? Container()
+          : Card(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: Center(
+                  child: SizedBox(
+                    height: makeScrollable
+                        ? MediaQuery.of(context).size.height * .25
+                        : height,
+                    child: ListView(
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      children: [
+                        Wrap(
+                          alignment: WrapAlignment.center,
+                          spacing: 5,
+                          runSpacing: 5,
+                          children: widget.categoryList,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ],
-          ),
-        )),
-      ),
+            ),
     );
   }
 

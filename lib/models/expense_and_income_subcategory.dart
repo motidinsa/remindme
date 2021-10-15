@@ -1,6 +1,6 @@
 import 'package:remindme/models/expense_and_income_subsubcategory.dart';
 
-class ExpenseAndIncomeSubCategoryModel {
+class IncomeAndExpenseSubCategoryModel {
   String subcategoryName;
   String iconName;
   String iconType;
@@ -16,7 +16,7 @@ class ExpenseAndIncomeSubCategoryModel {
 
   // List<ExpenseAndIncomeSubSubCategoryModel> subcategories =[];
 
-  ExpenseAndIncomeSubCategoryModel({
+  IncomeAndExpenseSubCategoryModel({
     this.subcategoryName,
     this.dateAdded,
     this.subcategoryType,

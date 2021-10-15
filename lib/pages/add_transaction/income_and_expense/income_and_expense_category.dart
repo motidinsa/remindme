@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remindme/bloc/expense/expense_bloc.dart';
 import 'package:remindme/bloc/expense/expense_event.dart';
+import 'package:remindme/getx_controller/income_and_expense/income_and_expense_controller.dart';
+import 'package:remindme/models/income_and_expense_category_select_model.dart';
 
 import 'expense_controller.dart';
 
-class IncomeAndExpenseCategory extends StatefulWidget {
+class IncomeAndExpenseCategorySelect extends StatefulWidget {
   final String categoryName;
   final Icon icon;
   bool isSelected;
@@ -14,7 +16,7 @@ class IncomeAndExpenseCategory extends StatefulWidget {
   final int categoryID;
   Key key;
 
-  IncomeAndExpenseCategory({
+  IncomeAndExpenseCategorySelect({
     this.categoryName,
     this.icon,
     this.isSelected,
@@ -24,17 +26,20 @@ class IncomeAndExpenseCategory extends StatefulWidget {
   });
 
   @override
-  _IncomeAndExpenseCategoryState createState() =>
-      _IncomeAndExpenseCategoryState();
+  _IncomeAndExpenseCategorySelectState createState() =>
+      _IncomeAndExpenseCategorySelectState();
 }
 
-class _IncomeAndExpenseCategoryState extends State<IncomeAndExpenseCategory> {
+class _IncomeAndExpenseCategorySelectState
+    extends State<IncomeAndExpenseCategorySelect> {
   bool isSelected;
+  final IncomeAndExpenseController incomeAndExpenseController = Get.find();
 
   @override
   void initState() {
     super.initState();
-    isSelected = widget.isSelected != null ? widget.isSelected : null;
+    isSelected = widget.isSelected;
+    print(incomeAndExpenseController == null);
   }
 
   @override
@@ -62,9 +67,18 @@ class _IncomeAndExpenseCategoryState extends State<IncomeAndExpenseCategory> {
                       () {
                         isSelected = !isSelected;
                         if (isSelected) {
+                          incomeAndExpenseController.addIncomeAndExpense(
+                            IncomeAndExpenseCategorySelectModel(
+                              categoryName: widget.categoryName,
+                              icon: widget.icon,
+                              isSelected: widget.isSelected,
+                              categoryID: widget.categoryID,
+                              finishedCategory: false,
+                            ),
+                          );
                           // BlocProvider.of<ExpenseBloc>(context).add(
                           //   AddExpenseCategory(
-                          //     IncomeAndExpenseCategory(
+                          //     IncomeAndExpenseCategorySelect(
                           //         categoryName: widget.categoryName,
                           //         icon: widget.icon,
                           //         isSelected: widget.isSelected,
@@ -90,7 +104,7 @@ class _IncomeAndExpenseCategoryState extends State<IncomeAndExpenseCategory> {
                   ),
                 )
               ],
-      ),
+            ),
     );
   }
 }

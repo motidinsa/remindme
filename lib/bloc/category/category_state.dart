@@ -13,9 +13,9 @@ class CategoryState extends Equatable {
 class NoCategoryAdded extends CategoryState {}
 
 class CategoryInitialized extends CategoryState {
-  final List<ExpenseAndIncomeCategoryModel> categories;
-  final List<ExpenseAndIncomeSubCategoryModel> subcategories;
-  final List<ExpenseAndIncomeSubSubCategoryModel> subSubcategories;
+  final List<IncomeAndExpenseCategoryModel> categories;
+  final List<IncomeAndExpenseSubCategoryModel> subcategories;
+  final List<IncomeAndExpenseSubSubCategoryModel> subSubcategories;
 
   CategoryInitialized(
       {this.categories, this.subcategories, this.subSubcategories});
@@ -140,7 +140,7 @@ class SubSubcategoryRemoved extends CategoryState {
 }
 
 class SubSubcategoryAdded extends CategoryState {
-  final List<ExpenseAndIncomeSubSubCategoryModel> subcategories;
+  final List<IncomeAndExpenseSubSubCategoryModel> subcategories;
   final int categoryID;
   final bool isUpdate;
 

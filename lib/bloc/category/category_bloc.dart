@@ -99,7 +99,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
         // print(event.subSubcategories)
         int subcategoryID;
         if (event.subcategories.length > 0) {
-          List<ExpenseAndIncomeSubCategoryModel> subcategories = [
+          List<IncomeAndExpenseSubCategoryModel> subcategories = [
             ...event.subcategories
           ];
           subcategories.forEach((element) {

@@ -23,11 +23,11 @@ class SubCategoryEditPage extends StatefulWidget {
   String categoryType;
   String categoryIconName;
   List<SingleSubcategory> subcategoryEditList = [];
-  List<ExpenseAndIncomeSubCategoryModel> subcategoryModels = [];
-  List<ExpenseAndIncomeSubSubCategoryModel> subSubcategoryModels = [];
+  List<IncomeAndExpenseSubCategoryModel> subcategoryModels = [];
+  List<IncomeAndExpenseSubSubCategoryModel> subSubcategoryModels = [];
   List<Reason> subcategoryReasonModelList = [];
   List<SingleSubSubcategory> subsubcategoryEditPage = [];
-  final ExpenseAndIncomeCategoryModel category;
+  final IncomeAndExpenseCategoryModel category;
 
   SubCategoryEditPage(
       {this.id,
@@ -49,7 +49,7 @@ class _SubCategoryEditPageState extends State<SubCategoryEditPage> {
 
   // List<SubSubCategoryReasonPage> subSubcategoryReasonList = [];
   List<Widget> subcategoryList = [];
-  List<ExpenseAndIncomeSubCategoryModel> subcategoryModels = [];
+  List<IncomeAndExpenseSubCategoryModel> subcategoryModels = [];
   int tempSubSubCategoryID = 0;
   int tempSubCategoryID = 0;
 
@@ -62,7 +62,7 @@ class _SubCategoryEditPageState extends State<SubCategoryEditPage> {
   }
 
   Future<void> _showMyDialog() async {
-    List<ExpenseAndIncomeCategoryModel> categories = [];
+    List<IncomeAndExpenseCategoryModel> categories = [];
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -229,7 +229,7 @@ class _SubCategoryEditPageState extends State<SubCategoryEditPage> {
                                       id: tempSubCategoryID))
                                   .toList();
                               widget.subcategoryModels.add(
-                                ExpenseAndIncomeSubCategoryModel(
+                                IncomeAndExpenseSubCategoryModel(
                                   id: tempSubCategoryID,
                                   dateType: 'gr',
                                   iconType: 'material',
@@ -257,7 +257,7 @@ class _SubCategoryEditPageState extends State<SubCategoryEditPage> {
                         onPressed: () {
                           setState(() {
                             widget.subSubcategoryModels.add(
-                              ExpenseAndIncomeSubSubCategoryModel(
+                              IncomeAndExpenseSubSubCategoryModel(
                                 id: tempSubSubCategoryID,
                                 dateType: 'gr',
                                 subSubcategoryType: widget.categoryType,

@@ -11,9 +11,9 @@ import 'package:remindme/pages/add_transaction/income_and_expense/single_expense
 class ExpenseList extends StatefulWidget {
   static const routeName = 'ExpenseList';
   final List<ExpenseAndIncome> allIncomeAndExpense;
-  final List<ExpenseAndIncomeSubCategoryModel> allSubcategories;
+  final List<IncomeAndExpenseSubCategoryModel> allSubcategories;
 
-  final List<ExpenseAndIncomeSubSubCategoryModel> allSubSubcategories;
+  final List<IncomeAndExpenseSubSubCategoryModel> allSubSubcategories;
 
   ExpenseList(
       {this.allIncomeAndExpense,

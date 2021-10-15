@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:remindme/repository/task_repository.dart';
 import 'package:remindme/route/routes.dart';
 
@@ -12,19 +14,33 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   const SystemUiOverlayStyle(
+    //     statusBarColor: Colors.white,
+    //   ),
+    // );
     return RepositoryProvider.value(
       value: taskRepository,
-      child: MaterialApp(
+      child: GetMaterialApp(
         title: 'Remind Me',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.green,
           appBarTheme: const AppBarTheme(
-              color: Colors.white, foregroundColor: Colors.green, elevation: 3),
+            color: Colors.white,
+            foregroundColor: Colors.green,
+            elevation: 1,
+            systemOverlayStyle: SystemUiOverlayStyle(
+                statusBarColor: Colors.transparent,
+                statusBarIconBrightness: Brightness.dark),
+          ),
           tabBarTheme: const TabBarTheme(
             labelColor: Colors.green,
             indicator: UnderlineTabIndicator(
-              borderSide: BorderSide(width: 1, color: Colors.green),
+              borderSide: BorderSide(
+                width: 1,
+                color: Colors.green,
+              ),
             ),
           ),
           visualDensity: VisualDensity.adaptivePlatformDensity,

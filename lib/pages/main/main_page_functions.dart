@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:remindme/models/expense_and_income_category.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/expense_detail.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/income_and_expense.dart';
 import 'package:remindme/repository/expense_repository.dart';
 
 import '../../test.dart';
+import '../../test3.dart';
 
 class MainPageFunctions {
   final ExpenseRepository expenseRepository;
@@ -28,15 +31,41 @@ class MainPageFunctions {
           children: [
             TextButton(
                 onPressed: () async {
-                  List<ExpenseAndIncomeCategoryModel> categories =
-                      await fetchExpenseCategories();
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TestExpenseDetail(),
-                    ),
-                  );
+                  // List<IncomeAndExpenseCategoryModel> categories =
+                  //     await fetchExpenseCategories();
+                  List<IncomeAndExpenseCategoryModel> categories = [
+                    IncomeAndExpenseCategoryModel(
+                        categoryType: 'Expense',
+                        id: 1,
+                        categoryName: 'Transport',
+                        iconType: 'material',
+                        iconName: 'account_balance'),
+                    IncomeAndExpenseCategoryModel(
+                        categoryType: 'Expense',
+                        id: 2,
+                        categoryName: 'Food',
+                        iconType: 'material',
+                        iconName: 'account_balance'),
+                    IncomeAndExpenseCategoryModel(
+                        categoryType: 'Expense',
+                        id: 3,
+                        categoryName: 'Other',
+                        iconType: 'material',
+                        iconName: 'account_balance'),
+                  ];
+                  Get.to(() => ExpenseAndIncomePage(
+                        type: 'Expense',
+                        categories: categories,
+                      ));
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => ExpenseAndIncomePage(
+                  //       type: 'Income',
+                  //       categories: categories,
+                  //     ),
+                  //   ),
+                  // );
                 },
                 child: const Text(
                   'Expense',
@@ -44,7 +73,7 @@ class MainPageFunctions {
                 )),
             TextButton(
                 onPressed: () async {
-                  List<ExpenseAndIncomeCategoryModel> categories =
+                  List<IncomeAndExpenseCategoryModel> categories =
                       await fetchIncomeCategories();
 
                   Navigator.push(
@@ -67,11 +96,11 @@ class MainPageFunctions {
     );
   }
 
-  Future<List<ExpenseAndIncomeCategoryModel>> fetchExpenseCategories() async {
+  Future<List<IncomeAndExpenseCategoryModel>> fetchExpenseCategories() async {
     return await expenseRepository.getAllExpenseCategory();
   }
 
-  Future<List<ExpenseAndIncomeCategoryModel>> fetchIncomeCategories() async {
+  Future<List<IncomeAndExpenseCategoryModel>> fetchIncomeCategories() async {
     return await expenseRepository.getAllIncomeCategory();
   }
 }

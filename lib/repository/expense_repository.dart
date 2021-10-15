@@ -45,59 +45,59 @@ class ExpenseRepository {
     return await dataProvider.getInitializedParameters();
   }
 
-  Future<List<ExpenseAndIncomeCategoryModel>> getAllCategories() async {
+  Future<List<IncomeAndExpenseCategoryModel>> getAllCategories() async {
     return await dataProvider.getAllCategories();
   }
 
-  Future<List<ExpenseAndIncomeCategoryModel>> getAllExpenseCategory() async {
+  Future<List<IncomeAndExpenseCategoryModel>> getAllExpenseCategory() async {
     return await dataProvider.getAllExpenseCategory();
   }
 
-  Future<List<ExpenseAndIncomeCategoryModel>> getAllIncomeCategory() async {
+  Future<List<IncomeAndExpenseCategoryModel>> getAllIncomeCategory() async {
     return await dataProvider.getAllIncomeCategory();
   }
 
-  Future<List<ExpenseAndIncomeSubCategoryModel>> getAllSubCategories() async {
+  Future<List<IncomeAndExpenseSubCategoryModel>> getAllSubCategories() async {
     return await dataProvider.getAllSubCategories();
   }
 
-  Future<List<ExpenseAndIncomeSubCategoryModel>>
+  Future<List<IncomeAndExpenseSubCategoryModel>>
       getAllSubCategoriesWithCategoryID(int categoryID) async {
     return await dataProvider.getAllSubCategoriesWithCategoryID(categoryID);
   }
 
-  Future<List<ExpenseAndIncomeSubCategoryModel>>
+  Future<List<IncomeAndExpenseSubCategoryModel>>
       getSubcategoryWithSubcategoryID(int subcategoryID) async {
     return await dataProvider.getSubcategoryWithSubcategoryID(subcategoryID);
   }
 
-  Future<List<ExpenseAndIncomeSubSubCategoryModel>>
+  Future<List<IncomeAndExpenseSubSubCategoryModel>>
       getAllSubSubCategoriesWithSubCategoryID(int subcategoryID) async {
     return await dataProvider
         .getAllSubSubCategoriesWithSubCategoryID(subcategoryID);
   }
 
-  Future<List<ExpenseAndIncomeSubSubCategoryModel>>
+  Future<List<IncomeAndExpenseSubSubCategoryModel>>
       getAllSubSubCategories() async {
     return await dataProvider.getAllSubSubCategories();
   }
 
-  Future<int> insertCategory(ExpenseAndIncomeCategoryModel category) async {
+  Future<int> insertCategory(IncomeAndExpenseCategoryModel category) async {
     return await dataProvider.insertCategory(category);
   }
 
   Future<int> insertSubCategory(
-      ExpenseAndIncomeSubCategoryModel subcategory, int categoryID) async {
+      IncomeAndExpenseSubCategoryModel subcategory, int categoryID) async {
     return await dataProvider.insertSubCategory(subcategory, categoryID);
   }
 
   Future<void> updateSubCategory(
-      List<ExpenseAndIncomeSubCategoryModel> subcategory) async {
+      List<IncomeAndExpenseSubCategoryModel> subcategory) async {
     return await dataProvider.updateSubCategory(subcategory);
   }
 
   Future<void> insertSubSubCategory(
-      List<ExpenseAndIncomeSubSubCategoryModel> subSubcategory,
+      List<IncomeAndExpenseSubSubCategoryModel> subSubcategory,
       int categoryID,
       int subcategoryID) async {
     return await dataProvider.insertSubSubCategory(
@@ -105,7 +105,7 @@ class ExpenseRepository {
   }
 
   Future<void> updateSubSubCategory(
-    List<ExpenseAndIncomeSubSubCategoryModel> subSubcategory,
+    List<IncomeAndExpenseSubSubCategoryModel> subSubcategory,
   ) async {
     return await dataProvider.updateSubSubCategory(subSubcategory);
   }

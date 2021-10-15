@@ -49,7 +49,7 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
   FocusNode reasonFocusNode = FocusNode();
   FocusNode numberOfTimesFocusNode = FocusNode();
 
-  List<ExpenseAndIncomeSubCategoryModel> subcategories = [];
+  List<IncomeAndExpenseSubCategoryModel> subcategories = [];
   List<Reason> categoryReasonList = [];
   List<Reason> reasonlist = [
     Reason(

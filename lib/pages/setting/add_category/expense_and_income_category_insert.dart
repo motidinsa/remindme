@@ -42,8 +42,8 @@ class _ExpenseAndIncomeCategoryInsertState
   Icon subCategoryIcon;
 
   // List<ExpenseAndIncomeCategoryModel> categories = [];
-  List<ExpenseAndIncomeSubCategoryModel> subcategories = [];
-  List<List<ExpenseAndIncomeSubSubCategoryModel>> subSubcategories = [];
+  List<IncomeAndExpenseSubCategoryModel> subcategories = [];
+  List<List<IncomeAndExpenseSubSubCategoryModel>> subSubcategories = [];
   String categoryType;
   List<Subcategory> subcategoryWidgets = [];
 
@@ -337,7 +337,7 @@ class _ExpenseAndIncomeCategoryInsertState
                               print(tempSubcategoryID.toString() + ' before');
                               setState(() {
                                 subcategories.add(
-                                  ExpenseAndIncomeSubCategoryModel(
+                                  IncomeAndExpenseSubCategoryModel(
                                     userID: 1,
                                     id: tempSubcategoryID,
                                     dateType: 'gr',
@@ -412,7 +412,7 @@ class _ExpenseAndIncomeCategoryInsertState
                         });
                         BlocProvider.of<CategoryBloc>(context).add(
                           InsertCategory(
-                              category: ExpenseAndIncomeCategoryModel(
+                              category: IncomeAndExpenseCategoryModel(
                                   categoryType: categoryType,
                                   dateType: 'gr',
                                   timeAdded: currentTime,

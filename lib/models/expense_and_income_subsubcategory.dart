@@ -1,4 +1,4 @@
-class ExpenseAndIncomeSubSubCategoryModel {
+class IncomeAndExpenseSubSubCategoryModel {
   String subSubcategoryName;
 
   String dateAdded;
@@ -12,7 +12,7 @@ class ExpenseAndIncomeSubSubCategoryModel {
   int categoryID;
   String subSubcategoryType;
 
-  ExpenseAndIncomeSubSubCategoryModel(
+  IncomeAndExpenseSubSubCategoryModel(
       {this.subSubcategoryName,
       this.dateAdded,
       this.subSubcategoryType,

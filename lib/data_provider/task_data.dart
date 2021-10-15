@@ -318,8 +318,8 @@ class TaskDataProvider {
     DateFormat timeFormat = DateFormat("HH:mm:ss");
     String currentDate = dateFormat.format(now);
     String currentTime = timeFormat.format(now);
-    List<ExpenseAndIncomeCategoryModel> expenseAndIncomeCategory = [
-      ExpenseAndIncomeCategoryModel(
+    List<IncomeAndExpenseCategoryModel> expenseAndIncomeCategory = [
+      IncomeAndExpenseCategoryModel(
         userID: 1,
         categoryType: 'Expense',
         categoryName: 'Transport',
@@ -330,8 +330,8 @@ class TaskDataProvider {
         timeAdded: currentTime,
       )
     ];
-    List<ExpenseAndIncomeSubCategoryModel> expenseAndIncomeSubcategory = [
-      ExpenseAndIncomeSubCategoryModel(
+    List<IncomeAndExpenseSubCategoryModel> expenseAndIncomeSubcategory = [
+      IncomeAndExpenseSubCategoryModel(
           userID: 1,
           subcategoryType: 'Expense',
           subcategoryName: 'Bus',
@@ -341,7 +341,7 @@ class TaskDataProvider {
           iconType: 'material',
           timeAdded: currentTime,
           categoryID: 1),
-      ExpenseAndIncomeSubCategoryModel(
+      IncomeAndExpenseSubCategoryModel(
           userID: 1,
           subcategoryType: 'Expense',
           subcategoryName: 'Taxi',
@@ -352,8 +352,8 @@ class TaskDataProvider {
           timeAdded: currentTime,
           categoryID: 1)
     ];
-    List<ExpenseAndIncomeSubSubCategoryModel> expenseAndIncomeSubSubcategory = [
-      ExpenseAndIncomeSubSubCategoryModel(
+    List<IncomeAndExpenseSubSubCategoryModel> expenseAndIncomeSubSubcategory = [
+      IncomeAndExpenseSubSubCategoryModel(
           userID: 1,
           subSubcategoryType: 'Expense',
           subSubcategoryName: 'Anbessa',
@@ -362,7 +362,7 @@ class TaskDataProvider {
           timeAdded: currentTime,
           categoryID: 1,
           subcategoryID: 1),
-      ExpenseAndIncomeSubSubCategoryModel(
+      IncomeAndExpenseSubSubCategoryModel(
           userID: 1,
           subSubcategoryType: 'Expense',
           subSubcategoryName: 'Sheger',
@@ -371,7 +371,7 @@ class TaskDataProvider {
           timeAdded: currentTime,
           categoryID: 1,
           subcategoryID: 1),
-      ExpenseAndIncomeSubSubCategoryModel(
+      IncomeAndExpenseSubSubCategoryModel(
           userID: 1,
           subSubcategoryType: 'Expense',
           subSubcategoryName: 'Public service',
@@ -392,7 +392,7 @@ class TaskDataProvider {
   }
 
   Future<void> initializeCategory(
-      List<ExpenseAndIncomeCategoryModel> expenseAndIncomeCategory) async {
+      List<IncomeAndExpenseCategoryModel> expenseAndIncomeCategory) async {
     final Database db = await instance.db;
     for (int i = 0; i < expenseAndIncomeCategory.length; i++) {
       await db.insert(
@@ -403,7 +403,7 @@ class TaskDataProvider {
   }
 
   Future<void> initializeSubCategory(
-      List<ExpenseAndIncomeSubCategoryModel>
+      List<IncomeAndExpenseSubCategoryModel>
           expenseAndIncomeSubCategory) async {
     final Database db = await instance.db;
     for (int i = 0; i < expenseAndIncomeSubCategory.length; i++) {
@@ -415,7 +415,7 @@ class TaskDataProvider {
   }
 
   Future<void> initializeSubSubCategory(
-      List<ExpenseAndIncomeSubSubCategoryModel>
+      List<IncomeAndExpenseSubSubCategoryModel>
           expenseAndIncomeSubSubCategory) async {
     final Database db = await instance.db;
     for (int i = 0; i < expenseAndIncomeSubSubCategory.length; i++) {
@@ -453,12 +453,12 @@ class TaskDataProvider {
     );
   }
 
-  Future<List<ExpenseAndIncomeCategoryModel>> getAllCategories() async {
+  Future<List<IncomeAndExpenseCategoryModel>> getAllCategories() async {
     final Database db = await instance.db;
     final categories = await db.rawQuery('''SELECT * FROM category''');
 
     return List.generate(categories.length, (i) {
-      return ExpenseAndIncomeCategoryModel(
+      return IncomeAndExpenseCategoryModel(
           id: categories[i]['id'],
           categoryName: categories[i]['name'],
           timeAdded: categories[i]['time'],
@@ -472,13 +472,13 @@ class TaskDataProvider {
     });
   }
 
-  Future<List<ExpenseAndIncomeCategoryModel>> getAllExpenseCategory() async {
+  Future<List<IncomeAndExpenseCategoryModel>> getAllExpenseCategory() async {
     final Database db = await instance.db;
     final categories = await db.rawQuery(
         '''SELECT * FROM category where category_type = 'Expense' or category_type = 'both' ''');
 
     return List.generate(categories.length, (i) {
-      return ExpenseAndIncomeCategoryModel(
+      return IncomeAndExpenseCategoryModel(
           id: categories[i]['id'],
           categoryName: categories[i]['name'],
           timeAdded: categories[i]['time'],
@@ -492,13 +492,13 @@ class TaskDataProvider {
     });
   }
 
-  Future<List<ExpenseAndIncomeCategoryModel>> getAllIncomeCategory() async {
+  Future<List<IncomeAndExpenseCategoryModel>> getAllIncomeCategory() async {
     final Database db = await instance.db;
     final categories = await db.rawQuery(
         '''SELECT * FROM category where category_type = 'Income' or category_type = 'both' ''');
 
     return List.generate(categories.length, (i) {
-      return ExpenseAndIncomeCategoryModel(
+      return IncomeAndExpenseCategoryModel(
           id: categories[i]['id'],
           categoryName: categories[i]['name'],
           timeAdded: categories[i]['time'],
@@ -512,12 +512,12 @@ class TaskDataProvider {
     });
   }
 
-  Future<List<ExpenseAndIncomeSubCategoryModel>> getAllSubCategories() async {
+  Future<List<IncomeAndExpenseSubCategoryModel>> getAllSubCategories() async {
     final Database db = await instance.db;
     final subCategories = await db.rawQuery('''SELECT * FROM subcategory''');
 
     return List.generate(subCategories.length, (i) {
-      return ExpenseAndIncomeSubCategoryModel(
+      return IncomeAndExpenseSubCategoryModel(
           id: subCategories[i]['id'],
           subcategoryName: subCategories[i]['name'],
           timeAdded: subCategories[i]['time'],
@@ -532,14 +532,14 @@ class TaskDataProvider {
     });
   }
 
-  Future<List<ExpenseAndIncomeSubCategoryModel>>
+  Future<List<IncomeAndExpenseSubCategoryModel>>
       getAllSubCategoriesWithCategoryID(int categoryID) async {
     final Database db = await instance.db;
     final subCategories = await db.rawQuery(
         '''SELECT * FROM subcategory where category_id = $categoryID''');
 
     return List.generate(subCategories.length, (i) {
-      return ExpenseAndIncomeSubCategoryModel(
+      return IncomeAndExpenseSubCategoryModel(
           id: subCategories[i]['id'],
           subcategoryName: subCategories[i]['name'],
           timeAdded: subCategories[i]['time'],
@@ -554,14 +554,14 @@ class TaskDataProvider {
     });
   }
 
-  Future<List<ExpenseAndIncomeSubCategoryModel>>
+  Future<List<IncomeAndExpenseSubCategoryModel>>
       getSubcategoryWithSubcategoryID(int subcategoryID) async {
     final Database db = await instance.db;
     final subCategories = await db
         .rawQuery('''SELECT * FROM subcategory where id = $subcategoryID''');
 
     return List.generate(subCategories.length, (i) {
-      return ExpenseAndIncomeSubCategoryModel(
+      return IncomeAndExpenseSubCategoryModel(
           id: subCategories[i]['id'],
           subcategoryName: subCategories[i]['name'],
           timeAdded: subCategories[i]['time'],
@@ -576,14 +576,14 @@ class TaskDataProvider {
     });
   }
 
-  Future<List<ExpenseAndIncomeSubSubCategoryModel>>
+  Future<List<IncomeAndExpenseSubSubCategoryModel>>
       getAllSubSubCategoriesWithSubCategoryID(int subcategoryID) async {
     final Database db = await instance.db;
     final subCategories = await db.rawQuery(
         '''SELECT * FROM sub_subcategory where sub_category_id = $subcategoryID''');
 
     return List.generate(subCategories.length, (i) {
-      return ExpenseAndIncomeSubSubCategoryModel(
+      return IncomeAndExpenseSubSubCategoryModel(
           id: subCategories[i]['id'],
           subSubcategoryName: subCategories[i]['name'],
           timeAdded: subCategories[i]['time'],
@@ -596,14 +596,14 @@ class TaskDataProvider {
     });
   }
 
-  Future<List<ExpenseAndIncomeSubSubCategoryModel>>
+  Future<List<IncomeAndExpenseSubSubCategoryModel>>
       getAllSubSubCategories() async {
     final Database db = await instance.db;
     final subSubCategories =
         await db.rawQuery('''SELECT * FROM sub_subcategory''');
 
     return List.generate(subSubCategories.length, (i) {
-      return ExpenseAndIncomeSubSubCategoryModel(
+      return IncomeAndExpenseSubSubCategoryModel(
           id: subSubCategories[i]['id'],
           subSubcategoryName: subSubCategories[i]['name'],
           timeAdded: subSubCategories[i]['time'],
@@ -617,7 +617,7 @@ class TaskDataProvider {
     });
   }
 
-  Future<int> insertCategory(ExpenseAndIncomeCategoryModel category) async {
+  Future<int> insertCategory(IncomeAndExpenseCategoryModel category) async {
     final Database db = await instance.db;
     await db.insert('category', category.toMap());
     final lastCategoryID = await db
@@ -628,7 +628,7 @@ class TaskDataProvider {
   }
 
   Future<int> insertSubCategory(
-      ExpenseAndIncomeSubCategoryModel subcategory, int categoryID) async {
+      IncomeAndExpenseSubCategoryModel subcategory, int categoryID) async {
     final Database db = await instance.db;
     // List<ExpenseAndIncomeSubCategoryModel> subcategories = [...subcategory];
     // subcategories.forEach((element) {
@@ -646,18 +646,18 @@ class TaskDataProvider {
   }
 
   Future<void> updateSubCategory(
-      List<ExpenseAndIncomeSubCategoryModel> subcategory) async {
+      List<IncomeAndExpenseSubCategoryModel> subcategory) async {
     final Database db = await instance.db;
     for (int i = 0; i < subcategory.length; i++)
       await db.insert('subcategory', subcategory[i].toMap());
   }
 
   Future<void> insertSubSubCategory(
-      List<ExpenseAndIncomeSubSubCategoryModel> subSubcategory,
+      List<IncomeAndExpenseSubSubCategoryModel> subSubcategory,
       int categoryID,
       int subcategoryID) async {
     final Database db = await instance.db;
-    List<ExpenseAndIncomeSubSubCategoryModel> subSubcategories = [
+    List<IncomeAndExpenseSubSubCategoryModel> subSubcategories = [
       ...subSubcategory
     ];
     print(subSubcategories.length.toString() + ' le');
@@ -682,7 +682,7 @@ class TaskDataProvider {
   }
 
   Future<void> updateSubSubCategory(
-      List<ExpenseAndIncomeSubSubCategoryModel> subcategory) async {
+      List<IncomeAndExpenseSubSubCategoryModel> subcategory) async {
     final Database db = await instance.db;
     for (int i = 0; i < subcategory.length; i++)
       await db.insert('sub_subcategory', subcategory[i].toMap());

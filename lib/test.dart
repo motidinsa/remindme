@@ -97,7 +97,7 @@ class _TestExpenseDetailState extends State<TestExpenseDetail> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
                 child: Row(
                   children: [
                     const Text(
@@ -122,10 +122,13 @@ class _TestExpenseDetailState extends State<TestExpenseDetail> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          OutlinedButton(
+                          TextButton(
                             child: const Text(
                               'Change Date',
                               style: TextStyle(color: Colors.green),
+                            ),
+                            style: TextButton.styleFrom(
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             ),
                             onPressed: () {
                               showModalBottomSheet(
@@ -187,17 +190,52 @@ class _TestExpenseDetailState extends State<TestExpenseDetail> {
                   ],
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Row(
+                  children: [
+                    Text('Subtract from '),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Card(
+                      elevation: 3,
+                      color: Colors.green.shade50,
+                      child: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: Column(
+                          children: [Text('Wallet'), Text('Balance: 100')],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text('Change'),
+                      // style: TextButton.styleFrom(
+                      //   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      // ),
+                    )
+                  ],
+                ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   TextButton(
                     child: const Text('Select reason'),
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    style: TextButton.styleFrom(
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
                     onPressed: () {},
                   ),
                   TextButton(
                     child: const Text('Select Subcategory'),
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    style: TextButton.styleFrom(
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
                     onPressed: () {
                       showModalBottomSheet(
                           isScrollControlled: true,
@@ -213,37 +251,54 @@ class _TestExpenseDetailState extends State<TestExpenseDetail> {
                 ],
               ),
               Padding(
+                padding: EdgeInsets.only(left: 20),
+                child: Row(
+                  children: const [
+                    Icon(
+                      Icons.star_rounded,
+                      color: Colors.grey,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: Text(
+                        'Subcategories will be automatically added if you pressed the select reason button',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Padding(
                 padding: const EdgeInsets.only(left: 20, bottom: 5),
                 child: Row(
                   children: const [
                     Text(
                       'Transport',
-                      style: TextStyle(fontSize: 15, color: Colors.grey),
+                      style: TextStyle(fontSize: 15, color: Colors.black87),
                     ),
                     SizedBox(
                       width: 5,
                     ),
-                    Icon(
-                      Icons.chevron_right_rounded,
-                      color: Colors.grey,
-                    ),
+                    Icon(Icons.chevron_right_rounded, color: Colors.black87),
                     SizedBox(
                       width: 5,
                     ),
                     Text(
                       'Bus',
-                      style: TextStyle(fontSize: 15, color: Colors.grey),
+                      style: TextStyle(fontSize: 15, color: Colors.black87),
                     ),
                     SizedBox(
                       width: 5,
                     ),
-                    Icon(
-                      Icons.chevron_right_rounded,
-                      color: Colors.grey,
-                    ),
+                    Icon(Icons.chevron_right_rounded, color: Colors.black87),
                     Text(
                       'Anbessa',
-                      style: TextStyle(fontSize: 15, color: Colors.grey),
+                      style: TextStyle(fontSize: 15, color: Colors.black87),
                     )
                   ],
                 ),
@@ -380,7 +435,7 @@ class _TestExpenseDetailState extends State<TestExpenseDetail> {
                             controller: _expenseReasonController,
                             decoration: const InputDecoration(
                               border: OutlineInputBorder(),
-                              labelText: 'Reason',
+                              labelText: 'Reason (Optional)',
                               labelStyle: TextStyle(
                                 // fontSize: 18,
                                 color: Colors.green,
@@ -471,6 +526,9 @@ class _TestExpenseDetailState extends State<TestExpenseDetail> {
                   ],
                 ),
               ),
+              SizedBox(
+                height: 5,
+              ),
               // if (widget.isLastItem)
               Row(
                 children: [
@@ -482,11 +540,17 @@ class _TestExpenseDetailState extends State<TestExpenseDetail> {
                         // BlocProvider.of<ExpenseBloc>(context)
                         //     .add(AddAnotherItem(widget.categoryID));
                       },
-                      child: Text('Add another'),
-                      style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.green),
+                      child: Text(
+                        'Add another',
+                        style: TextStyle(color: Colors.green),
                       ),
+                      style: TextButton.styleFrom(
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      // style: ButtonStyle(
+                      //   foregroundColor:
+                      //       MaterialStateProperty.all<Color>(Colors.green),
+                      // ),
                     ),
                   ),
                   Expanded(
@@ -497,13 +561,16 @@ class _TestExpenseDetailState extends State<TestExpenseDetail> {
                         //     .add(FinishCategory(widget.categoryID));
                       },
                       child: Text('Finish'),
-                      style: ButtonStyle(
-                          foregroundColor:
-                              MaterialStateProperty.all<Color>(Colors.green)),
+                      style: TextButton.styleFrom(
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
                     ),
                   ),
                 ],
               ),
+              SizedBox(
+                height: 5,
+              )
             ],
           ),
         ),

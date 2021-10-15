@@ -28,7 +28,7 @@ class _ReasonPageState extends State<ReasonPage> {
   bool isSubCategorySelected = false;
   String categoryName;
   int categoryID;
-  List<ExpenseAndIncomeCategoryModel> categoryModels = [];
+  List<IncomeAndExpenseCategoryModel> categoryModels = [];
 
   // List<Widget> categoryAndSubcategoryReasonList = [];
   List<Widget> categoryList = [];
@@ -46,7 +46,7 @@ class _ReasonPageState extends State<ReasonPage> {
   }
 
   Future<void> _showMyDialog() async {
-    List<ExpenseAndIncomeCategoryModel> categories = [];
+    List<IncomeAndExpenseCategoryModel> categories = [];
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {

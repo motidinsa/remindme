@@ -17,10 +17,10 @@ class SubcategoryReasonSelect extends StatelessWidget {
   final int categoryID;
   final int subcategoryID;
   final int index;
-  final ExpenseAndIncomeSubCategoryModel subCategoryModel;
+  final IncomeAndExpenseSubCategoryModel subCategoryModel;
   List<Reason> subcategoryReasonList = [];
   List<Reason> subsubcategoryReasonList = [];
-  List<ExpenseAndIncomeSubSubCategoryModel> subsubcategories = [];
+  List<IncomeAndExpenseSubSubCategoryModel> subsubcategories = [];
 
   SubcategoryReasonSelect(
       {this.categoryID, this.subcategoryID, this.subCategoryModel, this.index});

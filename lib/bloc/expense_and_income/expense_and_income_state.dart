@@ -14,9 +14,9 @@ class NoIncomeAndExpenseFound extends ExpenseAndIncomeState {}
 
 class AllIncomeAndExpenseFetched extends ExpenseAndIncomeState {
   final List<ExpenseAndIncome> allIncomeAndExpense;
-  final List<ExpenseAndIncomeSubCategoryModel> allSubcategories;
+  final List<IncomeAndExpenseSubCategoryModel> allSubcategories;
 
-  final List<ExpenseAndIncomeSubSubCategoryModel> allSubSubcategories;
+  final List<IncomeAndExpenseSubSubCategoryModel> allSubSubcategories;
 
   const AllIncomeAndExpenseFetched(
       {this.allIncomeAndExpense,

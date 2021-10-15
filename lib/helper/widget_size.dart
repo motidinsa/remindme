@@ -35,9 +35,9 @@ class _WidgetSizeState extends State<WidgetSize> {
     if (context == null) return;
 
     var newSize = context.size;
-    // if (oldSize == newSize) return;
-    // //
-    // oldSize = newSize;
+    if (oldSize == newSize) return;
+
+    oldSize = newSize;
     widget.onChange(newSize);
   }
 }

@@ -134,7 +134,7 @@ class RemoveSubSubcategory extends CategoryEvent {
 class AddSubSubCategory extends CategoryEvent {
   // final int subcategoryID;
   // final int id;
-  final List<ExpenseAndIncomeSubSubCategoryModel> subcategories;
+  final List<IncomeAndExpenseSubSubCategoryModel> subcategories;
   final int categoryID;
   final bool isUpdate;
 
@@ -145,9 +145,9 @@ class AddSubSubCategory extends CategoryEvent {
 }
 
 class InsertCategory extends CategoryEvent {
-  final ExpenseAndIncomeCategoryModel category;
-  final List<ExpenseAndIncomeSubCategoryModel> subcategories;
-  final List<List<ExpenseAndIncomeSubSubCategoryModel>> subSubcategories;
+  final IncomeAndExpenseCategoryModel category;
+  final List<IncomeAndExpenseSubCategoryModel> subcategories;
+  final List<List<IncomeAndExpenseSubSubCategoryModel>> subSubcategories;
 
   const InsertCategory(
       {this.category, this.subcategories, this.subSubcategories});
@@ -157,8 +157,8 @@ class InsertCategory extends CategoryEvent {
 }
 
 class UpdateCategory extends CategoryEvent {
-  final List<List<ExpenseAndIncomeSubCategoryModel>> subcategories;
-  final List<List<ExpenseAndIncomeSubSubCategoryModel>> subSubcategories;
+  final List<List<IncomeAndExpenseSubCategoryModel>> subcategories;
+  final List<List<IncomeAndExpenseSubSubCategoryModel>> subSubcategories;
 
   const UpdateCategory({this.subcategories, this.subSubcategories});
 

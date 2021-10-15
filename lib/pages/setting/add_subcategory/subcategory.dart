@@ -30,7 +30,7 @@ class _SubcategoryState extends State<Subcategory> {
 
   // int id = 1;
 
-  List<ExpenseAndIncomeSubSubCategoryModel> subSubcategories = [];
+  List<IncomeAndExpenseSubSubCategoryModel> subSubcategories = [];
   List<SubSubcategory> subSubcategoryWidgets = [];
 
   // List<ExpenseAndIncomeSubSubCategoryModel> subSubcategories = [];
@@ -173,7 +173,7 @@ class _SubcategoryState extends State<Subcategory> {
                           // ));
                           // tempSubSubcategoryID.add(0);
                           subSubcategories.add(
-                            ExpenseAndIncomeSubSubCategoryModel(
+                            IncomeAndExpenseSubSubCategoryModel(
                               userID: 1,
                               id: tempSubSubcategoryID,
                               subcategoryID: widget.id,

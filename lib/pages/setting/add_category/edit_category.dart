@@ -35,7 +35,7 @@ class _EditCategoryState extends State<EditCategory> {
   String categoryIconName;
   String categorytype;
   int categoryID;
-  List<ExpenseAndIncomeCategoryModel> categoryModels = [];
+  List<IncomeAndExpenseCategoryModel> categoryModels = [];
 
   // List<Widget> categoryAndSubcategoryReasonList = [];
   List<Widget> categoryList = [];
@@ -46,8 +46,8 @@ class _EditCategoryState extends State<EditCategory> {
   // List<CategoryReason> categoryReasonList = [];
   List<SubCategoryEditPage> subcategoryEditPage = [];
   List<List<SubSubCategoryReasonPage>> subsubcategoryReasonPage = [];
-  List<List<ExpenseAndIncomeSubCategoryModel>> allSubcategories = [];
-  List<List<ExpenseAndIncomeSubSubCategoryModel>> allSubSubcategories = [];
+  List<List<IncomeAndExpenseSubCategoryModel>> allSubcategories = [];
+  List<List<IncomeAndExpenseSubSubCategoryModel>> allSubSubcategories = [];
 
   // List<SubCategoryReasonPage> subcategoryWidgets = [];
   @override
@@ -56,7 +56,7 @@ class _EditCategoryState extends State<EditCategory> {
   }
 
   Future<void> _showMyDialog() async {
-    List<ExpenseAndIncomeCategoryModel> categories = [];
+    List<IncomeAndExpenseCategoryModel> categories = [];
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {

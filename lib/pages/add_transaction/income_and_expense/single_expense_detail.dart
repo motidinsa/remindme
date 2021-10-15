@@ -10,8 +10,8 @@ import 'package:remindme/repository/expense_repository.dart';
 
 class SingleExpenseDetail extends StatefulWidget {
   final ExpenseAndIncome expense;
-  final ExpenseAndIncomeSubCategoryModel subcategorymodel;
-  final ExpenseAndIncomeSubSubCategoryModel subSubcategorymodel;
+  final IncomeAndExpenseSubCategoryModel subcategorymodel;
+  final IncomeAndExpenseSubSubCategoryModel subSubcategorymodel;
 
   SingleExpenseDetail(
       {this.expense, this.subcategorymodel, this.subSubcategorymodel});

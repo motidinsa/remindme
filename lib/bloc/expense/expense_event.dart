@@ -10,7 +10,7 @@ abstract class ExpenseEvent extends Equatable {
 }
 
 class AddExpenseCategory extends ExpenseEvent {
-  final IncomeAndExpenseCategory selectedCategory;
+  final IncomeAndExpenseCategorySelect selectedCategory;
 
   const AddExpenseCategory(this.selectedCategory);
 

@@ -132,7 +132,7 @@ class NoReasonAdded extends ReasonState {}
 class CategoryFetchError extends ReasonState {}
 
 class AllCategoriesFetched extends ReasonState {
-  final List<ExpenseAndIncomeCategoryModel> categories;
+  final List<IncomeAndExpenseCategoryModel> categories;
 
   const AllCategoriesFetched(this.categories);
 
@@ -141,7 +141,7 @@ class AllCategoriesFetched extends ReasonState {
 }
 
 class AllSubCategoriesWithCategoryIDFetched extends ReasonState {
-  final List<ExpenseAndIncomeSubCategoryModel> subcategories;
+  final List<IncomeAndExpenseSubCategoryModel> subcategories;
 
   const AllSubCategoriesWithCategoryIDFetched(this.subcategories);
 
@@ -150,7 +150,7 @@ class AllSubCategoriesWithCategoryIDFetched extends ReasonState {
 }
 
 class AllSubSubCategoriesWithSubCategoryIDFetched extends ReasonState {
-  final List<ExpenseAndIncomeSubSubCategoryModel> subsubcategories;
+  final List<IncomeAndExpenseSubSubCategoryModel> subsubcategories;
 
   const AllSubSubCategoriesWithSubCategoryIDFetched(this.subsubcategories);
 
