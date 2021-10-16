@@ -1,6 +1,6 @@
-# mytodo
+# Remind Me
 
-ToDo and daily tracking app.
+Income & Expense tracker and task reminder app.
 
 ## Getting Started
 
