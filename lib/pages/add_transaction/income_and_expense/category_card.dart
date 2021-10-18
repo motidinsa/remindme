@@ -3,16 +3,22 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:remindme/getx_controller/income_and_expense/category_card_controller.dart';
+import 'package:remindme/getx_controller/income_and_expense/income_and_expense_controller.dart';
 import 'package:remindme/helper/widget_size.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/add_another_and_finish.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/add_subcategories.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class CategoryCard extends StatelessWidget {
   final String categoryName;
+  final int categoryId;
   final CategoryCardController categoryCardController =
       Get.put(CategoryCardController());
+  final IncomeAndExpenseController incomeAndExpenseController = Get.find();
+  bool isLastItem = true;
 
-  CategoryCard({Key key, this.categoryName}) : super(key: key);
+  CategoryCard({Key key, this.categoryName, this.categoryId, this.isLastItem})
+      : super(key: key);
 
   // CategoryCard();
 
@@ -402,10 +408,11 @@ class CategoryCard extends StatelessWidget {
                                     keyboardType: TextInputType.number,
                                     controller: categoryCardController
                                         .expenseNumberOfTimesController,
+                                    textAlign: TextAlign.center,
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                       contentPadding:
-                                          EdgeInsets.only(left: 10, bottom: 20),
+                                          EdgeInsets.only(bottom: 20),
                                     ),
                                     onChanged: (newValue) {
                                       categoryCardController.amount = newValue;
@@ -559,44 +566,10 @@ class CategoryCard extends StatelessWidget {
           const SizedBox(
             height: 5,
           ),
-          // if (widget.isLastItem)
-          Row(
-            children: [
-              Expanded(child: Container()),
-              Expanded(
-                child: TextButton(
-                  onPressed: () {
-                    // expenseController.addAnotherItem(widget.id);
-                    // BlocProvider.of<ExpenseBloc>(context)
-                    //     .add(AddAnotherItem(widget.categoryID));
-                  },
-                  child: const Text(
-                    'Add another',
-                    style: TextStyle(color: Colors.green),
-                  ),
-                  style: TextButton.styleFrom(
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  // style: ButtonStyle(
-                  //   foregroundColor:
-                  //       MaterialStateProperty.all<Color>(Colors.green),
-                  // ),
-                ),
-              ),
-              Expanded(
-                child: TextButton(
-                  onPressed: () {
-                    // expenseController.finishCategory(widget.id);
-                    // BlocProvider.of<ExpenseBloc>(context)
-                    //     .add(FinishCategory(widget.categoryID));
-                  },
-                  child: const Text('Finish'),
-                  style: TextButton.styleFrom(
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                ),
-              ),
-            ],
+          // if (isLastItem == true)
+          AddAnotherAnfFinish(
+            categoryId: categoryId,
+            categoryName: categoryName,
           ),
           const SizedBox(
             height: 5,

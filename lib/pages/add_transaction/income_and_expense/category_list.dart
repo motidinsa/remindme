@@ -27,7 +27,7 @@ class _CategoryListState extends State<CategoryList> {
     return WidgetSize(
       onChange: (Size size) {
         count++;
-        print('on change size $count');
+        // print('on change size $count');
         setState(() {
           if (!isFirstHeightSet) {
             height = size.height;

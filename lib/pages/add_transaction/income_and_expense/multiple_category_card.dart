@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:remindme/getx_controller/income_and_expense/income_and_expense_controller.dart';
 
 class MultipleCategoryCard extends StatelessWidget {
   final List<Widget> cardList;
+  final int categoryId;
+  final IncomeAndExpenseController incomeAndExpenseController = Get.find();
 
-  MultipleCategoryCard({this.cardList});
+  MultipleCategoryCard({Key key, this.cardList, this.categoryId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: cardList.isNotEmpty
-          ? const ClampingScrollPhysics()
-          : const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) => cardList[index],
-      // separatorBuilder: (context, index) => const SizedBox(height: 0,),
-      itemCount: cardList.length,
+    return GetBuilder(
+      init: incomeAndExpenseController,
+      builder: (_) => ListView.builder(
+        shrinkWrap: true,
+        physics: cardList.length == 1
+            ? const NeverScrollableScrollPhysics()
+            : const ClampingScrollPhysics(),
+        itemBuilder: (context, index) => cardList[index],
+        itemCount: cardList.length,
+      ),
     );
   }
 }
