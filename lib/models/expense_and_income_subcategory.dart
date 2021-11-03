@@ -13,6 +13,7 @@ class IncomeAndExpenseSubCategoryModel {
   final int userID;
   int categoryID;
   String subcategoryType;
+  int subSubcategoryCount;
 
   // List<ExpenseAndIncomeSubSubCategoryModel> subcategories =[];
 
@@ -29,6 +30,7 @@ class IncomeAndExpenseSubCategoryModel {
     this.timeAdded,
     this.categoryID,
     this.userID,
+    this.subSubcategoryCount,
   });
 
   Map<String, dynamic> toMap() {

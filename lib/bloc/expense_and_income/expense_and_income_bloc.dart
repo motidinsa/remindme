@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:remindme/models/expense_and_income.dart';
+import 'package:remindme/models/income_and_expense.dart';
 import 'package:remindme/models/expense_and_income_subcategory.dart';
 import 'package:remindme/models/expense_and_income_subsubcategory.dart';
 import 'package:remindme/repository/expense_repository.dart';
@@ -21,7 +21,7 @@ class ExpenseAndIncomeBloc
       ExpenseAndIncomeEvent event) async* {
     if (event is GetAllIncomeAndExpense) {
       try {
-        List<ExpenseAndIncome> allTransaction =
+        List<IncomeAndExpenseModel> allTransaction =
             await expenseRepository.getAllIncomeAndExpense();
         List<IncomeAndExpenseSubCategoryModel> allSubcategories =
             await expenseRepository.getAllSubCategories();
@@ -41,7 +41,7 @@ class ExpenseAndIncomeBloc
       try {
         await expenseRepository.insertExpenses(
             event.finishedCategories, event.expenseDetails, event.type);
-        List<ExpenseAndIncome> allTransaction =
+        List<IncomeAndExpenseModel> allTransaction =
             await expenseRepository.getAllIncomeAndExpense();
         List<IncomeAndExpenseSubCategoryModel> allSubcategories =
             await expenseRepository.getAllSubCategories();

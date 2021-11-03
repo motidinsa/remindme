@@ -1,4 +1,4 @@
-import 'package:remindme/models/expense_and_income.dart';
+import 'package:remindme/models/income_and_expense.dart';
 import 'package:remindme/models/expense_and_income_category.dart';
 import 'package:remindme/models/expense_and_income_subcategory.dart';
 import 'package:remindme/models/expense_and_income_subsubcategory.dart';
@@ -207,7 +207,7 @@ class TaskDataProvider {
     }
   }
 
-  Future<List<ExpenseAndIncome>> allExpenses() async {
+  Future<List<IncomeAndExpenseModel>> allExpenses() async {
     final Database db = await instance.db;
 
     final List<Map<String, dynamic>> expenses =
@@ -218,7 +218,7 @@ class TaskDataProvider {
     return List.generate(
       expenses.length,
       (i) {
-        return ExpenseAndIncome(
+        return IncomeAndExpenseModel(
           id: expenses[i]['id'],
           categoryID: expenses[i]['category_ID'],
           categoryName: expenses[i]['category_name'],
@@ -239,7 +239,7 @@ class TaskDataProvider {
     );
   }
 
-  Future<List<ExpenseAndIncome>> getAllIncomeAndExpense() async {
+  Future<List<IncomeAndExpenseModel>> getAllIncomeAndExpense() async {
     final Database db = await instance.db;
 
     final List<Map<String, dynamic>> expenses = await db
@@ -250,7 +250,7 @@ class TaskDataProvider {
     return List.generate(
       expenses.length,
       (i) {
-        return ExpenseAndIncome(
+        return IncomeAndExpenseModel(
             id: expenses[i]['id'],
             categoryID: expenses[i]['category_id'],
             categoryName: expenses[i]['category_name'],
@@ -260,7 +260,7 @@ class TaskDataProvider {
             reason: expenses[i]['reason'],
             reasonID: expenses[i]['reason_id'],
             subcategoryID: expenses[i]['subcategory_id'],
-            subsubcategoryID: expenses[i]['sub_subcategory_id'],
+            subSubCategoryId: expenses[i]['sub_subcategory_id'],
             subcategoryName: expenses[i]['subcategory_name'],
             dateType: expenses[i]['date_type'],
             date: expenses[i]['date'],
@@ -272,7 +272,7 @@ class TaskDataProvider {
     );
   }
 
-  Future<List<ExpenseAndIncome>> dailyExpenses() async {
+  Future<List<IncomeAndExpenseModel>> dailyExpenses() async {
     final Database db = await instance.db;
     String today =
         '${DateTime.now().year}-${DateTime.now().month > 9 ? DateTime.now().month : '0${DateTime.now().month}'}-${DateTime.now().day > 9 ? DateTime.now().day : '0${DateTime.now().day}'}';
@@ -287,7 +287,7 @@ class TaskDataProvider {
     return List.generate(
       expenses.length,
       (i) {
-        return ExpenseAndIncome(
+        return IncomeAndExpenseModel(
           id: expenses[i]['id'],
           categoryID: expenses[i]['category_ID'],
           categoryName: expenses[i]['category_name'],
@@ -817,7 +817,7 @@ class TaskDataProvider {
               subsubcategoryID: finishedCategories[i]
                   .expenseDetail[j]
                   .expense
-                  .subsubcategoryID,
+                  .subSubCategoryId,
               addedTime:
                   finishedCategories[i].expenseDetail[j].expense.addedTime,
               addedDate:
@@ -849,7 +849,7 @@ class TaskDataProvider {
             categoryID: expenseDetails[i][j].expense.categoryID,
             categoryName: expenseDetails[i][j].expense.categoryName,
             subcategoryID: expenseDetails[i][j].expense.subcategoryID,
-            subsubcategoryID: expenseDetails[i][j].expense.subsubcategoryID,
+            subsubcategoryID: expenseDetails[i][j].expense.subSubCategoryId,
             addedTime: expenseDetails[i][j].expense.addedTime,
             addedDate: expenseDetails[i][j].expense.addedDate,
             changedDate: expenseDetails[i][j].expense.changedDate,

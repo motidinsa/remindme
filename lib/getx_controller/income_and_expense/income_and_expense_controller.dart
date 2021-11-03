@@ -5,16 +5,15 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:remindme/helper/icons_helper.dart';
 import 'package:remindme/helper/widget_size.dart';
-import 'package:remindme/models/expense_and_income.dart';
+import 'package:remindme/models/category_card_model.dart';
 import 'package:remindme/models/expense_and_income_category.dart';
 import 'package:remindme/models/expense_and_income_subcategory.dart';
 import 'package:remindme/models/expense_and_income_subsubcategory.dart';
-import 'package:remindme/models/finished_category.dart';
 import 'package:remindme/models/income_and_expense_category_select_model.dart';
-import 'package:remindme/pages/add_transaction/income_and_expense/category_card.dart';
-import 'package:remindme/pages/add_transaction/income_and_expense/expense_detail.dart';
+import 'package:remindme/models/multiple_category_card_model.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/income_and_expense_category.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/multiple_category_card.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 
 class IncomeAndExpenseController extends GetxController {
   final List<IncomeAndExpenseCategoryModel> categories = [
@@ -23,7 +22,8 @@ class IncomeAndExpenseController extends GetxController {
         id: 1,
         categoryName: 'Transport',
         iconType: 'material',
-        iconName: 'account_balance'),
+        iconName: 'account_balance',
+        subcategoryCount: 3),
     IncomeAndExpenseCategoryModel(
         categoryType: 'Expense',
         id: 2,
@@ -37,55 +37,23 @@ class IncomeAndExpenseController extends GetxController {
         iconType: 'material',
         iconName: 'account_balance'),
   ];
-  List<IncomeAndExpenseCategorySelectModel> selectedCategories = [];
   List<IncomeAndExpenseSubCategoryModel> subcategories;
   List<IncomeAndExpenseSubSubCategoryModel> subSubcategories;
 
-  // int addedCategoryAdded;
-
-  // RxList<Widget> selectedCategoriess = [].obs;
+  int categoryModelId = 0;
   int currentCarouselPosition = 0;
-  List<Widget> cardItems = [];
-  List<MultipleCategoryCard> carouselLists = [];
-  List<Widget> singleCategoryList = [];
-  List<Widget> addItems = [];
-  List<List<CategoryCard>> expenseDetailList = [];
-  List<ExpenseDetail> finishedCategory = [];
-  List<FinishedCategory> finishedCategoryList = [];
-  bool expenseAdded = false;
-
-  List<ExpenseAndIncome> singleCategoryExpenseList = [];
+  List<MultipleCategoryCardModel> categoryModels = [];
   List<IncomeAndExpenseCategorySelect> categoryList = [];
-  int count = 0;
+
+  double categoryListHeight;
   double categoryHeight;
-  CategoryCard firstCategoryCard;
-
-  // bool isHeightSet = false;
+  double subcategorySelectPageHeight;
   bool isCategoryHeightSet = false;
+  bool makeCategoryListScrollable = false;
 
-  // static IncomeAndExpenseController incomeAndExpenseController = Get.put(IncomeAndExpenseController());
   @override
   void onInit() {
     super.onInit();
-    // final IncomeAndExpenseController incomeAndExpenseController =
-    // Get.put(IncomeAndExpenseController());
-    // for (int i = 0; i < categories.length; i++) {
-    //   categoryList.add(
-    //     IncomeAndExpenseCategorySelect(
-    //       categoryName: categories[i].categoryName,
-    //       icon: Icon(
-    //         IconsHelper.getIconGuessFavorFA(name: categories[i].iconName),
-    //         color: Colors.black54,
-    //         size: 25,
-    //       ),
-    //       isSelected: false,
-    //       categoryID: categories[i].id,
-    //       finishedCategory: false,
-    //       // incomeAndExpenseController:incomeAndExpenseController,
-    //     ),
-    //   );
-    // }
-
     for (var element in categories) {
       categoryList.add(IncomeAndExpenseCategorySelect(
           categoryName: element.categoryName,
@@ -101,78 +69,28 @@ class IncomeAndExpenseController extends GetxController {
     }
   }
 
-  void addIncomeAndExpense(IncomeAndExpenseCategorySelectModel incomeAndExpenseCategory) {
-    selectedCategories.add(incomeAndExpenseCategory);
+  void addIncomeAndExpense(
+      IncomeAndExpenseCategorySelectModel incomeAndExpenseCategory) {
     categoryList
         .firstWhere((element) =>
             element.categoryID == incomeAndExpenseCategory.categoryID)
         .isSelected = true;
-    List<Widget> singleCategoryMultipleItems = [];
-    List<ExpenseAndIncome> singleCategoryMultipleExpenses = [];
 
-    // singleCategoryMultipleItems.add(
-    //   ExpenseDetail(
-    //       categoryID: incomeAndExpenseCategory.categoryID,
-    //       expense: ExpenseAndIncome(
-    //           numberOfTimes: 1,
-    //           date: 'dateAdded',
-    //           categoryID: incomeAndExpenseCategory.categoryID,
-    //           categoryName: incomeAndExpenseCategory.categoryName,
-    //           dateType: 'gr'),
-    //       isLastItem: true),
-    // );
-    if (!isCategoryHeightSet) {
-      firstCategoryCard = CategoryCard(
-        categoryName: incomeAndExpenseCategory.categoryName,
-        categoryId: incomeAndExpenseCategory.categoryID,
-        isLastItem: true,
-      );
-      singleCategoryMultipleItems.add(
-        WidgetSize(
-          onChange: (Size size) {
-            updateCategoryCardHeight(
-              size.height,
-            );
-          },
-          child: firstCategoryCard,
-        ),
-      );
-
-      // carouselLists.add(
-      //   MultipleCategoryCard(
-      //     cardList: [CategoryCard()],
-      //   ),
-      // );
-    } else {
-      singleCategoryMultipleItems.add(
-        CategoryCard(
-          categoryName: incomeAndExpenseCategory.categoryName,
-          categoryId: incomeAndExpenseCategory.categoryID,
-          isLastItem: true,
-        ),
-      );
-    }
-
-    carouselLists.add(
-      MultipleCategoryCard(
-        cardList: singleCategoryMultipleItems,
-        categoryId: incomeAndExpenseCategory.categoryID,
+    int categoryId = incomeAndExpenseCategory.categoryID;
+    categoryModels.add(
+      MultipleCategoryCardModel(
+        categoryId: categoryId,
+        categoryCardModels: [
+          CategoryCardModel(
+              id: categoryModelId++,
+              categoryId: categoryId,
+              categoryName: incomeAndExpenseCategory.categoryName,
+              isLastItem: true,
+              frequency: 1)
+        ],
       ),
     );
-    print('the len is ${carouselLists.length}');
-    // singleCategoryMultipleExpenses.add(
-    //   ExpenseAndIncome(
-    //       numberOfTimes: 1,
-    //       date: 'dateAdded',
-    //       categoryID: incomeAndExpenseCategory.categoryID,
-    //       categoryName: incomeAndExpenseCategory.categoryName,
-    //       dateType: 'gr'),
-    // );
-    // update();
-    // expenseDetailList.add(singleCategoryMultipleItems);
-    // addCategoryCard(selectedCategories, expenseDetailList);
-    // print(cardItems.length);
-    // cardItems = convertToCategoryCard(selectedCategories, expenseDetailList);
+
     update();
   }
 
@@ -185,147 +103,113 @@ class IncomeAndExpenseController extends GetxController {
     categoryList
         .firstWhere((element) => element.categoryID == categoryId)
         .isSelected = false;
-
-    if (selectedCategories.length == 1) {
-      selectedCategories = [];
-      carouselLists = [];
-    } else {
-      selectedCategories
-          .removeWhere((element) => element.categoryID == categoryId);
-      carouselLists.removeWhere((element) => element.categoryId == categoryId);
-
-      // expenseDetailList.removeAt(index);
-    }
-    update();
-    // categoryList[state.categoryID - 1].isSelected = false;
-    // cardItems = convertToCategoryCard(selectedCategories, expenseDetailList);
-  }
-
-  void addAnotherItemToTheSameCategory(String categoryName, int categoryId) {
-    // for (var element in (carouselLists
-    //     .firstWhere((element) => element.categoryId == categoryId)
-    //     .cardList as List<CategoryCard>)) {
-    //   element.isLastItem = false;
-    // }
-    //     .add(
-    //   CategoryCard(
-    //     categoryId: categoryId,
-    //     categoryName: categoryName,
-    //     isLastItem: true,
-    //   ),
-    // );
-
-    carouselLists
-        .firstWhere((element) => element.categoryId == categoryId)
-        .cardList
-        .add(
-          CategoryCard(
-            categoryId: categoryId,
-            categoryName: categoryName,
-            isLastItem: true,
-          ),
-        );
+    categoryModels.removeWhere((element) => element.categoryId == categoryId);
     update();
   }
 
-  // void addCategoryCard(List<IncomeAndExpenseCategorySelectModel> expenses,
-  //     List<List<CategoryCard>> expenseDetail) {
-  //   // cardItems.add(Text('added'));
-  //
-  //   cardItems.add(
-  //
-  //   );
-  //   cardItems
-  //   update();
-  // }
   void updateCategoryCardHeight(double givenHeight) {
     categoryHeight = givenHeight;
     isCategoryHeightSet = true;
-    // carouselLists.first.cardList.first = firstCategoryCard;
-    // carouselLists.first.cardList.first = CategoryCard(
-    //   categoryName: categoryName,
-    //   categoryId: categoryId,
-    //   isLastItem: true,
-    // );
     print('cat height $categoryHeight');
     update();
   }
 
-  void replaceFirstWidget() {
-    // carouselLists.first.cardList.first = firstCategoryCard;
-    ([...carouselLists.first.cardList]).removeAt(0);
-    carouselLists.first.cardList.insert(0, firstCategoryCard);
-    print('replaced');
+  void updateSubcategoryHeight(double givenHeight) {
+    subcategorySelectPageHeight = givenHeight;
+    if (subcategorySelectPageHeight > Get.height / 2) {
+      subcategorySelectPageHeight = Get.height / 2;
+    }
+    // isCategoryHeightSet = true;
+    print('subcat height $subcategorySelectPageHeight');
     update();
   }
 
-  List<Widget> convertToCategoryCard(
-      List<IncomeAndExpenseCategorySelectModel> expenses,
-      List<List<ExpenseDetail>> expenseDetail) {
-    List<Widget> toBeReturned = [];
-    for (int i = 0; i < expenses.length; i++) {
-      toBeReturned.add(
-        Card(
-          child: multipleItems(expenses[i].categoryName, expenseDetail[i]),
-        ),
-      );
+  void updateCategoryListHeight(double givenHeight) {
+    categoryListHeight = givenHeight;
+    if (categoryListHeight > Get.height / 4) {
+      categoryListHeight = Get.height / 4;
     }
-    return toBeReturned;
+    // isCategoryHeightSet = true;
+    // print('subcat height $subcategorySelectPageHeight');
+    update();
   }
 
-  Widget multipleItems(String categoryName,
-      List<ExpenseDetail> multipleExpenses,) {
-    return multipleExpenses.isEmpty
-        ? Container()
-        : ListView.separated(
-        itemBuilder: (context, index) =>
-        index == multipleExpenses.length - 1
-            ? Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(left: 20, top: 10),
-              child: Text(
-                categoryName,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.brown,
-                ),
-              ),
-            ),
-            ExpenseDetail(
-                key: UniqueKey(),
-                categoryID: multipleExpenses.first.categoryID,
-                index: index,
-                expense: multipleExpenses[index].expense,
-                isLastItem: true),
-          ],
-        )
-            : Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: EdgeInsets.only(left: 20, top: 10),
-              child: Text(
-                categoryName,
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.brown),
-              ),
-            ),
-            ExpenseDetail(
-                key: UniqueKey(),
-                categoryID: multipleExpenses.first.categoryID,
-                index: index,
-                expense: multipleExpenses[index].expense,
-                isLastItem: false),
-          ],
-        ),
-        separatorBuilder: (context, index) => Divider(
-          color: Colors.grey,
-        ),
-        itemCount: multipleExpenses.length);
+  void addAnotherItem(int categoryId, int id) {
+    List<CategoryCardModel> categoryModel = categoryModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .categoryCardModels;
+
+    categoryModel.last.isLastItem = false;
+    categoryModel.add(
+      CategoryCardModel(
+          id: categoryModels.length,
+          isLastItem: true,
+          categoryName: categoryModel.last.categoryName,
+          categoryId: categoryModel.last.categoryId,
+          frequency: 1),
+    );
+    update();
+  }
+
+  void changeAmountValue(int id, int categoryId, String givenAmount) {
+    categoryModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .categoryCardModels
+        .firstWhere((element) => element.id == id)
+        .netAmount = givenAmount;
+    update();
+  }
+
+  void changeFrequency(int id, int categoryId, String givenFrequency) {
+    categoryModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .categoryCardModels
+        .firstWhere((element) => element.id == id)
+        .frequency = int.parse(givenFrequency);
+
+    update();
+  }
+
+  void increaseFrequencyValue(int id, int categoryId) {
+    categoryModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .categoryCardModels
+        .firstWhere((element) => element.id == id)
+        .frequency++;
+    update();
+  }
+
+  void decreaseFrequencyValue(int id, int categoryId) {
+    if (categoryModels
+            .firstWhere((element) => element.categoryId == categoryId)
+            .categoryCardModels
+            .firstWhere((element) => element.id == id)
+            .frequency >
+        1) {
+      categoryModels
+          .firstWhere((element) => element.categoryId == categoryId)
+          .categoryCardModels
+          .firstWhere((element) => element.id == id)
+          .frequency--;
+    }
+    update();
+  }
+
+  void changeReason(int id, int categoryId, String reason) {
+    categoryModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .categoryCardModels
+        .firstWhere((element) => element.id == id)
+        .reason = reason;
+    update();
+  }
+
+  void changeLocation(int id, int categoryId, String location) {
+    categoryModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .categoryCardModels
+        .firstWhere((element) => element.id == id)
+        .location = location;
+    update();
   }
 }

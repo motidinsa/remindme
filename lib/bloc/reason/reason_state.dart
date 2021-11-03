@@ -3,7 +3,7 @@ import 'package:remindme/models/expense_and_income_category.dart';
 import 'package:remindme/models/expense_and_income_subcategory.dart';
 import 'package:remindme/models/expense_and_income_subsubcategory.dart';
 import 'package:remindme/models/expense_tobe_added.dart';
-import 'package:remindme/models/expense_and_income.dart';
+import 'package:remindme/models/income_and_expense.dart';
 import 'package:remindme/models/finished_category.dart';
 import 'package:remindme/models/reason.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/income_and_expense_category.dart';

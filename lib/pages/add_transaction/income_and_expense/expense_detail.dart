@@ -6,7 +6,7 @@ import 'package:remindme/bloc/expense/expense_state.dart';
 import 'package:remindme/bloc/reason/reason_bloc.dart';
 import 'package:remindme/bloc/reason/reason_event.dart';
 import 'package:remindme/bloc/reason/reason_state.dart';
-import 'package:remindme/models/expense_and_income.dart';
+import 'package:remindme/models/income_and_expense.dart';
 import 'package:remindme/models/expense_and_income_subcategory.dart';
 import 'package:remindme/models/reason.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/single_reason.dart';
@@ -19,7 +19,7 @@ class ExpenseDetail extends StatefulWidget {
   final int categoryID;
   final int index;
   final bool isLastItem;
-  ExpenseAndIncome expense;
+  IncomeAndExpenseModel expense;
   final Key key;
 
   ExpenseDetail(

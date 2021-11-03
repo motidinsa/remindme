@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:remindme/data_provider/task_data.dart';
-import 'package:remindme/models/expense_and_income.dart';
+import 'package:remindme/models/income_and_expense.dart';
 import 'package:remindme/models/expense_and_income_category.dart';
 import 'package:remindme/models/expense_and_income_subcategory.dart';
 import 'package:remindme/models/expense_and_income_subsubcategory.dart';
@@ -29,11 +29,11 @@ class ExpenseRepository {
         finishedCategories, expenseDetails, type);
   }
 
-  Future<List<ExpenseAndIncome>> allExpenses() async {
+  Future<List<IncomeAndExpenseModel>> allExpenses() async {
     return await dataProvider.allExpenses();
   }
 
-  Future<List<ExpenseAndIncome>> getAllIncomeAndExpense() async {
+  Future<List<IncomeAndExpenseModel>> getAllIncomeAndExpense() async {
     return await dataProvider.getAllIncomeAndExpense();
   }
 

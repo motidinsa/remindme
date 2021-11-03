@@ -61,7 +61,7 @@ class CategoryCardController extends GetxController {
   }
 
   void updateFrequencyWidgetHeight(double givenHeight) {
-    height = givenHeight;
+    height = givenHeight - 10;
     isHeightSet = true;
     update();
   }

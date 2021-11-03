@@ -1,4 +1,4 @@
-class ExpenseAndIncome {
+class IncomeAndExpenseModel {
   String categoryName;
   String subcategoryName;
   String date;
@@ -15,11 +15,11 @@ class ExpenseAndIncome {
   int userID;
   int categoryID;
   int subcategoryID;
-  int subsubcategoryID;
+  int subSubCategoryId;
   int numberOfTimes;
   int reasonID;
 
-  ExpenseAndIncome(
+  IncomeAndExpenseModel(
       {this.categoryName,
       this.subcategoryName,
       this.date,
@@ -37,6 +37,6 @@ class ExpenseAndIncome {
       this.numberOfTimes,
       this.reasonID,
       this.userID,
-      this.subsubcategoryID,
+      this.subSubCategoryId,
       this.addedTime});
 }

@@ -18,7 +18,7 @@ import 'package:remindme/models/finished_category.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/expense_detail.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/selected_category.dart';
 import 'income_and_expense_category.dart';
-import 'package:remindme/models/expense_and_income.dart';
+import 'package:remindme/models/income_and_expense.dart';
 import 'package:intl/src/intl/date_format.dart';
 
 class ExpenseAndIncomePage extends StatefulWidget {
@@ -50,7 +50,7 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
   String date;
   String dateAdded = DateFormat("dd-MM-yy").format(DateTime.now());
 
-  List<ExpenseAndIncome> singleCategoryExpenseList = [];
+  List<IncomeAndExpenseModel> singleCategoryExpenseList = [];
   List<IncomeAndExpenseCategorySelect> categoryList = [];
 
   void setDate(String date) {

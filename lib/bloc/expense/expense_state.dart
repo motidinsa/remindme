@@ -3,7 +3,7 @@ import 'package:remindme/models/expense_and_income_category.dart';
 import 'package:remindme/models/expense_and_income_subcategory.dart';
 import 'package:remindme/models/expense_and_income_subsubcategory.dart';
 import 'package:remindme/models/expense_tobe_added.dart';
-import 'package:remindme/models/expense_and_income.dart';
+import 'package:remindme/models/income_and_expense.dart';
 import 'package:remindme/models/finished_category.dart';
 import 'package:remindme/models/reason.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/income_and_expense_category.dart';
@@ -176,7 +176,7 @@ class ExpenseAddingFailed extends ExpenseState {
 }
 
 class AllExpenseLoaded extends ExpenseState {
-  final List<ExpenseAndIncome> allExpenses;
+  final List<IncomeAndExpenseModel> allExpenses;
 
   AllExpenseLoaded(this.allExpenses);
 
@@ -185,7 +185,7 @@ class AllExpenseLoaded extends ExpenseState {
 }
 
 class DailyExpenseLoaded extends ExpenseState {
-  final List<ExpenseAndIncome> dailyExpenses;
+  final List<IncomeAndExpenseModel> dailyExpenses;
 
   DailyExpenseLoaded(this.dailyExpenses);
 
@@ -194,7 +194,7 @@ class DailyExpenseLoaded extends ExpenseState {
 }
 
 class WeeklyExpenseLoaded extends ExpenseState {
-  final List<ExpenseAndIncome> weeklyExpenses;
+  final List<IncomeAndExpenseModel> weeklyExpenses;
 
   WeeklyExpenseLoaded(this.weeklyExpenses);
 
@@ -203,7 +203,7 @@ class WeeklyExpenseLoaded extends ExpenseState {
 }
 
 class MonthlyExpenseLoaded extends ExpenseState {
-  final List<ExpenseAndIncome> monthlyExpenses;
+  final List<IncomeAndExpenseModel> monthlyExpenses;
 
   MonthlyExpenseLoaded(this.monthlyExpenses);
 

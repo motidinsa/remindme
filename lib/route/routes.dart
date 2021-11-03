@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:remindme/data_provider/task_data.dart';
 import 'package:remindme/models/task.dart';
 import 'package:remindme/pages/add_reminder/add_reminder.dart';
-import 'package:remindme/pages/add_transaction/income_and_expense/category_card.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/category_card/category_card.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/income_and_expense.dart';
 import 'package:remindme/pages/main/main_page.dart';
 import 'package:remindme/pages/setting/add_category/expense_and_income_category_insert.dart';

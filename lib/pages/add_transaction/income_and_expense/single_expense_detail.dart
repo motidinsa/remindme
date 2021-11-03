@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remindme/bloc/expense/expense_bloc.dart';
 import 'package:remindme/bloc/expense/expense_event.dart';
 import 'package:remindme/data_provider/task_data.dart';
-import 'package:remindme/models/expense_and_income.dart';
+import 'package:remindme/models/income_and_expense.dart';
 import 'package:remindme/models/expense_and_income_subcategory.dart';
 import 'package:remindme/models/expense_and_income_subsubcategory.dart';
 import 'package:remindme/repository/expense_repository.dart';
 
 class SingleExpenseDetail extends StatefulWidget {
-  final ExpenseAndIncome expense;
+  final IncomeAndExpenseModel expense;
   final IncomeAndExpenseSubCategoryModel subcategorymodel;
   final IncomeAndExpenseSubSubCategoryModel subSubcategorymodel;
 

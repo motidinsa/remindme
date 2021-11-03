@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:remindme/models/expense_and_income.dart';
+import 'package:remindme/models/income_and_expense.dart';
 import 'package:remindme/models/expense_and_income_subcategory.dart';
 import 'package:remindme/models/expense_and_income_subsubcategory.dart';
 
@@ -13,7 +13,7 @@ class ExpenseAndIncomeState extends Equatable {
 class NoIncomeAndExpenseFound extends ExpenseAndIncomeState {}
 
 class AllIncomeAndExpenseFetched extends ExpenseAndIncomeState {
-  final List<ExpenseAndIncome> allIncomeAndExpense;
+  final List<IncomeAndExpenseModel> allIncomeAndExpense;
   final List<IncomeAndExpenseSubCategoryModel> allSubcategories;
 
   final List<IncomeAndExpenseSubSubCategoryModel> allSubSubcategories;

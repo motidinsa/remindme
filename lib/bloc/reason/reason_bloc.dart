@@ -3,7 +3,7 @@ import 'package:remindme/bloc/expense/expense_event.dart';
 import 'package:remindme/bloc/expense/expense_state.dart';
 import 'package:remindme/bloc/reason/reason_event.dart';
 import 'package:remindme/bloc/reason/reason_state.dart';
-import 'package:remindme/models/expense_and_income.dart';
+import 'package:remindme/models/income_and_expense.dart';
 import 'package:remindme/models/expense_tobe_added.dart';
 import 'package:remindme/models/setting_configuration.dart';
 import 'package:remindme/repository/expense_repository.dart';

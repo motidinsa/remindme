@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remindme/bloc/expense/expense_bloc.dart';
 import 'package:remindme/bloc/expense/expense_event.dart';
 import 'package:remindme/bloc/expense/expense_state.dart';
-import 'package:remindme/models/expense_and_income.dart';
+import 'package:remindme/models/income_and_expense.dart';
 import 'package:remindme/models/expense_and_income_subcategory.dart';
 import 'package:remindme/models/expense_and_income_subsubcategory.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/single_expense_detail.dart';
 
 class ExpenseList extends StatefulWidget {
   static const routeName = 'ExpenseList';
-  final List<ExpenseAndIncome> allIncomeAndExpense;
+  final List<IncomeAndExpenseModel> allIncomeAndExpense;
   final List<IncomeAndExpenseSubCategoryModel> allSubcategories;
 
   final List<IncomeAndExpenseSubSubCategoryModel> allSubSubcategories;
@@ -45,10 +45,10 @@ class _ExpenseListState extends State<ExpenseList> {
                 element.id == widget.allIncomeAndExpense[index].subcategoryID)
             : null,
         subSubcategorymodel:
-            widget.allIncomeAndExpense[index].subsubcategoryID != null
+        widget.allIncomeAndExpense[index].subSubCategoryId != null
                 ? widget.allSubSubcategories.firstWhere((element) =>
                     element.id ==
-                    widget.allIncomeAndExpense[index].subsubcategoryID)
+                    widget.allIncomeAndExpense[index].subSubCategoryId)
                 : null,
       ),
       itemCount: widget.allIncomeAndExpense.length,

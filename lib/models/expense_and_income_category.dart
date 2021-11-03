@@ -10,19 +10,22 @@ class IncomeAndExpenseCategoryModel {
   final int id;
   final int userID;
   final String categoryType;
+  final int subcategoryCount;
 
-  IncomeAndExpenseCategoryModel(
-      {this.categoryType,
-      this.dateAdded,
-      this.categoryName,
-      this.changedDate,
-      this.dateType,
-      this.id,
-      this.changedTime,
-      this.iconName,
-      this.iconType,
-      this.timeAdded,
-      this.userID});
+  IncomeAndExpenseCategoryModel({
+    this.categoryType,
+    this.dateAdded,
+    this.categoryName,
+    this.changedDate,
+    this.dateType,
+    this.id,
+    this.changedTime,
+    this.iconName,
+    this.iconType,
+    this.timeAdded,
+    this.subcategoryCount,
+    this.userID,
+  });
 
   Map<String, dynamic> toMap() {
     return {
