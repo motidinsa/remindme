@@ -55,17 +55,17 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
     Reason(
       amount: 2.toString(),
       name: 'reason 1',
-      record: 2,
+      // record: 2,
     ),
     Reason(
       amount: 1.toString(),
       name: 'reason 2',
-      record: 7,
+      // record: 7,
     ),
     Reason(
       amount: 2.toString(),
       name: 'reason 3',
-      record: 1,
+      // record: 1,
     ),
     Reason(amount: 5.toString(), name: 'reason 4')
   ];

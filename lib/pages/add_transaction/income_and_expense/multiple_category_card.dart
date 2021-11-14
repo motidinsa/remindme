@@ -7,9 +7,12 @@ import 'package:remindme/helper/widget_size.dart';
 import 'package:remindme/models/multiple_category_card_model.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/category_card/category_card.dart';
 
+import 'category_card/category_card_user_input.dart';
+
 class MultipleCategoryCard extends StatelessWidget {
   final bool isInitialCategory;
-  final List<Widget> cardList;
+
+  // final List<Widget> cardList;
 
   // final List<MultipleCategoryCard> multipleCategoryCard;
 
@@ -18,11 +21,7 @@ class MultipleCategoryCard extends StatelessWidget {
   final IncomeAndExpenseController incomeAndExpenseController = Get.find();
 
   MultipleCategoryCard(
-      {Key key,
-      this.cardList,
-      this.categoryId,
-      this.isInitialCategory,
-      this.model})
+      {Key key, this.categoryId, this.isInitialCategory, this.model})
       : super(key: key);
 
   @override
@@ -35,6 +34,7 @@ class MultipleCategoryCard extends StatelessWidget {
       itemBuilder: (context, index) => model.categoryCardModels.length > 1
           ? CategoryCard(
               categoryModel: model.categoryCardModels[index],
+              // key: UniqueKey(),
             )
           : WidgetSize(
               onChange: (Size size) {
@@ -44,6 +44,7 @@ class MultipleCategoryCard extends StatelessWidget {
               },
               child: CategoryCard(
                 categoryModel: model.categoryCardModels[index],
+                // key: UniqueKey(),
               ),
             ),
       itemCount: model.categoryCardModels.length,

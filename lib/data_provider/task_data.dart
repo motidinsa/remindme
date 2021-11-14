@@ -741,9 +741,9 @@ class TaskDataProvider {
         return Reason(
           id: maps[i]['id'],
           name: maps[i]['name'],
-          categoryID: maps[i]['category_id'],
-          date: maps[i]['date'],
-          time: maps[i]['time'],
+          categoryId: maps[i]['category_id'],
+          dateAdded: maps[i]['date'],
+          timeAdded: maps[i]['time'],
           amount: maps[i]['current_amount'],
         );
       },
@@ -760,10 +760,10 @@ class TaskDataProvider {
         return Reason(
           id: maps[i]['id'],
           name: maps[i]['name'],
-          categoryID: maps[i]['category_id'],
-          subcategoryID: maps[i]['subcategory_id'],
-          date: maps[i]['date'],
-          time: maps[i]['time'],
+          categoryId: maps[i]['category_id'],
+          subcategoryId: maps[i]['subcategory_id'],
+          dateAdded: maps[i]['date'],
+          timeAdded: maps[i]['time'],
           amount: maps[i]['current_amount'],
         );
       },
@@ -780,10 +780,10 @@ class TaskDataProvider {
         return Reason(
           id: maps[i]['id'],
           name: maps[i]['name'],
-          categoryID: maps[i]['category_id'],
-          subcategoryID: maps[i]['subcategory_id'],
-          date: maps[i]['date'],
-          time: maps[i]['time'],
+          categoryId: maps[i]['category_id'],
+          subcategoryId: maps[i]['subcategory_id'],
+          dateAdded: maps[i]['date'],
+          timeAdded: maps[i]['time'],
           amount: maps[i]['current_amount'],
         );
       },

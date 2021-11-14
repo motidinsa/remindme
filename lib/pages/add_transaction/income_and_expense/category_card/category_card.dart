@@ -21,7 +21,10 @@ class CategoryCard extends StatelessWidget {
       Get.put(CategoryCardController());
   final CategoryCardModel categoryModel;
 
-  CategoryCard({Key key, this.categoryModel}) : super(key: key);
+  CategoryCard({
+    Key key,
+    this.categoryModel,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +48,10 @@ class CategoryCard extends StatelessWidget {
               date: DateTime.now(),
             ),
             const CategoryAccountSelect(),
-            const ReasonAndSubcategorySelect(),
+            ReasonAndSubcategorySelect(
+              categoryId: categoryModel.categoryId,
+              categoryCardId: categoryModel.id,
+            ),
             const SizedBox(
               height: 5,
             ),
@@ -336,6 +342,7 @@ class CategoryCard extends StatelessWidget {
                   ),
                   borderRadius: BorderRadius.circular(30),
                   onTap: () {
+                    FocusScope.of(context).unfocus();
                     incomeAndExpenseController.addAnotherItem(
                         categoryModel.categoryId, categoryModel.id);
                   },

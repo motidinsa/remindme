@@ -1,6 +1,5 @@
 class IncomeAndExpenseSubSubCategoryModel {
   String subSubcategoryName;
-
   String dateAdded;
   String timeAdded;
   final String changedDate;

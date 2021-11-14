@@ -76,11 +76,11 @@ class Setting extends StatelessWidget {
             ),
           ),
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ReasonPage(),
-                ));
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => ReasonPage(),
+            //     ));
             // showModalBottomSheet(
             //   isScrollControlled: true,
             //   shape: RoundedRectangleBorder(

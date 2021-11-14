@@ -11,6 +11,9 @@ import 'package:remindme/models/expense_and_income_subcategory.dart';
 import 'package:remindme/models/expense_and_income_subsubcategory.dart';
 import 'package:remindme/models/income_and_expense_category_select_model.dart';
 import 'package:remindme/models/multiple_category_card_model.dart';
+import 'package:remindme/models/reason.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/carousel_category_list.dart';
+import 'package:remindme/pages/add_transaction/income_and_expense/category_card/category_card_user_input.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/income_and_expense_category.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/multiple_category_card.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
@@ -37,8 +40,185 @@ class IncomeAndExpenseController extends GetxController {
         iconType: 'material',
         iconName: 'account_balance'),
   ];
-  List<IncomeAndExpenseSubCategoryModel> subcategories;
-  List<IncomeAndExpenseSubSubCategoryModel> subSubcategories;
+  List<IncomeAndExpenseSubCategoryModel> subcategories = [
+    IncomeAndExpenseSubCategoryModel(
+      subcategoryType: 'Expense',
+      id: 1,
+      categoryID: 1,
+      subcategoryName: 'Bus',
+      iconType: 'material',
+      iconName: 'account_balance',
+      subSubcategoryCount: 3,
+      isSelected: false,
+    ),
+    IncomeAndExpenseSubCategoryModel(
+      subcategoryType: 'Expense',
+      id: 2,
+      categoryID: 1,
+      subcategoryName: 'Taxi',
+      iconType: 'material',
+      iconName: 'account_balance',
+      subSubcategoryCount: 3,
+      isSelected: false,
+    ),
+    IncomeAndExpenseSubCategoryModel(
+      subcategoryType: 'Expense',
+      id: 3,
+      categoryID: 1,
+      subcategoryName: 'Bajaj',
+      iconType: 'material',
+      iconName: 'account_balance',
+      subSubcategoryCount: 0,
+      isSelected: false,
+    ),
+  ];
+  final List<IncomeAndExpenseSubSubCategoryModel> subSubcategories = [
+    IncomeAndExpenseSubSubCategoryModel(
+      subSubcategoryType: 'Expense',
+      id: 1,
+      categoryID: 1,
+      subcategoryID: 1,
+      subSubcategoryName: 'Anbessa',
+    ),
+    IncomeAndExpenseSubSubCategoryModel(
+      subSubcategoryType: 'Expense',
+      id: 2,
+      categoryID: 1,
+      subcategoryID: 1,
+      subSubcategoryName: 'Sheger',
+    ),
+    IncomeAndExpenseSubSubCategoryModel(
+      subSubcategoryType: 'Expense',
+      id: 3,
+      categoryID: 1,
+      subcategoryID: 1,
+      subSubcategoryName: 'public',
+    ),
+    IncomeAndExpenseSubSubCategoryModel(
+      subSubcategoryType: 'Expense',
+      id: 4,
+      categoryID: 1,
+      subcategoryID: 2,
+      subSubcategoryName: 'sc',
+    ),
+    IncomeAndExpenseSubSubCategoryModel(
+      subSubcategoryType: 'Expense',
+      id: 5,
+      categoryID: 1,
+      subcategoryID: 2,
+      subSubcategoryName: 'qw',
+    ),
+    IncomeAndExpenseSubSubCategoryModel(
+      subSubcategoryType: 'Expense',
+      id: 6,
+      categoryID: 1,
+      subcategoryID: 3,
+      subSubcategoryName: 'ewwww',
+    ),
+  ];
+  List<Reason> reasons = [
+    Reason(
+      categoryId: 1,
+      amount: '5',
+      name: 'test reason',
+      location: 'alembank',
+    ),
+    Reason(
+        categoryId: 1,
+        subcategoryId: 1,
+        amount: '9',
+        name: 'test reason',
+        location: 'zzzz vfd'),
+    Reason(
+      categoryId: 1,
+      subcategoryId: 2,
+      amount: '5',
+      name: 'test reason',
+      location: 'et',
+    ),
+    Reason(
+      categoryId: 1,
+      subcategoryId: 2,
+      amount: '54',
+      name: 'test reason',
+      location: 'eth',
+    ),
+    Reason(
+      categoryId: 1,
+      subcategoryId: 1,
+      subSubcategoryId: 1,
+      amount: '50',
+      name: 'test reason',
+      location: 'alembank',
+    ),
+    Reason(
+      categoryId: 1,
+      subcategoryId: 1,
+      subSubcategoryId: 1,
+      amount: '5',
+      name: 'test reason 2',
+      // location: 'alembank',
+    ),
+    Reason(
+      categoryId: 1,
+      subcategoryId: 1,
+      subSubcategoryId: 1,
+      amount: '24',
+      name: 'test reason 3',
+      location: 'alembank',
+    ),
+    Reason(
+      categoryId: 1,
+      subcategoryId: 1,
+      subSubcategoryId: 2,
+      amount: '50',
+      name: 'shaki sha',
+      location: 'alembank',
+    ),
+    Reason(
+      categoryId: 1,
+      subcategoryId: 1,
+      subSubcategoryId: 2,
+      amount: '504',
+      name: 'sha',
+      // location: 'alembank',
+    ),
+    Reason(
+      categoryId: 1,
+      subcategoryId: 1,
+      subSubcategoryId: 3,
+      amount: '504',
+      name: 'sha',
+      // location: 'alembank',
+    ),
+    Reason(
+      categoryId: 1,
+      subcategoryId: 1,
+      subSubcategoryId: 3,
+      amount: '504',
+      name: 'sha',
+      // location: 'alembank',
+    ),
+    Reason(
+      categoryId: 1,
+      subcategoryId: 1,
+      subSubcategoryId: 3,
+      amount: '504',
+      name: 'sha',
+      // location: 'alembank',
+    ),
+    Reason(
+      categoryId: 1,
+      subcategoryId: 1,
+      subSubcategoryId: 3,
+      amount: '504',
+      name: 'sha',
+      // location: 'alembank',
+    ),
+  ];
+  List<IncomeAndExpenseSubSubCategoryModel> selectedSubSubcategories = [];
+  List<Reason> categoryReasons = [];
+  List<Reason> subcategoryReasons = [];
 
   int categoryModelId = 0;
   int currentCarouselPosition = 0;
@@ -48,14 +228,17 @@ class IncomeAndExpenseController extends GetxController {
   double categoryListHeight;
   double categoryHeight;
   double subcategorySelectPageHeight;
+  double reasonSelectPageHeight;
+  double subSubcategoryReasonSelectHeight;
   bool isCategoryHeightSet = false;
-  bool makeCategoryListScrollable = false;
+  bool subcategorySelectHintDismissed = false;
 
   @override
   void onInit() {
     super.onInit();
     for (var element in categories) {
-      categoryList.add(IncomeAndExpenseCategorySelect(
+      categoryList.add(
+        IncomeAndExpenseCategorySelect(
           categoryName: element.categoryName,
           icon: Icon(
             IconsHelper.getIconGuessFavorFA(name: element.iconName),
@@ -65,7 +248,9 @@ class IncomeAndExpenseController extends GetxController {
           isSelected: false,
           categoryID: element.id,
           finishedCategory: false,
-          key: UniqueKey()));
+          key: UniqueKey(),
+        ),
+      );
     }
   }
 
@@ -110,17 +295,21 @@ class IncomeAndExpenseController extends GetxController {
   void updateCategoryCardHeight(double givenHeight) {
     categoryHeight = givenHeight;
     isCategoryHeightSet = true;
-    print('cat height $categoryHeight');
     update();
   }
 
   void updateSubcategoryHeight(double givenHeight) {
-    subcategorySelectPageHeight = givenHeight;
-    if (subcategorySelectPageHeight > Get.height / 2) {
+    if (givenHeight > Get.height / 2) {
       subcategorySelectPageHeight = Get.height / 2;
+      // isSubSubcategoryHeightSet = true;
     }
-    // isCategoryHeightSet = true;
-    print('subcat height $subcategorySelectPageHeight');
+    update();
+  }
+
+  void updateReasonHeight(double givenHeight) {
+    if (givenHeight > Get.height / 2) {
+      reasonSelectPageHeight = Get.height / 2;
+    }
     update();
   }
 
@@ -129,8 +318,6 @@ class IncomeAndExpenseController extends GetxController {
     if (categoryListHeight > Get.height / 4) {
       categoryListHeight = Get.height / 4;
     }
-    // isCategoryHeightSet = true;
-    // print('subcat height $subcategorySelectPageHeight');
     update();
   }
 
@@ -142,12 +329,13 @@ class IncomeAndExpenseController extends GetxController {
     categoryModel.last.isLastItem = false;
     categoryModel.add(
       CategoryCardModel(
-          id: categoryModels.length,
+          id: categoryModelId++,
           isLastItem: true,
           categoryName: categoryModel.last.categoryName,
           categoryId: categoryModel.last.categoryId,
           frequency: 1),
     );
+
     update();
   }
 
@@ -156,7 +344,8 @@ class IncomeAndExpenseController extends GetxController {
         .firstWhere((element) => element.categoryId == categoryId)
         .categoryCardModels
         .firstWhere((element) => element.id == id)
-        .netAmount = givenAmount;
+      ..netAmount = givenAmount
+      ..requestFocusOnAmount = false;
     update();
   }
 
@@ -166,7 +355,6 @@ class IncomeAndExpenseController extends GetxController {
         .categoryCardModels
         .firstWhere((element) => element.id == id)
         .frequency = int.parse(givenFrequency);
-
     update();
   }
 
@@ -210,6 +398,201 @@ class IncomeAndExpenseController extends GetxController {
         .categoryCardModels
         .firstWhere((element) => element.id == id)
         .location = location;
+    update();
+  }
+
+  void fetchSubSubcategories(int categoryId, int subcategoryId) {
+    selectedSubSubcategories = subSubcategories
+        .where((element) =>
+            element.categoryID == categoryId &&
+            element.subcategoryID == subcategoryId)
+        .toList();
+    update();
+  }
+
+  void changeSelectedSubcategoryColor(int categoryId, int subcategoryId) {
+    for (var item in subcategories) {
+      item.isSelected = false;
+    }
+    subcategories
+        .firstWhere((element) =>
+            element.id == subcategoryId && element.categoryID == categoryId)
+        .isSelected = true;
+    update();
+  }
+
+  void updateCategoryModelDetailFromSubSubcategory(int categoryId,
+      int subcategoryId, int subSubcategoryId, int categoryCardId) {
+    IncomeAndExpenseSubCategoryModel subCategoryModel =
+        subcategories.firstWhere((element) =>
+            element.categoryID == categoryId && element.id == subcategoryId);
+    IncomeAndExpenseSubSubCategoryModel subSubCategoryModel =
+        subSubcategories.firstWhere((element) =>
+            element.categoryID == categoryId &&
+            element.subcategoryID == subcategoryId &&
+            element.id == subSubcategoryId);
+    categoryModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .categoryCardModels
+        .firstWhere((element) => element.id == categoryCardId)
+      ..requestFocusOnAmount = true
+      ..subcategoryId = subCategoryModel.id
+      ..subcategoryName = subCategoryModel.subcategoryName
+      ..subSubCategoryId = subSubCategoryModel.id
+      ..subSubcategoryName = subSubCategoryModel.subSubcategoryName;
+    update();
+  }
+
+  void updateCategoryModelDetailFromSubcategory(
+      int categoryId, int subcategoryId, int categoryCardId) {
+    IncomeAndExpenseSubCategoryModel subCategoryModel =
+        subcategories.firstWhere((element) =>
+            element.categoryID == categoryId && element.id == subcategoryId);
+
+    categoryModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .categoryCardModels
+        .firstWhere((element) => element.id == categoryCardId)
+      ..requestFocusOnAmount = true
+      ..subcategoryId = subCategoryModel.id
+      ..subcategoryName = subCategoryModel.subcategoryName
+      ..subSubCategoryId = null
+      ..subSubcategoryName = null;
+
+    update();
+  }
+
+  void insertCategoryReasonValues(Reason reason,
+      {int categoryId, int categoryCardId}) {
+    categoryModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .categoryCardModels
+        .firstWhere((element) => element.id == categoryCardId)
+      ..netAmount = reason.amount
+      ..reason = reason.name
+      ..location = reason.location
+      ..subcategoryId = null
+      ..subcategoryName = null
+      ..subSubCategoryId = null
+      ..subSubcategoryName = null;
+
+    update();
+  }
+
+  void insertSubCategoryReasonValues(Reason reason,
+      {int categoryId, int categoryCardId, int subcategoryId}) {
+    categoryModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .categoryCardModels
+        .firstWhere((element) => element.id == categoryCardId)
+      ..netAmount = reason.amount
+      ..reason = reason.name
+      ..location = reason.location
+      ..subcategoryId = reason.subcategoryId
+      ..subcategoryName = subcategories
+          .firstWhere((element) => element.id == subcategoryId)
+          .subcategoryName
+      ..subSubCategoryId = null
+      ..subSubcategoryName = null;
+
+    update();
+  }
+
+  void fetchCategoryReason(int categoryId) {
+    categoryReasons =
+        reasons.where((element) => element.categoryId == categoryId).toList();
+    List<Reason> allSubcategoryReasons = categoryReasons
+        .where((element) => element.subcategoryId != null)
+        .toList();
+
+    List<Reason> subcategoryReasons = [];
+
+    for (Reason reason in allSubcategoryReasons) {
+      if (subcategoryReasons.isEmpty ||
+          subcategoryReasons.last.subcategoryId != reason.subcategoryId) {
+        subcategoryReasons.add(reason);
+      }
+    }
+    subcategoryReasons.addAll(
+      categoryReasons
+          .where((element) => element.subcategoryId == null)
+          .toList(),
+    );
+    categoryReasons = subcategoryReasons;
+    update();
+  }
+
+  void fetchSubcategoryReason(int categoryId, int subcategoryId) {
+    subcategoryReasons = reasons
+        .where((element) =>
+            element.categoryId == categoryId &&
+            element.subcategoryId == subcategoryId)
+        .toList();
+    List<Reason> allSubSubcategoryReasons = subcategoryReasons
+        .where((element) => element.subSubcategoryId != null)
+        .toList();
+
+    List<Reason> subSubcategoryReasons = [];
+
+    for (Reason reason in allSubSubcategoryReasons) {
+      if (subSubcategoryReasons.isEmpty) {
+        subSubcategoryReasons.add(reason);
+      } else {
+        int subcategorySimilarityFrequency = 0;
+        List<Reason> tempSubSubcategory = [];
+        for (Reason item in subSubcategoryReasons) {
+          if (item.subSubcategoryId != reason.subSubcategoryId) {
+            tempSubSubcategory.add(reason);
+          } else {
+            subcategorySimilarityFrequency++;
+          }
+        }
+        if (subcategorySimilarityFrequency == 0) {
+          subSubcategoryReasons.add(tempSubSubcategory.first);
+        }
+      }
+    }
+    subSubcategoryReasons.addAll(
+      subcategoryReasons
+          .where((element) => element.subSubcategoryId == null)
+          .toList(),
+    );
+    subcategoryReasons = subSubcategoryReasons;
+    update();
+  }
+
+  void changeSelectedSubcategoryReasonColor(int categoryId, int subcategoryId) {
+    for (var item in reasons) {
+      item.isSubcategorySelected = false;
+    }
+    reasons
+        .firstWhere((element) =>
+            element.categoryId == categoryId &&
+            element.subcategoryId == subcategoryId)
+        .isSubcategorySelected = true;
+
+    update();
+  }
+
+  void changeSelectedSubSubcategoryReasonColor(
+      int categoryId, int subcategoryId, int subSubcategoryId) {
+    for (var item in reasons) {
+      item.isSubSubcategorySelected = false;
+    }
+    reasons
+        .firstWhere((element) =>
+            element.categoryId == categoryId &&
+            element.subcategoryId == subcategoryId &&
+            element.subSubcategoryId == subSubcategoryId)
+        .isSubSubcategorySelected = true;
+
+    update();
+  }
+
+  void removeBackgroundColorOfSelectedSubSubCategoryReason() {
+    for (var element in subcategoryReasons) {
+      element.isSubSubcategorySelected = false;
+    }
     update();
   }
 }

@@ -14,6 +14,7 @@ class IncomeAndExpenseSubCategoryModel {
   int categoryID;
   String subcategoryType;
   int subSubcategoryCount;
+  bool isSelected;
 
   // List<ExpenseAndIncomeSubSubCategoryModel> subcategories =[];
 
@@ -31,6 +32,7 @@ class IncomeAndExpenseSubCategoryModel {
     this.categoryID,
     this.userID,
     this.subSubcategoryCount,
+    this.isSelected,
   });
 
   Map<String, dynamic> toMap() {

@@ -1,40 +1,42 @@
 class Reason {
-  String name;
-  String amount;
-  final int record;
   final int id;
-
-  // final int previousReasonID;
-  int categoryID;
-  int subcategoryID;
-  int subSubcategoryID;
-  String time;
-  String date;
+  final int categoryId;
+  final int subcategoryId;
+  final int subSubcategoryId;
+  final String name;
+  final String amount;
+  final String location;
+  final String timeAdded;
+  final String dateAdded;
   final String changedDate;
   final String changedTime;
+  bool isSubcategorySelected = false;
+  bool isSubSubcategorySelected = false;
 
-  Reason(
-      {this.amount,
-      this.name,
-      this.record,
-      this.time,
-      this.date,
-      this.id,
-      this.categoryID,
-      this.changedDate,
-      this.changedTime,
-      this.subcategoryID,
-      this.subSubcategoryID});
+  Reason({
+    this.amount,
+    this.name,
+    this.timeAdded,
+    this.dateAdded,
+    this.id,
+    this.categoryId,
+    this.changedDate,
+    this.changedTime,
+    this.subcategoryId,
+    this.subSubcategoryId,
+    this.location,
+    // this.isSelected,
+  });
 
   Map<String, dynamic> toMap() {
     return {
       'user_id': 001,
       'name': name,
-      'category_id': categoryID,
-      'subcategory_id': subcategoryID,
-      'sub_subcategory_id': subSubcategoryID,
-      'date': date,
-      'time': time,
+      'category_id': categoryId,
+      'subcategory_id': subcategoryId,
+      'sub_subcategory_id': subSubcategoryId,
+      'date': dateAdded,
+      'time': timeAdded,
       'current_amount': amount,
       'date_type': 'gr',
       // 'previous_reason_id': previousReasonID,

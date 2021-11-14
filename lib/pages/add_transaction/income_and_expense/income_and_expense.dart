@@ -63,7 +63,8 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
   void initState() {
     super.initState();
     widget.categories.forEach((element) {
-      categoryList.add(IncomeAndExpenseCategorySelect(
+      categoryList.add(
+        IncomeAndExpenseCategorySelect(
           categoryName: element.categoryName,
           icon: Icon(
             IconsHelper.getIconGuessFavorFA(name: element.iconName),
@@ -73,7 +74,9 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
           isSelected: false,
           categoryID: element.id,
           finishedCategory: false,
-          key: UniqueKey()));
+          key: UniqueKey(),
+        ),
+      );
     });
   }
 

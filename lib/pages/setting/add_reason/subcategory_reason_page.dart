@@ -141,26 +141,26 @@ class _SubCategoryReasonPageState extends State<SubCategoryReasonPage> {
               .firstWhere((element) => element.id == state.subcategoryID)
               .subcategoryName;
           subcategoryID = state.subcategoryID;
-          widget.subcategoryReasonModelList.forEach((element) {
-            element.categoryID = widget.categoryID;
-            element.subcategoryID = subcategoryID;
-          });
+          // widget.subcategoryReasonModelList.forEach((element) {
+          //   element.categoryId = widget.categoryID;
+          //   element.subcategoryId = subcategoryID;
+          // });
 
           BlocProvider.of<ReasonBloc>(context).add(ClearReason());
         }
         if (state is SubCategoryReasonAdded) {
           // print(state.categoryReason.toString() + ' sssssssssssssss');
           // if(widget.subsubcategoryReasonPage.length>0)
-          widget.subcategoryReasonModelList
-              .firstWhere((element) => element.id == state.id)
-              .name = state.subcategoryReason;
-          BlocProvider.of<ReasonBloc>(context).add(ClearReason());
+          // widget.subcategoryReasonModelList
+          //     .firstWhere((element) => element.id == state.id)
+          //     .name = state.subcategoryReason;
+          // BlocProvider.of<ReasonBloc>(context).add(ClearReason());
         }
         if (state is SubCategoryAmountAdded) {
-          widget.subcategoryReasonModelList
-              .firstWhere((element) => element.id == state.id)
-              .amount = state.subcategoryAmount;
-          BlocProvider.of<ReasonBloc>(context).add(ClearReason());
+          // widget.subcategoryReasonModelList
+          //     .firstWhere((element) => element.id == state.id)
+          //     .amount = state.subcategoryAmount;
+          // BlocProvider.of<ReasonBloc>(context).add(ClearReason());
         }
         if (state is CategoryReasonRemoved) {
           widget.subcategoryReasonModelList
@@ -212,9 +212,9 @@ class _SubCategoryReasonPageState extends State<SubCategoryReasonPage> {
                               subcategoryID: subcategoryID,
                             ));
                             widget.subcategoryReasonModelList.add(Reason(
-                                categoryID: widget.categoryID,
+                                categoryId: widget.categoryID,
                                 id: tempSubCategoryID,
-                                subcategoryID: subcategoryID));
+                                subcategoryId: subcategoryID));
                           });
 
                           tempSubCategoryID++;

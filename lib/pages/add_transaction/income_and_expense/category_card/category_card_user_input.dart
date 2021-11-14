@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:remindme/getx_controller/income_and_expense/category_card_controller.dart';
 import 'package:remindme/getx_controller/income_and_expense/income_and_expense_controller.dart';
 import 'package:remindme/helper/widget_size.dart';
@@ -10,7 +9,6 @@ import 'package:remindme/models/category_card_model.dart';
 class CategoryUserInput extends StatefulWidget {
   final CategoryCardModel categoryModel;
 
-  // final TextEditingController frequencyController;
   const CategoryUserInput({Key key, this.categoryModel}) : super(key: key);
 
   @override
@@ -22,10 +20,10 @@ class _CategoryUserInputState extends State<CategoryUserInput> {
 
   final IncomeAndExpenseController incomeAndExpenseController = Get.find();
 
-  final TextEditingController amountController = TextEditingController();
-  final TextEditingController reasonController = TextEditingController();
-  final TextEditingController frequencyController = TextEditingController();
-  final TextEditingController locationController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
+  final TextEditingController _reasonController = TextEditingController();
+  final TextEditingController _frequencyController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
 
   String amountValue;
   String frequency;
@@ -43,11 +41,8 @@ class _CategoryUserInputState extends State<CategoryUserInput> {
     reasonFocusNode.addListener(onReasonFocusChange);
     frequencyFocusNode.addListener(onFrequencyFocusChange);
     locationFocusNode.addListener(onLocationFocusChange);
+
     super.initState();
-    amountController.text = widget.categoryModel.netAmount;
-    reasonController.text = widget.categoryModel.reason;
-    frequencyController.text = widget.categoryModel.frequency.toString();
-    locationController.text = widget.categoryModel.location;
   }
 
   void onAmountFocusChange() {
@@ -80,30 +75,166 @@ class _CategoryUserInputState extends State<CategoryUserInput> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder(
-      init: categoryCardController,
-      builder: (_) {
-        return Column(
+    if (widget.categoryModel.requestFocusOnAmount == true) {
+      amountFocusNode.requestFocus();
+    }
+    _amountController.value = _amountController.value.copyWith(
+      text: widget.categoryModel.netAmount,
+    );
+    _reasonController.value = _reasonController.value.copyWith(
+      text: widget.categoryModel.reason,
+    );
+    _frequencyController.value = _frequencyController.value.copyWith(
+      text: widget.categoryModel.frequency.toString(),
+    );
+    _locationController.value = _locationController.value.copyWith(
+      text: widget.categoryModel.location,
+    );
+
+    return Column(
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(left: 35),
+          child: Text(
+            'Frequency',
+            style: TextStyle(color: Colors.brown),
+          ),
+        ),
+        const SizedBox(
+          height: 3,
+        ),
+        Row(
           children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 35),
-              child: Text(
-                'Frequency',
-                style: TextStyle(color: Colors.brown),
+            SizedBox(
+              width: 100,
+              height: categoryCardController.height,
+              child: TextField(
+                focusNode: amountFocusNode,
+                keyboardType: TextInputType.number,
+                controller: _amountController,
+                decoration: const InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green, width: 0.5),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green, width: 0.75),
+                  ),
+                  labelText: 'Amount',
+                  labelStyle: TextStyle(
+                    fontSize: 16,
+                    color: Colors.green,
+                  ),
+                  contentPadding: EdgeInsets.only(left: 20, bottom: 20),
+                ),
+                onChanged: (amount) {
+                  amountValue = amount;
+                },
+                onEditingComplete: () {
+                  FocusScope.of(context).unfocus();
+                  incomeAndExpenseController.changeAmountValue(
+                    widget.categoryModel.id,
+                    widget.categoryModel.categoryId,
+                    amountValue,
+                  );
+                },
               ),
             ),
             const SizedBox(
-              height: 3,
+              width: 50,
             ),
-            Row(
-              children: [
-                SizedBox(
-                  width: 100,
-                  height: categoryCardController.height,
-                  child: TextField(
-                    focusNode: amountFocusNode,
-                    keyboardType: TextInputType.number,
-                    controller: amountController,
+            SizedBox(
+              width: 100,
+              height: categoryCardController.height,
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.green.shade100),
+                    borderRadius: BorderRadius.circular(5)),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: WidgetSize(
+                        onChange: (Size size) {
+                          if (!categoryCardController.isHeightSet) {
+                            categoryCardController
+                                .updateFrequencyWidgetHeight(size.height);
+                          }
+                        },
+                        child: TextButton(
+                          child: const Icon(
+                            Icons.remove,
+                          ),
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                          ),
+                          onPressed: () async {
+                            await FocusScope.of(context).unfocus();
+                            incomeAndExpenseController.decreaseFrequencyValue(
+                                widget.categoryModel.id,
+                                widget.categoryModel.categoryId);
+                          },
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: TextField(
+                        focusNode: frequencyFocusNode,
+                        keyboardType: TextInputType.number,
+                        controller: _frequencyController,
+                        textAlign: TextAlign.center,
+                        decoration: const InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.green, width: 0.5),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.green, width: 0.75),
+                          ),
+                          contentPadding: EdgeInsets.only(bottom: 20),
+                        ),
+                        onChanged: (givenFrequency) {
+                          frequency = givenFrequency;
+                        },
+                        onEditingComplete: () {
+                          FocusScope.of(context).unfocus();
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      // flex: 2,
+                      child: TextButton(
+                        child: const Center(
+                          child: Icon(Icons.add),
+                        ),
+                        style:
+                            OutlinedButton.styleFrom(padding: EdgeInsets.zero),
+                        onPressed: () async {
+                          await FocusScope.of(context).unfocus();
+                          incomeAndExpenseController.increaseFrequencyValue(
+                              widget.categoryModel.id,
+                              widget.categoryModel.categoryId);
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: SizedBox(
+                height: categoryCardController.height,
+                child: TextField(
+                    focusNode: reasonFocusNode,
+                    controller: _reasonController,
                     decoration: const InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.green, width: 0.5),
@@ -112,208 +243,69 @@ class _CategoryUserInputState extends State<CategoryUserInput> {
                         borderSide:
                             BorderSide(color: Colors.green, width: 0.75),
                       ),
-                      labelText: 'Amount',
+                      labelText: 'Reason (Optional)',
                       labelStyle: TextStyle(
-                        fontSize: 16,
+                        // fontSize: 18,
                         color: Colors.green,
                       ),
-                      contentPadding: EdgeInsets.only(left: 20, bottom: 20),
+                      contentPadding: EdgeInsets.only(left: 20),
                     ),
-                    onChanged: (amount) {
-                      amountValue = amount;
-                    },
+                    onChanged: (givenReason) => reason = givenReason,
                     onEditingComplete: () {
                       FocusScope.of(context).unfocus();
-                      incomeAndExpenseController.changeAmountValue(
-                        widget.categoryModel.id,
-                        widget.categoryModel.categoryId,
-                        amountValue,
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  width: 50,
-                ),
-                SizedBox(
-                  width: 100,
-                  height: categoryCardController.height,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.green.shade100),
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: WidgetSize(
-                            onChange: (Size size) {
-                              if (!categoryCardController.isHeightSet) {
-                                categoryCardController
-                                    .updateFrequencyWidgetHeight(size.height);
-                              }
-                              // }
-                            },
-                            child: TextButton(
-                              child: const Icon(
-                                Icons.remove,
-                              ),
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                              ),
-                              onPressed: () async {
-                                await FocusScope.of(context).unfocus();
-                                incomeAndExpenseController
-                                    .decreaseFrequencyValue(
-                                        widget.categoryModel.id,
-                                        widget.categoryModel.categoryId);
-                                setState(() {
-                                  frequencyController.text =
-                                      widget.categoryModel.frequency.toString();
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: TextField(
-                            focusNode: frequencyFocusNode,
-                            keyboardType: TextInputType.number,
-                            controller: frequencyController,
-                            textAlign: TextAlign.center,
-                            decoration: const InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.green, width: 0.5),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.green, width: 0.75),
-                              ),
-                              contentPadding: EdgeInsets.only(bottom: 20),
-                            ),
-                            onChanged: (givenFrequency) {
-                              frequency = givenFrequency;
-                            },
-                            onEditingComplete: () {
-                              FocusScope.of(context).unfocus();
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          // flex: 2,
-                          child: TextButton(
-                            child: const Center(
-                              child: Icon(Icons.add),
-                            ),
-                            style: OutlinedButton.styleFrom(
-                                padding: EdgeInsets.zero),
-                            onPressed: () async {
-                              await FocusScope.of(context).unfocus();
-                              incomeAndExpenseController.increaseFrequencyValue(
-                                  widget.categoryModel.id,
-                                  widget.categoryModel.categoryId);
-                              setState(() {
-                                frequencyController.text =
-                                    widget.categoryModel.frequency.toString();
-                              });
-                            },
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                )
-              ],
+                    }),
+              ),
             ),
             const SizedBox(
-              height: 8,
+              width: 20,
             ),
-            Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: SizedBox(
-                    height: categoryCardController.height,
-                    child: TextField(
-                        focusNode: reasonFocusNode,
-                        // cursorHeight: 30,
-                        controller: reasonController,
-                        decoration: const InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.green, width: 0.5),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.green, width: 0.75),
-                          ),
-                          labelText: 'Reason (Optional)',
-                          labelStyle: TextStyle(
-                            // fontSize: 18,
-                            color: Colors.green,
-                          ),
-                          contentPadding: EdgeInsets.only(left: 20),
-                        ),
-                        onChanged: (givenReason) => reason = givenReason,
-                        onEditingComplete: () {
-                          FocusScope.of(context).unfocus();
-                        }),
-                  ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                const Spacer()
-              ],
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: SizedBox(
-                    height: categoryCardController.height,
-                    child: TextField(
-                        focusNode: locationFocusNode,
-                        // cursorHeight: 30,
-                        controller: locationController,
-                        decoration: const InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.green, width: 0.5),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.green, width: 0.75),
-                          ),
-                          labelText: 'Location (Optional)',
-                          labelStyle: TextStyle(
-                            // fontSize: 18,
-                            color: Colors.green,
-                          ),
-                          contentPadding: EdgeInsets.only(left: 20),
-                        ),
-                        onChanged: (givenLocation) => location = givenLocation,
-                        onEditingComplete: () {
-                          FocusScope.of(context).unfocus();
-                        }),
-                  ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                const Spacer()
-              ],
-            ),
-            const SizedBox(
-              height: 6,
-            ),
+            const Spacer()
           ],
-        );
-      },
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: SizedBox(
+                height: categoryCardController.height,
+                child: TextField(
+                    focusNode: locationFocusNode,
+                    // cursorHeight: 30,
+                    controller: _locationController,
+                    decoration: const InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.green, width: 0.5),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Colors.green, width: 0.75),
+                      ),
+                      labelText: 'Location (Optional)',
+                      labelStyle: TextStyle(
+                        // fontSize: 18,
+                        color: Colors.green,
+                      ),
+                      contentPadding: EdgeInsets.only(left: 20),
+                    ),
+                    onChanged: (givenLocation) => location = givenLocation,
+                    onEditingComplete: () {
+                      FocusScope.of(context).unfocus();
+                    }),
+              ),
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            const Spacer()
+          ],
+        ),
+        const SizedBox(
+          height: 6,
+        ),
+      ],
     );
   }
 }

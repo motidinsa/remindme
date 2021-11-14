@@ -1,3 +1,5 @@
+import 'package:remindme/pages/add_transaction/income_and_expense/category_card/category_card_user_input.dart';
+
 class CategoryCardModel {
   final String categoryName;
   final int id;
@@ -12,6 +14,8 @@ class CategoryCardModel {
   String reason;
   String location;
   bool isLastItem;
+  bool requestFocusOnAmount;
+  CategoryUserInput userInput;
 
   CategoryCardModel(
       {this.categoryName,
@@ -26,5 +30,7 @@ class CategoryCardModel {
       this.location,
       this.subcategoryId,
       this.subSubCategoryId,
-      this.id});
+      this.id,
+      this.requestFocusOnAmount,
+      this.userInput});
 }
