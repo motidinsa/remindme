@@ -30,7 +30,6 @@ dependencies:
   cupertino_icons: ^1.0.0
   equatable:
   abushakir: ^0.1.4
-  flutter_rounded_date_picker: 1.0.5
   date_time_picker:
   syncfusion_flutter_datepicker: ^18.4.46-beta
   day_night_time_picker: ^0.5.0
@@ -50,6 +49,7 @@ dependencies:
   flutter_launcher_icons: ^0.9.2
   linked_scroll_controller: ^0.2.0
   getwidget: ^2.0.4
+  table_calendar: ^3.0.3
 
 
 dev_dependencies:

@@ -28,6 +28,7 @@ class ReasonAndSubcategorySelect extends StatelessWidget {
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               onPressed: () {
+                FocusScope.of(context).unfocus();
                 for (var element in incomeAndExpenseController.reasons) {
                   element.isSubcategorySelected = false;
                 }
@@ -53,6 +54,7 @@ class ReasonAndSubcategorySelect extends StatelessWidget {
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               onPressed: () {
+                FocusScope.of(context).unfocus();
                 for (var element in incomeAndExpenseController.subcategories) {
                   element.isSelected = false;
                 }
@@ -74,7 +76,7 @@ class ReasonAndSubcategorySelect extends StatelessWidget {
             ),
           ],
         ),
-        const SubcategorySelectHint()
+        SubcategorySelectHint()
       ],
     );
   }

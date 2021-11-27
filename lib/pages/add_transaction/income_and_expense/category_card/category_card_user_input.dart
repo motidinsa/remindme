@@ -87,9 +87,15 @@ class _CategoryUserInputState extends State<CategoryUserInput> {
     _frequencyController.value = _frequencyController.value.copyWith(
       text: widget.categoryModel.frequency.toString(),
     );
-    _locationController.value = _locationController.value.copyWith(
-      text: widget.categoryModel.location,
-    );
+    if (widget.categoryModel.location == null) {
+      _locationController.value = _locationController.value.copyWith(
+        text: '',
+      );
+    } else {
+      _locationController.value = _locationController.value.copyWith(
+        text: widget.categoryModel.location,
+      );
+    }
 
     return Column(
       children: [
@@ -178,6 +184,9 @@ class _CategoryUserInputState extends State<CategoryUserInput> {
                     Expanded(
                       flex: 2,
                       child: TextField(
+                        onTap: () {
+                          frequency = widget.categoryModel.frequency.toString();
+                        },
                         focusNode: frequencyFocusNode,
                         keyboardType: TextInputType.number,
                         controller: _frequencyController,
@@ -189,11 +198,12 @@ class _CategoryUserInputState extends State<CategoryUserInput> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide:
-                                BorderSide(color: Colors.green, width: 0.75),
+                            BorderSide(color: Colors.green, width: 0.75),
                           ),
                           contentPadding: EdgeInsets.only(bottom: 20),
                         ),
                         onChanged: (givenFrequency) {
+                          print('given $givenFrequency');
                           frequency = givenFrequency;
                         },
                         onEditingComplete: () {

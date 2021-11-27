@@ -32,13 +32,11 @@ class CarouselCategoryList extends StatelessWidget {
                           ),
                         )
                         .toList(),
+                    carouselController:
+                        incomeAndExpenseController.buttonCarouselController,
                     options: CarouselOptions(
+                        enableInfiniteScroll: false,
                         height: incomeAndExpenseController.categoryHeight,
-                        enableInfiniteScroll:
-                            incomeAndExpenseController.categoryModels.length ==
-                                    1
-                                ? false
-                                : true,
                         viewportFraction: 1,
                         onPageChanged: (index, reason) {
                           FocusScope.of(context).unfocus();

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:remindme/getx_controller/income_and_expense/income_and_expense_controller.dart';
-import 'package:remindme/helper/widget_size.dart';
 import 'package:remindme/models/reason.dart';
 
 class SubSubcategoryReasonSelect extends StatelessWidget {
@@ -25,28 +25,89 @@ class SubSubcategoryReasonSelect extends StatelessWidget {
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
-        child: Card(
-          child: ListView.builder(
-              shrinkWrap: true,
-              physics: const BouncingScrollPhysics(),
-              itemBuilder: (context, i) => ListTile(
-                    leading: Padding(
-                      padding: const EdgeInsets.only(left: 25),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Card(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30, top: 5, bottom: 5),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
                       child: Text(
-                        reason[i].name,
-                        style:
-                            const TextStyle(fontSize: 16, color: Colors.black),
-                        textAlign: TextAlign.start,
+                        subSubcategoryName,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.green),
                       ),
                     ),
-                    trailing: Text(
-                      reason[i].amount,
-                      style: const TextStyle(fontSize: 16, color: Colors.black),
-                      textAlign: TextAlign.start,
-                    ),
-                    onTap: () {},
                   ),
-              itemCount: reason.length),
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemBuilder: (context, i) => InkWell(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 30, top: 10, bottom: 10),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 4,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(reason[i].name),
+                                  if (reason[i].location != null)
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.room_outlined,
+                                          size: 16,
+                                          color: Colors.grey,
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          reason[i].location,
+                                          style: const TextStyle(
+                                              color: Colors.grey, fontSize: 15),
+                                        )
+                                      ],
+                                    )
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                reason[i].amount,
+                                textAlign: TextAlign.center,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      onTap: () {
+                        incomeAndExpenseController
+                            .insertSubSubCategoryReasonValues(reason[i],
+                                categoryId: reason[i].categoryId,
+                                categoryCardId: categoryCardId,
+                                subcategoryId: reason[i].subcategoryId,
+                                subSubcategoryId: reason[i].subSubcategoryId);
+                        Get.back();
+                        Get.back();
+                      },
+                    ),
+                    itemCount: reason.length,
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const Divider(),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

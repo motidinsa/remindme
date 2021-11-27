@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_controller.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
@@ -121,7 +122,7 @@ class IncomeAndExpenseController extends GetxController {
       categoryId: 1,
       amount: '5',
       name: 'test reason',
-      location: 'alembank',
+      // location: 'alembank',
     ),
     Reason(
         categoryId: 1,
@@ -221,6 +222,7 @@ class IncomeAndExpenseController extends GetxController {
   List<Reason> subcategoryReasons = [];
 
   int categoryModelId = 0;
+  int multipleCategoryId = 0;
   int currentCarouselPosition = 0;
   List<MultipleCategoryCardModel> categoryModels = [];
   List<IncomeAndExpenseCategorySelect> categoryList = [];
@@ -232,6 +234,7 @@ class IncomeAndExpenseController extends GetxController {
   double subSubcategoryReasonSelectHeight;
   bool isCategoryHeightSet = false;
   bool subcategorySelectHintDismissed = false;
+  CarouselController buttonCarouselController = CarouselController();
 
   @override
   void onInit() {
@@ -254,17 +257,17 @@ class IncomeAndExpenseController extends GetxController {
     }
   }
 
-  void addIncomeAndExpense(
-      IncomeAndExpenseCategorySelectModel incomeAndExpenseCategory) {
+  void addIncomeAndExpense(IncomeAndExpenseCategorySelectModel incomeAndExpenseCategory) {
     categoryList
         .firstWhere((element) =>
-            element.categoryID == incomeAndExpenseCategory.categoryID)
+    element.categoryID == incomeAndExpenseCategory.categoryID)
         .isSelected = true;
 
     int categoryId = incomeAndExpenseCategory.categoryID;
     categoryModels.add(
       MultipleCategoryCardModel(
         categoryId: categoryId,
+        id: multipleCategoryId++,
         categoryCardModels: [
           CategoryCardModel(
               id: categoryModelId++,
@@ -276,6 +279,9 @@ class IncomeAndExpenseController extends GetxController {
       ),
     );
 
+    if (categoryModels.length > 1) {
+      buttonCarouselController.animateToPage(categoryModels.length - 1);
+    }
     update();
   }
 
@@ -289,6 +295,15 @@ class IncomeAndExpenseController extends GetxController {
         .firstWhere((element) => element.categoryID == categoryId)
         .isSelected = false;
     categoryModels.removeWhere((element) => element.categoryId == categoryId);
+    for (int i = 0; i < categoryModels.length; i++) {
+      categoryModels[i].id = i;
+    }
+    multipleCategoryId = categoryModels.length;
+    if (categoryModels.isEmpty) {
+      currentCarouselPosition = 0;
+    } else {
+      currentCarouselPosition = categoryModels.length - 1;
+    }
     update();
   }
 
@@ -369,10 +384,10 @@ class IncomeAndExpenseController extends GetxController {
 
   void decreaseFrequencyValue(int id, int categoryId) {
     if (categoryModels
-            .firstWhere((element) => element.categoryId == categoryId)
-            .categoryCardModels
-            .firstWhere((element) => element.id == id)
-            .frequency >
+        .firstWhere((element) => element.categoryId == categoryId)
+        .categoryCardModels
+        .firstWhere((element) => element.id == id)
+        .frequency >
         1) {
       categoryModels
           .firstWhere((element) => element.categoryId == categoryId)
@@ -404,8 +419,8 @@ class IncomeAndExpenseController extends GetxController {
   void fetchSubSubcategories(int categoryId, int subcategoryId) {
     selectedSubSubcategories = subSubcategories
         .where((element) =>
-            element.categoryID == categoryId &&
-            element.subcategoryID == subcategoryId)
+    element.categoryID == categoryId &&
+        element.subcategoryID == subcategoryId)
         .toList();
     update();
   }
@@ -416,7 +431,7 @@ class IncomeAndExpenseController extends GetxController {
     }
     subcategories
         .firstWhere((element) =>
-            element.id == subcategoryId && element.categoryID == categoryId)
+    element.id == subcategoryId && element.categoryID == categoryId)
         .isSelected = true;
     update();
   }
@@ -424,13 +439,13 @@ class IncomeAndExpenseController extends GetxController {
   void updateCategoryModelDetailFromSubSubcategory(int categoryId,
       int subcategoryId, int subSubcategoryId, int categoryCardId) {
     IncomeAndExpenseSubCategoryModel subCategoryModel =
-        subcategories.firstWhere((element) =>
-            element.categoryID == categoryId && element.id == subcategoryId);
+    subcategories.firstWhere((element) =>
+    element.categoryID == categoryId && element.id == subcategoryId);
     IncomeAndExpenseSubSubCategoryModel subSubCategoryModel =
-        subSubcategories.firstWhere((element) =>
-            element.categoryID == categoryId &&
-            element.subcategoryID == subcategoryId &&
-            element.id == subSubcategoryId);
+    subSubcategories.firstWhere((element) =>
+    element.categoryID == categoryId &&
+        element.subcategoryID == subcategoryId &&
+        element.id == subSubcategoryId);
     categoryModels
         .firstWhere((element) => element.categoryId == categoryId)
         .categoryCardModels
@@ -443,11 +458,10 @@ class IncomeAndExpenseController extends GetxController {
     update();
   }
 
-  void updateCategoryModelDetailFromSubcategory(
-      int categoryId, int subcategoryId, int categoryCardId) {
+  void updateCategoryModelDetailFromSubcategory(int categoryId, int subcategoryId, int categoryCardId) {
     IncomeAndExpenseSubCategoryModel subCategoryModel =
-        subcategories.firstWhere((element) =>
-            element.categoryID == categoryId && element.id == subcategoryId);
+    subcategories.firstWhere((element) =>
+    element.categoryID == categoryId && element.id == subcategoryId);
 
     categoryModels
         .firstWhere((element) => element.categoryId == categoryId)
@@ -475,7 +489,10 @@ class IncomeAndExpenseController extends GetxController {
       ..subcategoryName = null
       ..subSubCategoryId = null
       ..subSubcategoryName = null;
-
+    // categoryModels
+    //     .firstWhere((element) => element.categoryId == categoryId)
+    //     .categoryCardModels
+    //     .firstWhere((element) => element.id == categoryCardId).location = null;
     update();
   }
 
@@ -495,6 +512,32 @@ class IncomeAndExpenseController extends GetxController {
       ..subSubCategoryId = null
       ..subSubcategoryName = null;
 
+    update();
+  }
+
+  void insertSubSubCategoryReasonValues(Reason reason,
+      {int categoryId,
+      int categoryCardId,
+      int subcategoryId,
+      int subSubcategoryId}) {
+    print('reason loc ${reason.location}');
+    categoryModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .categoryCardModels
+        .firstWhere((element) => element.id == categoryCardId)
+      ..netAmount = reason.amount
+      ..reason = reason.name
+      ..location = reason.location
+      ..subcategoryId = reason.subcategoryId
+      ..subcategoryName = subcategories
+          .firstWhere((element) => element.id == subcategoryId)
+          .subcategoryName
+      ..subSubCategoryId = reason.subSubcategoryId
+      ..subSubcategoryName = subSubcategories
+          .firstWhere((element) => element.id == subSubcategoryId)
+          .subSubcategoryName;
+    print(
+        'nn ${categoryModels.firstWhere((element) => element.categoryId == categoryId).categoryCardModels.firstWhere((element) => element.id == categoryCardId).location}');
     update();
   }
 
@@ -525,8 +568,8 @@ class IncomeAndExpenseController extends GetxController {
   void fetchSubcategoryReason(int categoryId, int subcategoryId) {
     subcategoryReasons = reasons
         .where((element) =>
-            element.categoryId == categoryId &&
-            element.subcategoryId == subcategoryId)
+    element.categoryId == categoryId &&
+        element.subcategoryId == subcategoryId)
         .toList();
     List<Reason> allSubSubcategoryReasons = subcategoryReasons
         .where((element) => element.subSubcategoryId != null)
@@ -567,23 +610,22 @@ class IncomeAndExpenseController extends GetxController {
     }
     reasons
         .firstWhere((element) =>
-            element.categoryId == categoryId &&
-            element.subcategoryId == subcategoryId)
+    element.categoryId == categoryId &&
+        element.subcategoryId == subcategoryId)
         .isSubcategorySelected = true;
 
     update();
   }
 
-  void changeSelectedSubSubcategoryReasonColor(
-      int categoryId, int subcategoryId, int subSubcategoryId) {
+  void changeSelectedSubSubcategoryReasonColor(int categoryId, int subcategoryId, int subSubcategoryId) {
     for (var item in reasons) {
       item.isSubSubcategorySelected = false;
     }
     reasons
         .firstWhere((element) =>
-            element.categoryId == categoryId &&
-            element.subcategoryId == subcategoryId &&
-            element.subSubcategoryId == subSubcategoryId)
+    element.categoryId == categoryId &&
+        element.subcategoryId == subcategoryId &&
+        element.subSubcategoryId == subSubcategoryId)
         .isSubSubcategorySelected = true;
 
     update();
@@ -593,6 +635,11 @@ class IncomeAndExpenseController extends GetxController {
     for (var element in subcategoryReasons) {
       element.isSubSubcategorySelected = false;
     }
+    update();
+  }
+
+  void dismissHint() {
+    subcategorySelectHintDismissed = true;
     update();
   }
 }

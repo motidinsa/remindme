@@ -12,33 +12,27 @@ class CategoryCarouselIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-        init: incomeAndExpenseController,
-        builder: (_) => Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: incomeAndExpenseController.categoryModels.map(
-                (url) {
-                  int index =
-                      incomeAndExpenseController.categoryModels.indexOf(url);
-                  return Container(
-                    width: 6.0,
-                    height: 6.0,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 2.0, vertical: 1),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color:
-                          incomeAndExpenseController.currentCarouselPosition ==
-                                      index ||
-                                  incomeAndExpenseController
-                                          .categoryModels.length ==
-                                      1
-                              ? Colors.green
-                              : Colors.grey,
-                    ),
-                  );
-                },
-              ).toList(),
-            ));
+      init: incomeAndExpenseController,
+      builder: (_) => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: incomeAndExpenseController.categoryModels.map(
+          (url) {
+            return Container(
+              width: 6.0,
+              height: 6.0,
+              margin: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 1),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color:
+                    incomeAndExpenseController.currentCarouselPosition == url.id
+                        ? Colors.green
+                        : Colors.grey,
+              ),
+            );
+          },
+        ).toList(),
+      ),
+    );
   }
 }

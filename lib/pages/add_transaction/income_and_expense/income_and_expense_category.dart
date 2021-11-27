@@ -61,7 +61,13 @@ class IncomeAndExpenseCategorySelect extends StatelessWidget {
                     finishedCategory: false,
                   ),
                 );
-
+                if (incomeAndExpenseController.categoryModels.length > 1) {
+                  // currentCarouselPosition = categoryModels.length-1;
+                  // incomeAndExpenseController.buttonCarouselController
+                  //     .animateToPage(
+                  //         incomeAndExpenseController.categoryModels.length - 1);
+                  // buttonCarouselController.
+                }
                 // BlocProvider.of<ExpenseBloc>(context).add(
                 //   AddExpenseCategory(
                 //     IncomeAndExpenseCategorySelect(
