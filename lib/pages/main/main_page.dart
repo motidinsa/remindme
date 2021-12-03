@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:remindme/bloc/completed_task/completed_task_bloc.dart';
 import 'package:remindme/bloc/completed_task/completed_task_event.dart';
+import 'package:remindme/getx_controller/income_and_expense/income_and_expense_controller.dart';
 import 'package:remindme/models/expense_and_income_category.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/income_and_expense.dart';
 import 'package:remindme/pages/completed/completed_task.dart';
@@ -81,10 +83,16 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       elevation: 4,
       backgroundColor: Colors.white,
       foregroundColor: Colors.green,
-      onPressed: () => Get.to(() => ExpenseAndIncomePage(
-            type: 'Expense',
-            categories: categories,
-          )),
+      onPressed: () async {
+        // UsersBinding().dependencies();
+        // await Get.put<IncomeAndExpenseController>(IncomeAndExpenseController());
+        //  IncomeAndExpenseController a = Get.find();
+        //  print(a.categoryList.length);
+        Get.to(() => ExpenseAndIncomePage(
+              type: 'Expense',
+              categories: categories,
+            ));
+      },
       child: const Icon(Icons.add),
     );
   }
@@ -119,10 +127,14 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               elevation: 4,
               backgroundColor: Colors.white,
               foregroundColor: Colors.green,
-              onPressed: () => Get.to(() => ExpenseAndIncomePage(
-                    type: 'Expense',
-                    categories: categories,
-                  )),
+              onPressed: () {
+                // UsersBinding().dependencies();
+                // Get.put<IncomeAndExpenseController>(IncomeAndExpenseController());
+                Get.to(() => ExpenseAndIncomePage(
+                      type: 'Expense',
+                      categories: categories,
+                    ));
+              },
               child: const Icon(Icons.add),
             );
             break;

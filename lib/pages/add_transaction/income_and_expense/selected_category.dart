@@ -1,10 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_common/get_reset.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
+import 'package:hive/hive.dart';
+import 'package:remindme/database_models/category_model.dart';
 import 'package:remindme/getx_controller/income_and_expense/income_and_expense_controller.dart';
+import 'package:remindme/helper/icons_helper.dart';
 import 'package:remindme/helper/widget_size.dart';
 import 'package:remindme/models/income_and_expense.dart';
 import 'package:remindme/models/finished_category.dart';
@@ -14,7 +18,6 @@ import 'package:remindme/pages/add_transaction/income_and_expense/category_card/
 import 'package:remindme/pages/add_transaction/income_and_expense/category_list.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/expense_detail.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/multiple_category_card.dart';
-
 import 'carousel_category_list.dart';
 import 'category_card/category_carousel_position_indicator.dart';
 import 'income_and_expense_category.dart';
@@ -40,20 +43,54 @@ class SelectedCategoryInsertItem extends StatefulWidget {
 class _SelectedCategoryInsertItemState
     extends State<SelectedCategoryInsertItem> {
   int _current = 0;
+  final IncomeAndExpenseController incomeAndExpenseController =
+      Get.put(IncomeAndExpenseController());
+
+  // List<IncomeAndExpenseCategorySelect> categoryList = [];
+
+  @override
+  void initState() {
+    // UsersBinding().dependencies();
+    super.initState();
+    // Get.put(IncomeAndExpenseController());
+    // WidgetsBinding.instance.addPostFrameCallback((_) async{
+    //   // UsersBinding().dependencies();
+    //  // await incomeAndExpenseController.initialize();
+    //  //  await incomeAndExpenseController.initialize();
+    // });
+    // initialize();
+  }
+
+  @override
+  void dispose() {
+    Hive.box<CategoryModel>('category').close();
+    // Get.delete<IncomeAndExpenseController>();
+    // Get.reset();
+    super.dispose();
+    // Get.reset();
+    // IncomeAndExpenseController controller = Get.find();
+    // incomeAndExpenseController.reset();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final IncomeAndExpenseController incomeAndExpenseController =
-        Get.put(IncomeAndExpenseController());
-
+    // incomeAndExpenseController.
     // print('detailll ${incomeAndExpenseController.categoryHeight}');
     return Column(
       // physics: const NeverScrollableScrollPhysics(),
       // key: UniqueKey(),
       // shrinkWrap: true,
       children: [
-        // if (widget.finishedCategories.length > 1)
-        CategoryList(),
+        incomeAndExpenseController.isInitialized
+            ? CategoryList()
+            : StreamBuilder(
+                stream: incomeAndExpenseController.initialize(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Container();
+                  }
+                  return CategoryList();
+                }),
         CategoryCarouselIndicator(),
         CarouselCategoryList(),
 

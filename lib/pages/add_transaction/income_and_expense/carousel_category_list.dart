@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
+import 'package:hive/hive.dart';
+import 'package:remindme/database_models/category_model.dart';
 import 'package:remindme/getx_controller/income_and_expense/income_and_expense_controller.dart';
 
 import 'multiple_category_card.dart';
@@ -50,6 +52,9 @@ class CarouselCategoryList extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           ElevatedButton(
+                            child: const Text(
+                              'Save',
+                            ),
                             style: ButtonStyle(
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                 backgroundColor:
@@ -58,9 +63,37 @@ class CarouselCategoryList extends StatelessWidget {
                                 foregroundColor:
                                     MaterialStateProperty.all<Color>(
                                         Colors.white)),
-                            onPressed: () {
+                            onPressed: () async {
+                              int id =
+                                  await Hive.box<CategoryModel>('category').add(
+                                CategoryModel(),
+                              );
+                              Hive.box<CategoryModel>('category').put(
+                                id,
+                                CategoryModel(
+                                    id: id,
+                                    categoryName: 'test $id',
+                                    dateAndTimeAdded: DateTime.now(),
+                                    iconName: 'icon name $id'),
+                              );
+                              // Hive.box<CategoryModel>('category').keys.last;
+                              // Hive.box<CategoryModel>('category').add(
+                              //   CategoryModel(
+                              //     categoryName: 'test 4',
+                              //     dateAndTimeAdded: DateTime.now(),
+                              //     iconName: 'icon name 4'
+                              //   ),
+                              // );
+                              // Hive.box<CategoryModel>('category').delete(-1);
                               // DateTime now = DateTime.now();
                               //
+                              Hive.box<CategoryModel>('category')
+                                  .values
+                                  .forEach((element) {
+                                print(
+                                    'key: ${element.key}  id: ${element.id} name: ${element.categoryName} icon: ${element.iconName} date: ${element.dateAndTimeAdded} mod: ${element.lastModifiedDateAndTime}');
+                              });
+                              // Hive.box<CategoryModel>('category').clear();
                               // DateFormat dateFormat = DateFormat("dd-MM-yy");
                               // DateFormat timeFormat = DateFormat("HH:mm:ss");
                               // String currentDate = dateFormat.format(now);
@@ -90,9 +123,6 @@ class CarouselCategoryList extends StatelessWidget {
                               //       AddExpense(finishedCategoryList, expenseDetailList),
                               //     );
                             },
-                            child: const Text(
-                              'Save',
-                            ),
                           ),
                         ],
                       ),

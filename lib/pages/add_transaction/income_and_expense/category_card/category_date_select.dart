@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-
-// import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
-// import 'package:flutter_rounded_date_picker/rounded_picker.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:intl/src/intl/date_format.dart';
 import 'package:remindme/getx_controller/income_and_expense/category_card_controller.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class CategoryDateSelect extends StatelessWidget {
   final DateTime date;

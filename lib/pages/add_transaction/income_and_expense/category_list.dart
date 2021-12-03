@@ -17,6 +17,7 @@ class CategoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('cl ${incomeAndExpenseController.categoryList.length}');
     return GetBuilder(
       init: incomeAndExpenseController,
       builder: (_) => Card(
@@ -28,25 +29,25 @@ class CategoryList extends StatelessWidget {
               child: WidgetSize(
                 onChange: (Size size) {
                   incomeAndExpenseController
-                      .updateCategoryListHeight(size.height);
-                },
-                child: ListView(
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  children: [
-                    Wrap(
-                      alignment: WrapAlignment.center,
-                      spacing: 5,
-                      runSpacing: 5,
-                      children: incomeAndExpenseController.categoryList,
+                          .updateCategoryListHeight(size.height);
+                    },
+                    child: ListView(
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      children: [
+                        Wrap(
+                          alignment: WrapAlignment.center,
+                          spacing: 5,
+                          runSpacing: 5,
+                          children: incomeAndExpenseController.categoryList,
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ),
     );
   }
 }
