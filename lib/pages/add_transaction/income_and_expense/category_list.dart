@@ -12,42 +12,50 @@ import 'package:flutter/rendering.dart';
 
 class CategoryList extends StatelessWidget {
   final IncomeAndExpenseController incomeAndExpenseController = Get.find();
+  final String type;
 
-  CategoryList({Key key}) : super(key: key);
+  CategoryList({Key key, this.type}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print('cl ${incomeAndExpenseController.categoryList.length}');
-    return GetBuilder(
-      init: incomeAndExpenseController,
-      builder: (_) => Card(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          child: Center(
-            child: SizedBox(
-              height: incomeAndExpenseController.categoryListHeight,
-              child: WidgetSize(
-                onChange: (Size size) {
-                  incomeAndExpenseController
-                          .updateCategoryListHeight(size.height);
-                    },
-                    child: ListView(
-                      physics: const BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      children: [
-                        Wrap(
-                          alignment: WrapAlignment.center,
-                          spacing: 5,
-                          runSpacing: 5,
-                          children: incomeAndExpenseController.categoryList,
+    return StreamBuilder(
+        stream: incomeAndExpenseController.initialize(type),
+        builder: (context, snapshot) {
+          if (incomeAndExpenseController.isInitialized) {
+            return GetBuilder(
+              init: incomeAndExpenseController,
+              builder: (_) => Card(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Center(
+                    child: SizedBox(
+                      height: incomeAndExpenseController.categoryListHeight,
+                      child: WidgetSize(
+                        onChange: (Size size) {
+                          incomeAndExpenseController
+                              .updateCategoryListHeight(size.height);
+                        },
+                        child: ListView(
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          children: [
+                            Wrap(
+                              alignment: WrapAlignment.center,
+                              spacing: 5,
+                              runSpacing: 5,
+                              children: incomeAndExpenseController.categoryList,
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ),
-    );
+            );
+          } else {
+            return Container();
+          }
+        });
   }
 }

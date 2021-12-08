@@ -92,7 +92,9 @@ class _ExpenseAndIncomePageState extends State<ExpenseAndIncomePage> {
         },
         child: ListView(
           children: [
-            SelectedCategoryInsertItem(),
+            SelectedCategoryInsertItem(
+              type: widget.type,
+            ),
 
             // BlocBuilder<ExpenseBloc, ExpenseState>(
             //   builder: (_, state) {

@@ -1,43 +1,40 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'sub_subcategory_model.dart';
+part of 'category_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class SubSubcategoryModelAdapter extends TypeAdapter<SubSubcategoryModel> {
+class CategoryModelAdapter extends TypeAdapter<CategoryModel> {
   @override
-  final int typeId = 2;
+  final int typeId = 0;
 
   @override
-  SubSubcategoryModel read(BinaryReader reader) {
+  CategoryModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return SubSubcategoryModel(
-      subSubcategoryName: fields[0] as String,
-      subSubcategoryType: fields[6] as String,
+    return CategoryModel(
+      categoryName: fields[0] as String,
+      categoryType: fields[6] as String,
       dateAndTimeAdded: fields[3] as DateTime,
       lastModifiedDateAndTime: fields[4] as DateTime,
       iconName: fields[1] as String,
       dateType: fields[5] as String,
       iconType: fields[2] as String,
-      id: fields[9] as int,
-      userId: fields[10] as int,
-      orderNumber: fields[11] as int,
-      categoryId: fields[7] as int,
-      subcategoryId: fields[8] as int,
+      id: fields[7] as int,
+      userId: fields[8] as int,
     );
   }
 
   @override
-  void write(BinaryWriter writer, SubSubcategoryModel obj) {
+  void write(BinaryWriter writer, CategoryModel obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(9)
       ..writeByte(0)
-      ..write(obj.subSubcategoryName)
+      ..write(obj.categoryName)
       ..writeByte(1)
       ..write(obj.iconName)
       ..writeByte(2)
@@ -49,17 +46,11 @@ class SubSubcategoryModelAdapter extends TypeAdapter<SubSubcategoryModel> {
       ..writeByte(5)
       ..write(obj.dateType)
       ..writeByte(6)
-      ..write(obj.subSubcategoryType)
+      ..write(obj.categoryType)
       ..writeByte(7)
-      ..write(obj.categoryId)
-      ..writeByte(8)
-      ..write(obj.subcategoryId)
-      ..writeByte(9)
       ..write(obj.id)
-      ..writeByte(10)
-      ..write(obj.userId)
-      ..writeByte(11)
-      ..write(obj.orderNumber);
+      ..writeByte(8)
+      ..write(obj.userId);
   }
 
   @override
@@ -68,7 +59,7 @@ class SubSubcategoryModelAdapter extends TypeAdapter<SubSubcategoryModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SubSubcategoryModelAdapter &&
+      other is CategoryModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

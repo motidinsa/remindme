@@ -5,7 +5,8 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:remindme/database_models/category_model.dart';
+import 'package:remindme/database_models/category/category_model.dart';
+import 'package:remindme/database_models/setting/setting_model.dart';
 import 'package:remindme/helper/icons_helper.dart';
 import 'package:remindme/helper/widget_size.dart';
 import 'package:remindme/models/category_card_model.dart';
@@ -15,8 +16,6 @@ import 'package:remindme/models/expense_and_income_subsubcategory.dart';
 import 'package:remindme/models/income_and_expense_category_select_model.dart';
 import 'package:remindme/models/multiple_category_card_model.dart';
 import 'package:remindme/models/reason.dart';
-import 'package:remindme/pages/add_transaction/income_and_expense/carousel_category_list.dart';
-import 'package:remindme/pages/add_transaction/income_and_expense/category_card/category_card_user_input.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/income_and_expense_category.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/multiple_category_card.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
@@ -237,24 +236,20 @@ class IncomeAndExpenseController extends GetxController {
   bool isCategoryHeightSet = false;
   bool subcategorySelectHintDismissed = false;
   bool isInitialized = false;
+  String categoryType;
   CarouselController buttonCarouselController = CarouselController();
-
+  DateTime now = DateTime.now();
   List<CategoryModel> category = [];
-
-  @override
-  void onReady() {
-    super.onReady();
-    print('ready');
-  }
 
   @override
   void onInit() {
     super.onInit();
   }
 
-  Stream<bool> initialize() async* {
+  Stream<bool> initialize(String type) async* {
     if (!isInitialized) {
       await Hive.openBox<CategoryModel>('category');
+      await Hive.openBox<SettingModel>('setting');
       if (Hive.box<CategoryModel>('category').isEmpty) {
         int id = await Hive.box<CategoryModel>('category').add(
           CategoryModel(),
@@ -293,9 +288,16 @@ class IncomeAndExpenseController extends GetxController {
               iconType: 'material'),
         );
       }
+      if (Hive.box<SettingModel>('setting').isNotEmpty) {
+        if (Hive.box<SettingModel>('setting')
+                .get(0)
+                .subcategorySelectHintDismissed ==
+            true) {
+          subcategorySelectHintDismissed = true;
+        }
+      }
       category = Hive.box<CategoryModel>('category').values.toList();
-      print('lens ${category.length}');
-      // print(  Hive.box<CategoryModel>('category').values.last.key);
+      categoryType = type;
       for (var element in category) {
         print('inside ${element.categoryName}');
         categoryList.add(
@@ -304,7 +306,7 @@ class IncomeAndExpenseController extends GetxController {
             icon: Icon(
               IconsHelper.getIconGuessFavorFA(name: element.iconName),
               color: Colors.black54,
-              size: 25,
+              size: 20,
             ),
             isSelected: false,
             categoryID: element.id,
@@ -332,11 +334,14 @@ class IncomeAndExpenseController extends GetxController {
         id: multipleCategoryId++,
         categoryCardModels: [
           CategoryCardModel(
-              id: categoryModelId++,
-              categoryId: categoryId,
-              categoryName: incomeAndExpenseCategory.categoryName,
-              isLastItem: true,
-              frequency: 1)
+            id: categoryModelId++,
+            categoryId: categoryId,
+            categoryName: incomeAndExpenseCategory.categoryName,
+            isLastItem: true,
+            frequency: 1,
+            date: DateTime(now.year, now.month, now.day),
+            categoryType: categoryType,
+          )
         ],
       ),
     );
@@ -405,13 +410,17 @@ class IncomeAndExpenseController extends GetxController {
         .categoryCardModels;
 
     categoryModel.last.isLastItem = false;
+
     categoryModel.add(
       CategoryCardModel(
-          id: categoryModelId++,
-          isLastItem: true,
-          categoryName: categoryModel.last.categoryName,
-          categoryId: categoryModel.last.categoryId,
-          frequency: 1),
+        id: categoryModelId++,
+        isLastItem: true,
+        categoryName: categoryModel.last.categoryName,
+        categoryId: categoryModel.last.categoryId,
+        frequency: 1,
+        date: DateTime(now.year, now.month, now.day),
+        categoryType: categoryType,
+      ),
     );
 
     update();
@@ -704,7 +713,30 @@ class IncomeAndExpenseController extends GetxController {
   }
 
   void dismissHint() {
+    Hive.openBox<SettingModel>('setting');
+    if (Hive.box<SettingModel>('setting').isEmpty) {
+      Hive.box<SettingModel>('setting').add(
+        SettingModel(subcategorySelectHintDismissed: true),
+      );
+    } else {
+      Hive.box<SettingModel>('setting').put(
+        0,
+        SettingModel(
+            subcategorySelectHintDismissed: true,
+            theme: Hive.box<SettingModel>('setting').get(0).theme),
+      );
+    }
+
     subcategorySelectHintDismissed = true;
+    update();
+  }
+
+  void updateDate(int id, int categoryId, DateTime givenDate) {
+    categoryModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .categoryCardModels
+        .firstWhere((element) => element.id == id)
+        .date = givenDate;
     update();
   }
 }

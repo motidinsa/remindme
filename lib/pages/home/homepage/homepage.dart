@@ -6,6 +6,7 @@ import 'package:remindme/bloc/expense_and_income/expense_and_income_bloc.dart';
 import 'package:remindme/bloc/expense_and_income/expense_and_income_event.dart';
 import 'package:remindme/bloc/expense_and_income/expense_and_income_state.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/expense_list.dart';
+import 'package:remindme/pages/home/homepage/transaction_list.dart';
 import 'package:remindme/pages/home/tasks.dart';
 import '../../../bloc/task/task_bloc.dart';
 import '../../../bloc/task/task_state.dart';
@@ -34,29 +35,30 @@ class _HomePageState extends State<HomePage> {
     return TabBarView(
       controller: widget.tabController,
       children: [
-        BlocBuilder<ExpenseAndIncomeBloc, ExpenseAndIncomeState>(
-          builder: (_, state) {
-            if (state is AllIncomeAndExpenseFailed) {
-              return Text('Some error happened');
-            }
-            if (state is AllIncomeAndExpenseFetched) {
-              print('state isssss $state');
-              state.allIncomeAndExpense.forEach((element) {
-                print(
-                    'check cat ${element.categoryID} subcat ${element.subcategoryID} date ${element.date}');
-              });
-              return ExpenseList(
-                allIncomeAndExpense: state.allIncomeAndExpense,
-                allSubcategories: state.allSubcategories,
-                allSubSubcategories: state.allSubSubcategories,
-              );
-            }
-            print('state is $state');
-
-            print(state.toString() + 'stateeeeeeeeee');
-            return Center(child: Text('Loading'));
-          },
-        ),
+        TransactionList(),
+        // BlocBuilder<ExpenseAndIncomeBloc, ExpenseAndIncomeState>(
+        //   builder: (_, state) {
+        //     if (state is AllIncomeAndExpenseFailed) {
+        //       return Text('Some error happened');
+        //     }
+        //     if (state is AllIncomeAndExpenseFetched) {
+        //       print('state isssss $state');
+        //       state.allIncomeAndExpense.forEach((element) {
+        //         print(
+        //             'check cat ${element.categoryID} subcat ${element.subcategoryID} date ${element.date}');
+        //       });
+        //        ExpenseList(
+        //         allIncomeAndExpense: state.allIncomeAndExpense,
+        //         allSubcategories: state.allSubcategories,
+        //         allSubSubcategories: state.allSubSubcategories,
+        //       )
+        // }
+        //     print('state is $state');
+        //
+        //     print(state.toString() + 'stateeeeeeeeee');
+        //     return Center(child: Text('Loading'));
+        //   },
+        // ),
         BlocBuilder<TaskBloc, TaskState>(
           builder: (_, state) {
             if (state is TaskOperationFailure) {

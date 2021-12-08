@@ -170,7 +170,7 @@ packages:
     source: hosted
     version: "4.1.0"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       url: "https://pub.dartlang.org"
@@ -312,6 +312,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.5.7"
+  flutter_sticky_header:
+    dependency: "direct main"
+    description:
+      name: flutter_sticky_header
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -371,6 +378,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
+  grouped_list:
+    dependency: "direct main"
+    description:
+      name: grouped_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.1.0"
   hive:
     dependency: "direct main"
     description:
@@ -609,6 +623,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  quiver:
+    dependency: transitive
+    description:
+      name: quiver
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.1+1"
   shelf:
     dependency: transitive
     description:
@@ -635,6 +656,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.3.2"
+  sortedmap:
+    dependency: "direct main"
+    description:
+      name: sortedmap
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.1"
   source_gen:
     dependency: transitive
     description:
@@ -754,6 +782,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
+  value_layout_builder:
+    dependency: transitive
+    description:
+      name: value_layout_builder
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.1"
   vector_math:
     dependency: transitive
     description:

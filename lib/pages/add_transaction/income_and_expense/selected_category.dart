@@ -6,14 +6,13 @@ import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:hive/hive.dart';
-import 'package:remindme/database_models/category_model.dart';
+import 'package:remindme/database_models/category/category_model.dart';
 import 'package:remindme/getx_controller/income_and_expense/income_and_expense_controller.dart';
 import 'package:remindme/helper/icons_helper.dart';
 import 'package:remindme/helper/widget_size.dart';
 import 'package:remindme/models/income_and_expense.dart';
 import 'package:remindme/models/finished_category.dart';
 import 'package:remindme/models/income_and_expense_category_select_model.dart';
-import 'package:remindme/pages/add_transaction/income_and_expense/added_expense_list.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/category_card/category_card.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/category_list.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/expense_detail.dart';
@@ -27,13 +26,13 @@ import 'package:intl/src/intl/date_format.dart';
 
 class SelectedCategoryInsertItem extends StatefulWidget {
   // final List<Widget> categories;
-
+  final String type;
   final List<Widget> categories;
   List<FinishedCategory> finishedCategories;
   final List<Widget> categoryList;
 
   SelectedCategoryInsertItem(
-      {this.categoryList, this.categories, this.finishedCategories});
+      {this.categoryList, this.categories, this.finishedCategories, this.type});
 
   @override
   _SelectedCategoryInsertItemState createState() =>
@@ -81,16 +80,7 @@ class _SelectedCategoryInsertItemState
       // key: UniqueKey(),
       // shrinkWrap: true,
       children: [
-        incomeAndExpenseController.isInitialized
-            ? CategoryList()
-            : StreamBuilder(
-                stream: incomeAndExpenseController.initialize(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container();
-                  }
-                  return CategoryList();
-                }),
+        CategoryList(),
         CategoryCarouselIndicator(),
         CarouselCategoryList(),
 

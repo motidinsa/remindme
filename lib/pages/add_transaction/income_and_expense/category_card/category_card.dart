@@ -45,7 +45,9 @@ class CategoryCard extends StatelessWidget {
               subSubcategoryName: categoryModel.subSubcategoryName,
             ),
             CategoryDateSelect(
-              date: DateTime.now(),
+              date: categoryModel.date,
+              categoryId: categoryModel.categoryId,
+              categoryCardId: categoryModel.id,
             ),
             const CategoryAccountSelect(),
             ReasonAndSubcategorySelect(

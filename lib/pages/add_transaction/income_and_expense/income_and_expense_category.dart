@@ -91,7 +91,7 @@ class IncomeAndExpenseCategorySelect extends StatelessWidget {
             categoryName,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              fontSize: 15,
+              fontSize: 14,
             ),
           )
         ],

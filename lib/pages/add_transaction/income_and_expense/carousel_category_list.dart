@@ -2,10 +2,14 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:hive/hive.dart';
-import 'package:remindme/database_models/category_model.dart';
+import 'package:remindme/database_models/category/category_model.dart';
+import 'package:remindme/database_models/income_and_expense/income_and_expense_model.dart';
+import 'package:remindme/database_operations/income_and_expense_operation.dart';
 import 'package:remindme/getx_controller/income_and_expense/income_and_expense_controller.dart';
+import 'package:remindme/models/category_card_model.dart';
 
 import 'multiple_category_card.dart';
 
@@ -56,26 +60,84 @@ class CarouselCategoryList extends StatelessWidget {
                               'Save',
                             ),
                             style: ButtonStyle(
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.green),
-                                foregroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.white)),
-                            onPressed: () async {
-                              int id =
-                                  await Hive.box<CategoryModel>('category').add(
-                                CategoryModel(),
-                              );
-                              Hive.box<CategoryModel>('category').put(
-                                id,
-                                CategoryModel(
-                                    id: id,
-                                    categoryName: 'test $id',
-                                    dateAndTimeAdded: DateTime.now(),
-                                    iconName: 'icon name $id'),
-                              );
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.green),
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                            ),
+                            onPressed: () {
+                              IncomeAndExpenseOperation
+                                  incomeAndExpenseInstance =
+                                  IncomeAndExpenseOperation();
+                              incomeAndExpenseInstance.insertIncomeAndExpense();
+                              Get.back();
+                              // await Hive.openBox<IncomeAndExpenseModel>(
+                              //     'income_and_expense');
+                              // List<IncomeAndExpenseModel>
+                              //     databaseIncomeAndExpenseModel = [];
+                              // for (int i = 0;
+                              //     i <
+                              //         incomeAndExpenseController
+                              //             .categoryModels.length;
+                              //     i++) {
+                              //   List<CategoryCardModel> categoryCardModels =
+                              //       incomeAndExpenseController
+                              //           .categoryModels[i].categoryCardModels;
+                              //   for (int j = 0;
+                              //       j < categoryCardModels.length;
+                              //       j++) {
+                              //     int id =
+                              //         await Hive.box<IncomeAndExpenseModel>(
+                              //                 'income_and_expense')
+                              //             .add(
+                              //       IncomeAndExpenseModel(),
+                              //     );
+                              //     Hive.box<IncomeAndExpenseModel>(
+                              //             'income_and_expense')
+                              //         .put(
+                              //       id,
+                              //       IncomeAndExpenseModel(
+                              //         id: id,
+                              //         name: categoryCardModels[j].reason,
+                              //         categoryId:
+                              //             categoryCardModels[j].categoryId,
+                              //         subcategoryId:
+                              //             categoryCardModels[j].subcategoryId,
+                              //         subSubcategoryId: categoryCardModels[j]
+                              //             .subSubCategoryId,
+                              //         dateAndTimeAdded: DateTime.now(),
+                              //         selectedDateAndTime:
+                              //             categoryCardModels[j].date,
+                              //         userId: 0,
+                              //         frequency:
+                              //             categoryCardModels[j].frequency,
+                              //         netAmount: double.parse(
+                              //             categoryCardModels[j].netAmount),
+                              //         categoryName:
+                              //             categoryCardModels[j].categoryName,
+                              //         subcategoryName:
+                              //             categoryCardModels[j].subcategoryName,
+                              //         subSubcategoryName: categoryCardModels[j]
+                              //             .subSubcategoryName,
+                              //         location: categoryCardModels[j].location,
+                              //         dateType: 'gr',
+                              //       ),
+                              //     );
+                              //   }
+                              // }
+                              // int id =
+                              //     await Hive.box<CategoryModel>('category').add(
+                              //   CategoryModel(),
+                              // );
+                              // Hive.box<CategoryModel>('category').put(
+                              //   id,
+                              //   CategoryModel(
+                              //       id: id,
+                              //       categoryName: 'test $id',
+                              //       dateAndTimeAdded: DateTime.now(),
+                              //       iconName: 'account_balance'),
+                              // );
                               // Hive.box<CategoryModel>('category').keys.last;
                               // Hive.box<CategoryModel>('category').add(
                               //   CategoryModel(
@@ -87,12 +149,12 @@ class CarouselCategoryList extends StatelessWidget {
                               // Hive.box<CategoryModel>('category').delete(-1);
                               // DateTime now = DateTime.now();
                               //
-                              Hive.box<CategoryModel>('category')
-                                  .values
-                                  .forEach((element) {
-                                print(
-                                    'key: ${element.key}  id: ${element.id} name: ${element.categoryName} icon: ${element.iconName} date: ${element.dateAndTimeAdded} mod: ${element.lastModifiedDateAndTime}');
-                              });
+                              // Hive.box<CategoryModel>('category')
+                              //     .values
+                              //     .forEach((element) {
+                              //   print(
+                              //       'key: ${element.key}  id: ${element.id} name: ${element.categoryName} icon: ${element.iconName} date: ${element.dateAndTimeAdded} mod: ${element.lastModifiedDateAndTime}');
+                              // });
                               // Hive.box<CategoryModel>('category').clear();
                               // DateFormat dateFormat = DateFormat("dd-MM-yy");
                               // DateFormat timeFormat = DateFormat("HH:mm:ss");

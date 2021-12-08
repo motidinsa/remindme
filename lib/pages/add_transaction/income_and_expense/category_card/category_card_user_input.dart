@@ -99,12 +99,16 @@ class _CategoryUserInputState extends State<CategoryUserInput> {
 
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 35),
-          child: Text(
-            'Frequency',
-            style: TextStyle(color: Colors.brown),
-          ),
+        Row(
+          children: const [
+            SizedBox(
+              width: 170,
+            ),
+            Text(
+              'Frequency',
+              style: TextStyle(color: Colors.brown),
+            ),
+          ],
         ),
         const SizedBox(
           height: 3,
@@ -198,7 +202,7 @@ class _CategoryUserInputState extends State<CategoryUserInput> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide:
-                            BorderSide(color: Colors.green, width: 0.75),
+                                BorderSide(color: Colors.green, width: 0.75),
                           ),
                           contentPadding: EdgeInsets.only(bottom: 20),
                         ),

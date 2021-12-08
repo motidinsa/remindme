@@ -3,12 +3,17 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:intl/src/intl/date_format.dart';
 import 'package:remindme/getx_controller/income_and_expense/category_card_controller.dart';
+import 'package:remindme/getx_controller/income_and_expense/income_and_expense_controller.dart';
+import 'package:remindme/models/category_card_model.dart';
 
 class CategoryDateSelect extends StatelessWidget {
+  final IncomeAndExpenseController incomeAndExpenseController = Get.find();
   final DateTime date;
-  final CategoryCardController categoryCardController = Get.find();
+  final int categoryId;
+  final int categoryCardId;
 
-  CategoryDateSelect({Key key, this.date}) : super(key: key);
+  CategoryDateSelect({Key key, this.date, this.categoryId, this.categoryCardId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +57,15 @@ class CategoryDateSelect extends StatelessWidget {
                     cancelText: 'Cancel',
                     confirmText: 'OK',
                   );
+                  if (picked != null) {
+                    incomeAndExpenseController.updateDate(
+                        categoryCardId, categoryId, picked);
+                  }
+                  // print(picked);
+                  // DateTime a = DateTime.now();
+                  // DateTime b;
+                  // = 14;
+                  // print();
                   // showDialog(
                   //   // isScrollControlled: true,
                   //   // shape: const RoundedRectangleBorder(

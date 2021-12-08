@@ -28,10 +28,6 @@ class _ExpenseListState extends State<ExpenseList> {
   @override
   void initState() {
     super.initState();
-    print('qqqqqqqq ${widget.allSubSubcategories.length}');
-    widget.allSubSubcategories.forEach((element) {
-      print('pppppppppp ${element.subSubcategoryName}');
-    });
   }
 
   @override

@@ -1,11 +1,11 @@
 import 'package:hive/hive.dart';
 
-part 'sub_subcategory_model.g.dart';
+part 'subcategory_model.g.dart';
 
-@HiveType(typeId: 2)
-class SubSubcategoryModel extends HiveObject {
+@HiveType(typeId: 1)
+class SubcategoryModel extends HiveObject {
   @HiveField(0)
-  final String subSubcategoryName;
+  final String subcategoryName;
 
   @HiveField(1)
   final String iconName;
@@ -23,26 +23,21 @@ class SubSubcategoryModel extends HiveObject {
   final String dateType;
 
   @HiveField(6)
-  final String subSubcategoryType;
+  final String subcategoryType;
 
   @HiveField(7)
   final int categoryId;
 
   @HiveField(8)
-  final int subcategoryId;
-
-  @HiveField(9)
   final int id;
 
-  @HiveField(10)
+  @HiveField(9)
   final int userId;
 
-  @HiveField(11)
-  final int orderNumber;
 
-  SubSubcategoryModel({
-    this.subSubcategoryName,
-    this.subSubcategoryType,
+  SubcategoryModel({
+    this.subcategoryName,
+    this.subcategoryType,
     this.dateAndTimeAdded,
     this.lastModifiedDateAndTime,
     this.iconName,
@@ -50,8 +45,6 @@ class SubSubcategoryModel extends HiveObject {
     this.iconType,
     this.id,
     this.userId,
-    this.orderNumber,
     this.categoryId,
-    this.subcategoryId,
   });
 }

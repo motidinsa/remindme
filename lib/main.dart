@@ -20,7 +20,9 @@ import 'bloc/reason/reason_event.dart';
 import 'bloc/task/task_bloc.dart';
 import 'bloc/task/task_event.dart';
 import 'data_provider/task_data.dart';
-import 'database_models/category_model.dart';
+import 'database_models/category/category_model.dart';
+import 'database_models/income_and_expense/income_and_expense_model.dart';
+import 'database_models/setting/setting_model.dart';
 
 void main() async {
   final TaskRepository taskRepository = TaskRepository(
@@ -31,7 +33,10 @@ void main() async {
   );
   await Hive.initFlutter();
   Hive.registerAdapter(CategoryModelAdapter());
-  // UsersBinding().dependencies();
+  Hive.registerAdapter(SettingModelAdapter());
+  Hive.registerAdapter(IncomeAndExpenseModelAdapter());
+  await Hive.openBox<IncomeAndExpenseModel>('income_and_expense');
+  // Hive.box<IncomeAndExpenseModel>('income_and_expense').clear();
   runApp(
     MultiBlocProvider(
       providers: [

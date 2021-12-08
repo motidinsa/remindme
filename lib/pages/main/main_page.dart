@@ -66,7 +66,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     );
     appbar = AppBar(
       title: const Text('Home'),
-      elevation: 5,
+      elevation: 2,
       bottom: TabBar(
         controller: _tabController,
         tabs: const <Widget>[
@@ -89,7 +89,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         //  IncomeAndExpenseController a = Get.find();
         //  print(a.categoryList.length);
         Get.to(() => ExpenseAndIncomePage(
-              type: 'Expense',
+          type: 'expense',
               categories: categories,
             ));
       },
@@ -111,6 +111,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             body = HomePage(tabController: _tabController, sc: scaffoldKey);
             appbar = AppBar(
               title: const Text('Home'),
+              elevation: 2,
               bottom: TabBar(
                 controller: _tabController,
                 tabs: const <Widget>[
