@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-// import 'package:hive/hive.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:remindme/bloc/category/category_bloc.dart';
 import 'package:remindme/bloc/completed_task/completed_task_bloc.dart';
@@ -23,6 +22,7 @@ import 'data_provider/task_data.dart';
 import 'database_models/category/category_model.dart';
 import 'database_models/income_and_expense/income_and_expense_model.dart';
 import 'database_models/setting/setting_model.dart';
+import 'getx_controller/income_and_expense/transaction_controller.dart';
 
 void main() async {
   final TaskRepository taskRepository = TaskRepository(
@@ -36,7 +36,8 @@ void main() async {
   Hive.registerAdapter(SettingModelAdapter());
   Hive.registerAdapter(IncomeAndExpenseModelAdapter());
   await Hive.openBox<IncomeAndExpenseModel>('income_and_expense');
-  // Hive.box<IncomeAndExpenseModel>('income_and_expense').clear();
+  Get.put(TransactionController());
+
   runApp(
     MultiBlocProvider(
       providers: [
