@@ -13,7 +13,12 @@ class TransactionController extends GetxController {
     groupedTransaction =
         transactions.groupListsBy((element) => element.selectedDateAndTime);
     sortedDates = groupedTransaction.keys.toList(growable: false)
-      ..sort((k1, k2) => k2.compareTo(k1));
+      ..sort((k1, k2) {
+        if (k2 == null) {
+          return 0;
+        }
+        return k2.compareTo(k1);
+      });
   }
 
   void onReorder(int oldIndex, int newIndex, DateTime date) {

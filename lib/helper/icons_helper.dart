@@ -2422,7 +2422,7 @@ class IconsHelper {
     'trashRestoreAlt': FontAwesomeIcons.trashRestoreAlt,
     'tree': FontAwesomeIcons.tree,
     'trello': FontAwesomeIcons.trello,
-    'tripadvisor': FontAwesomeIcons.tripadvisor,
+    // 'tripadvisor': FontAwesomeIcons.tripadvisor,
     'trophy': FontAwesomeIcons.trophy,
     'truck': FontAwesomeIcons.truck,
     'truckLoading': FontAwesomeIcons.truckLoading,

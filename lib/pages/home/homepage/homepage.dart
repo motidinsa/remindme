@@ -26,10 +26,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<CategoryBloc>(context).add(CheckInitialization());
-    BlocProvider.of<ExpenseAndIncomeBloc>(context)
-        .add(GetAllIncomeAndExpense());
+    // BlocProvider.of<CategoryBloc>(context).add(CheckInitialization());
+    // BlocProvider.of<ExpenseAndIncomeBloc>(context)
+    //     .add(GetAllIncomeAndExpense());
   }
+
   @override
   Widget build(BuildContext context) {
     return TabBarView(
@@ -59,22 +60,24 @@ class _HomePageState extends State<HomePage> {
         //     return Center(child: Text('Loading'));
         //   },
         // ),
-        BlocBuilder<TaskBloc, TaskState>(
-          builder: (_, state) {
-            if (state is TaskOperationFailure) {
-              return Text('Some error happened');
-            }
-            if (state is TaskLoadSuccess) {
-              final tasks = state.tasks;
-              print(tasks.length.toString() + ' b');
-              return Tasks(
-                tasks: tasks,
-                sc: widget.sc,
-              );
-            }
-            return Center(child: Text('Loading'));
-          },
-        ),
+        Container()
+        // BlocBuilder<TaskBloc, TaskState>(
+        //   builder: (_, state) {
+        //     if (state is TaskOperationFailure) {
+        //       return Text('Some error happened');
+        //     }
+        //     if (state is TaskLoadSuccess) {
+        //       final tasks = state.tasks;
+        //       print(tasks.length.toString() + ' b');
+        //       return Container();
+        //       //   Tasks(
+        //       //   tasks: tasks,
+        //       //   sc: widget.sc,
+        //       // );
+        //     }
+        //     return Center(child: Text('Loading'));
+        //   },
+        // ),
       ],
     );
   }

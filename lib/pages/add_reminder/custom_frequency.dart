@@ -349,26 +349,26 @@ class _CustomFrequencyState extends State<CustomFrequency> {
                       title: Text('Select days for the task'),
                       contentPadding: EdgeInsets.fromLTRB(24, 20, 24, 0),
                       content: Container(
-                        // width: 100,
-                        child: GroupButton(
-                            spacing: 15,
-                            isRadio: false,
-                            direction: Axis.horizontal,
-                            unselectedColor: Colors.grey[200],
-                            onSelected: (index, isSelected) => isSelected
-                                ? {
-                                    tempDaysSelectedInNumber.add(index),
-                                    print(tempDaysSelectedInNumber.toString() +
-                                        " days in number")
-                                  }
-                                : {
-                                    tempDaysSelectedInNumber.remove(index),
-                                    print(tempDaysSelectedInNumber.toString() +
-                                        " days in number")
-                                  },
-                            buttons: days,
-                            selectedButtons: daysSelectedInName),
-                      ),
+                          // width: 100,
+                          // child: GroupButton(
+                          //     spacing: 15,
+                          //     isRadio: false,
+                          //     direction: Axis.horizontal,
+                          //     unselectedColor: Colors.grey[200],
+                          //     onSelected: (index, isSelected) => isSelected
+                          //         ? {
+                          //             tempDaysSelectedInNumber.add(index),
+                          //             print(tempDaysSelectedInNumber.toString() +
+                          //                 " days in number")
+                          //           }
+                          //         : {
+                          //             tempDaysSelectedInNumber.remove(index),
+                          //             print(tempDaysSelectedInNumber.toString() +
+                          //                 " days in number")
+                          //           },
+                          //     buttons: days,
+                          //     selectedButtons: daysSelectedInName),
+                          ),
                       actions: <Widget>[
                         TextButton(
                           child: Text(

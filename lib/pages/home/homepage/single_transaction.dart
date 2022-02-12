@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
@@ -44,124 +46,106 @@ class SingleTransaction extends StatelessWidget {
           child: Card(
             elevation: 1,
             child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            DateFormat('dd-MM-yy').format(date),
-                            style: const TextStyle(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        DateFormat('dd-MM-yy').format(date),
+                        style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.green,
+                            fontWeight: FontWeight.w600),
+                        // textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      const Expanded(
+                        child: Text(
+                          "DateFormat('dd-MM-yy')",
+                          style: TextStyle(
                               fontSize: 16,
-                              // color: Colors.green,
-                            ),
-                          ),
+                              color: Colors.brown,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
                         ),
-                        const SizedBox(
-                          width: 25,
+                      ),
+                      // Text(
+                      //     'id ${incomeAndExpenseModel[index].id}  order ${incomeAndExpenseModel[index].orderNumber}'),
+                      // Text(
+                      //   incomeAndExpenseModel.categoryName ?? '',
+                      //   style: TextStyle(
+                      //       color: Colors.green,
+                      //       fontSize: 18,
+                      //       fontWeight: FontWeight.w800),
+                      // ),
+                      // SizedBox(
+                      //   width: 5,
+                      // ),
+                      // if (incomeAndExpenseModel.subcategoryId != null)
+                      //   Text(
+                      //     '->  ${incomeAndExpenseModel.subcategoryName}',
+                      //     style: TextStyle(
+                      //         color: Colors.lightGreen,
+                      //         fontSize: 16,
+                      //         fontWeight: FontWeight.w400),
+                      //   ),
+                      // SizedBox(
+                      //   width: 5,
+                      // ),
+                      // if (incomeAndExpenseModel.subSubcategoryId != null)
+                      //   Text(
+                      //     '->  ${incomeAndExpenseModel.subSubcategoryName}',
+                      //     style: TextStyle(
+                      //         color: Colors.lightGreen,
+                      //         fontSize: 16,
+                      //         fontWeight: FontWeight.w400),
+                      //   ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    children: const [
+                      Icon(
+                        Icons.remove,
+                        color: Colors.red,
+                        size: 30,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: Text(
+                          'help help help help help help help help help bkgjnkbfnbk ',
+                          style: TextStyle(
+                              color: Colors.black45,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600),
+                          textAlign: TextAlign.center,
                         ),
-                        Text(
-                            'id ${incomeAndExpenseModel[index].id}  order ${incomeAndExpenseModel[index].orderNumber}'),
-                        // Text(
-                        //   incomeAndExpenseModel.categoryName ?? '',
-                        //   style: TextStyle(
-                        //       color: Colors.green,
-                        //       fontSize: 18,
-                        //       fontWeight: FontWeight.w800),
-                        // ),
-                        SizedBox(
-                          width: 5,
+                      ),
+                      Expanded(
+                        child: Text(
+                          '450',
+                          style: TextStyle(
+                              color: Colors.green,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
                         ),
-                        // if (incomeAndExpenseModel.subcategoryId != null)
-                        //   Text(
-                        //     '->  ${incomeAndExpenseModel.subcategoryName}',
-                        //     style: TextStyle(
-                        //         color: Colors.lightGreen,
-                        //         fontSize: 16,
-                        //         fontWeight: FontWeight.w400),
-                        //   ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        // if (incomeAndExpenseModel.subSubcategoryId != null)
-                        //   Text(
-                        //     '->  ${incomeAndExpenseModel.subSubcategoryName}',
-                        //     style: TextStyle(
-                        //         color: Colors.lightGreen,
-                        //         fontSize: 16,
-                        //         fontWeight: FontWeight.w400),
-                        //   ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    // Row(
-                    //   children: [
-                    //     Expanded(
-                    //         child: Align(
-                    //           child: Icon(
-                    //             widget.expense.categoryType == 'Income'
-                    //                 ? Icons.add
-                    //                 : Icons.minimize,
-                    //             color: widget.expense.categoryType == 'Income'
-                    //                 ? Colors.green
-                    //                 : Colors.red,
-                    //             size: 30,
-                    //           ),
-                    //           alignment: Alignment.centerLeft,
-                    //         )),
-                    //     Expanded(
-                    //       flex: 7,
-                    //       child: Column(
-                    //         crossAxisAlignment: CrossAxisAlignment.start,
-                    //         children: [
-                    //           Row(
-                    //             children: [
-                    //               Text(
-                    //                 widget.expense.reason,
-                    //                 style: TextStyle(
-                    //                     color: Colors.grey,
-                    //                     fontSize: 16,
-                    //                     fontWeight: FontWeight.w600),
-                    //               ),
-                    //               SizedBox(
-                    //                 width: 25,
-                    //               ),
-                    //               widget.expense.numberOfTimes == 1
-                    //                   ? Text(
-                    //                 'amount: ${widget.expense.netAmount.toString()}',
-                    //                 style: TextStyle(
-                    //                   color: Colors.green,
-                    //                   fontSize: 16,
-                    //                 ),
-                    //               )
-                    //                   : Text(
-                    //                 'amount: ${widget.expense.numberOfTimes} x ${widget.expense.netAmount} -> ${widget.expense.totalAmount.toString()}',
-                    //                 style: TextStyle(
-                    //                   color: Colors.green,
-                    //                   fontSize: 16,
-                    //                 ),
-                    //               ),
-                    //             ],
-                    //           ),
-                    //           SizedBox(
-                    //             height: 10,
-                    //           ),
-                    //           Text(
-                    //             'Time added:  ${widget.expense.addedTime}',
-                    //           )
-                    //         ],
-                    //       ),
-                    //     )
-                    //   ],
-                    // ),
-                  ],
-                )),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
         itemCount: incomeAndExpenseModel.length,

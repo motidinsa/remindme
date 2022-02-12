@@ -347,6 +347,7 @@ class CategoryCard extends StatelessWidget {
                     FocusScope.of(context).unfocus();
                     incomeAndExpenseController.addAnotherItem(
                         categoryModel.categoryId, categoryModel.id);
+                    // incomeAndExpenseController.makeScrollable(true);
                   },
                 ),
               ),

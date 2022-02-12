@@ -241,6 +241,9 @@ class IncomeAndExpenseController extends GetxController {
   DateTime now = DateTime.now();
   List<CategoryModel> category = [];
 
+  bool isScrollable = true;
+  ScrollController parentScrollController = ScrollController();
+
   @override
   void onInit() {
     super.onInit();
@@ -737,6 +740,29 @@ class IncomeAndExpenseController extends GetxController {
         .categoryCardModels
         .firstWhere((element) => element.id == id)
         .date = givenDate;
+    update();
+  }
+
+  void makeScrollable(bool scrollValue) {
+    if (scrollValue != isScrollable) {
+      isScrollable = scrollValue;
+      update();
+    }
+  }
+
+  void scrollUp() {
+    parentScrollController.animateTo(
+        parentScrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeIn);
+    update();
+  }
+
+  void scrollDown() {
+    parentScrollController.animateTo(
+        parentScrollController.position.minScrollExtent,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeIn);
     update();
   }
 }
