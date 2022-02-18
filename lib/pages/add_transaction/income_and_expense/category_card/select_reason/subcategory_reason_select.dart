@@ -110,33 +110,58 @@ class SubcategoryReasonSelect extends StatelessWidget {
                 ],
               ),
               if (reason.location != null && reason.subSubcategoryId == null)
-                Row(
+                Column(
                   children: [
-                    const Spacer(),
-                    Expanded(
-                      flex: 4,
-                      child: Row(
-                        // mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.room_outlined,
-                            size: 16,
-                            color: Colors.grey,
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            reason.location,
-                            style: const TextStyle(
-                                color: Colors.grey, fontSize: 15),
-                          )
-                        ],
-                      ),
+                    const SizedBox(
+                      height: 5,
                     ),
-                    const Spacer(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.room_outlined,
+                          size: 16,
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          reason.location,
+                          style:
+                              const TextStyle(color: Colors.grey, fontSize: 15),
+                        )
+                      ],
+                    ),
                   ],
-                )
+                ),
+              // Row(
+              //   children: [
+              //     const Spacer(),
+              //     Expanded(
+              //       flex: 4,
+              //       child: Row(
+              //         // mainAxisAlignment: MainAxisAlignment.center,
+              //         children: [
+              //           const Icon(
+              //             Icons.room_outlined,
+              //             size: 16,
+              //             color: Colors.grey,
+              //           ),
+              //           const SizedBox(
+              //             width: 5,
+              //           ),
+              //           Text(
+              //             reason.location,
+              //             style: const TextStyle(
+              //                 color: Colors.grey, fontSize: 15),
+              //           )
+              //         ],
+              //       ),
+              //     ),
+              //     const Spacer(),
+              //   ],
+              // )
             ],
           ),
         ),

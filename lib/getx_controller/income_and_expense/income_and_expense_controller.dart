@@ -232,6 +232,7 @@ class IncomeAndExpenseController extends GetxController {
   double categoryHeight;
   double subcategorySelectPageHeight;
   double reasonSelectPageHeight;
+  double accountSelectPageHeight;
   double subSubcategoryReasonSelectHeight;
   bool isCategoryHeightSet = false;
   bool subcategorySelectHintDismissed = false;
@@ -394,6 +395,13 @@ class IncomeAndExpenseController extends GetxController {
   void updateReasonHeight(double givenHeight) {
     if (givenHeight > Get.height / 2) {
       reasonSelectPageHeight = Get.height / 2;
+    }
+    update();
+  }
+
+  void updateAccountHeight(double givenHeight) {
+    if (givenHeight > Get.height / 2) {
+      accountSelectPageHeight = Get.height / 2;
     }
     update();
   }

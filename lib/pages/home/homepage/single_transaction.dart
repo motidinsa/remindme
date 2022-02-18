@@ -54,7 +54,7 @@ class SingleTransaction extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        DateFormat('dd-MM-yy').format(date),
+                        date != null ? DateFormat('dd-MM-yy').format(date) : '',
                         style: const TextStyle(
                             fontSize: 16,
                             color: Colors.green,
@@ -143,6 +143,31 @@ class SingleTransaction extends StatelessWidget {
                       )
                     ],
                   ),
+                  // Divider(color: Colors.grey,
+                  //   // height: 5,
+                  // ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Icon(
+                        Icons.room_outlined,
+                        size: 16,
+                        color: Colors.grey,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Location nrkjgnksgnvfk vdnk',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      )
+                    ],
+                  )
                 ],
               ),
             ),

@@ -48,6 +48,7 @@ class TransactionList extends StatelessWidget {
       builder: (context, box, _) {
         // transactions = box.values.toList();
         transactionController.updateTransaction(box.values.toList());
+        // transactionController.is
         // Map<DateTime, List<IncomeAndExpenseModel>> a =
         //     transactions.groupListsBy((element) => element.selectedDateAndTime);
         //

@@ -17,6 +17,7 @@ class TransactionController extends GetxController {
         if (k2 == null) {
           return 0;
         }
+
         return k2.compareTo(k1);
       });
   }
