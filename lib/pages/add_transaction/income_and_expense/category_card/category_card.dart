@@ -49,7 +49,12 @@ class CategoryCard extends StatelessWidget {
               categoryId: categoryModel.categoryId,
               categoryCardId: categoryModel.id,
             ),
-            const CategoryAccountSelect(),
+            CategoryAccountSelect(
+              accountId: categoryModel.accountId,
+              subAccountId: categoryModel.subAccountId,
+              categoryId: categoryModel.categoryId,
+              categoryCardId: categoryModel.id,
+            ),
             ReasonAndSubcategorySelect(
               categoryId: categoryModel.categoryId,
               categoryCardId: categoryModel.id,

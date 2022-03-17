@@ -13,15 +13,18 @@ class AccountModel {
 
   final double balance;
   final bool hasSubAccount;
+  bool isSelected;
+  bool isDefault;
 
-  AccountModel({
-    this.accountName,
-    this.balance,
-    this.dateAndTimeAdded,
-    this.lastModifiedDateAndTime,
-    this.dateType,
-    this.id,
-    this.userId,
-    this.hasSubAccount,
-  });
+  AccountModel(
+      {this.accountName,
+      this.balance,
+      this.dateAndTimeAdded,
+      this.lastModifiedDateAndTime,
+      this.dateType,
+      this.id,
+      this.userId,
+      this.hasSubAccount,
+      this.isSelected,
+      this.isDefault});
 }

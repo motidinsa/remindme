@@ -6,17 +6,17 @@ part of 'subaccount_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class SubAccountModelAdapter extends TypeAdapter<SubAccountModel> {
+class SubAccountModelAdapter extends TypeAdapter<SubAccountDatabaseModel> {
   @override
   final int typeId = 6;
 
   @override
-  SubAccountModel read(BinaryReader reader) {
+  SubAccountDatabaseModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return SubAccountModel(
+    return SubAccountDatabaseModel(
       accountName: fields[0] as String,
       balance: fields[6] as double,
       dateAndTimeAdded: fields[1] as DateTime,
@@ -29,7 +29,7 @@ class SubAccountModelAdapter extends TypeAdapter<SubAccountModel> {
   }
 
   @override
-  void write(BinaryWriter writer, SubAccountModel obj) {
+  void write(BinaryWriter writer, SubAccountDatabaseModel obj) {
     writer
       ..writeByte(8)
       ..writeByte(0)

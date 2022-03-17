@@ -63,6 +63,11 @@ class _CategoryUserInputState extends State<CategoryUserInput> {
     if (!frequencyFocusNode.hasFocus) {
       incomeAndExpenseController.changeFrequency(
           widget.categoryModel.id, widget.categoryModel.categoryId, frequency);
+      if (int.parse(frequency) < 1) {
+        print('inin');
+        incomeAndExpenseController.resetFrequencyValue(
+            widget.categoryModel.id, widget.categoryModel.categoryId);
+      }
     }
   }
 

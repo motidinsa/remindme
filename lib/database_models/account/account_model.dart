@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 part 'account_model.g.dart';
 
 @HiveType(typeId: 5)
-class AccountModel extends HiveObject {
+class AccountDatabaseModel extends HiveObject {
   @HiveField(0)
   final String accountName;
 
@@ -25,7 +25,7 @@ class AccountModel extends HiveObject {
   @HiveField(6)
   final double balance;
 
-  AccountModel({
+  AccountDatabaseModel({
     this.accountName,
     this.balance,
     this.dateAndTimeAdded,

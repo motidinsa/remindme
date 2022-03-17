@@ -8,22 +8,37 @@ import '../../../../../models/account_model.dart';
 
 class AccountSelectItem extends StatelessWidget {
   final AccountModel accountModel;
+  final int categoryId;
+  final int categoryCardId;
 
   // final int categoryCardId;
-  // final IncomeAndExpenseController incomeAndExpenseController = Get.find();
+  final IncomeAndExpenseController incomeAndExpenseController = Get.find();
 
-  const AccountSelectItem({
+  AccountSelectItem({
     Key key,
     this.accountModel,
-    // this.categoryCardId,
+    this.categoryId,
+    this.categoryCardId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // color: subcategoryModel.isSelected ? Colors.green.shade50 : null,
+      color: accountModel.isSelected == true ? Colors.green.shade50 : null,
       child: InkWell(
         onTap: () {
+          if (accountModel.hasSubAccount == true) {
+            incomeAndExpenseController.fetchSubAccountList(accountModel.id);
+            incomeAndExpenseController
+                .changeSelectedAccountColor(accountModel.id);
+            // incomeAndExpenseController
+            //     .removeBackgroundColorOfSelectedSubSubCategoryReason();
+            // print('cat id ${reason.categoryId} subcat ${reason.subcategoryId}');
+          } else {
+            incomeAndExpenseController.setAccountDetail(
+                accountModel.id, categoryId, categoryCardId);
+            Get.back();
+          }
           // if (subcategoryModel.subSubcategoryCount > 0) {
           //   incomeAndExpenseController.fetchSubSubcategories(
           //       subcategoryModel.categoryID, subcategoryModel.id);
@@ -37,11 +52,11 @@ class AccountSelectItem extends StatelessWidget {
           //   Get.back();
           // }
         },
-        onLongPress: () {
-          // incomeAndExpenseController.updateCategoryModelDetailFromSubcategory(
-          //     subcategoryModel.categoryID, subcategoryModel.id, categoryCardId);
-          // Get.back();
-        },
+        // onLongPress: () {
+        //   // incomeAndExpenseController.updateCategoryModelDetailFromSubcategory(
+        //   //     subcategoryModel.categoryID, subcategoryModel.id, categoryCardId);
+        //   // Get.back();
+        // },
         // color: Colors.green,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
@@ -79,8 +94,8 @@ class AccountSelectItem extends StatelessWidget {
               const SizedBox(
                 height: 5,
               ),
-              const Text(
-                'ETB 1000',
+              Text(
+                'ETB ${accountModel.balance}',
                 style: TextStyle(color: Colors.green),
               )
             ],

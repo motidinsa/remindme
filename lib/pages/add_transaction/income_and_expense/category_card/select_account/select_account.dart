@@ -16,72 +16,23 @@ import 'account_select_item.dart';
 
 class SelectAccount extends StatelessWidget {
   final IncomeAndExpenseController incomeAndExpenseController = Get.find();
+  final int categoryId;
+  final int categoryCardId;
 
-  SelectAccount({Key key}) : super(key: key);
-
-  final List<AccountModel> accountModels = [
-    AccountModel(
-      accountName: 'Wallet',
-      balance: 2500,
-      id: 1,
-      hasSubAccount: true,
-    ),
-    AccountModel(accountName: 'Bank', balance: 3300, id: 2),
-    AccountModel(accountName: 'Person', balance: 1200, id: 3),
-  ];
-  List<SubAccountModel> subAccountModels = [
-    SubAccountModel(
-      id: 1,
-      accountId: 1,
-      subAccountName: 'Bank 1',
-      balance: 500,
-    ),
-    SubAccountModel(
-      id: 2,
-      accountId: 1,
-      subAccountName: 'Bank 2',
-      balance: 550,
-    ),
-    SubAccountModel(
-      id: 3,
-      accountId: 1,
-      subAccountName: 'Bank 3',
-      balance: 1200,
-    ),
-    SubAccountModel(
-      id: 4,
-      accountId: 1,
-      subAccountName: 'Bank 5',
-      balance: 200,
-    ),
-    SubAccountModel(
-      id: 5,
-      accountId: 3,
-      subAccountName: 'Person 1',
-      balance: 1000,
-    ),
-    SubAccountModel(
-      id: 6,
-      accountId: 3,
-      subAccountName: 'Person 2',
-      balance: 250,
-    ),
-    SubAccountModel(
-      id: 7,
-      accountId: 3,
-      subAccountName: 'Person 3',
-      balance: 250,
-    ),
-    SubAccountModel(
-      id: 8,
-      accountId: 3,
-      subAccountName: 'Person 4',
-      balance: 250,
-    ),
-  ];
+  SelectAccount({Key key, this.categoryId, this.categoryCardId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // List<AccountModel> accountsWithNoSubAccount = [];
+    // for (int i = 0; i < accountModels.length; i++) {
+    //   if (accountModels[i].hasSubAccount == null) {
+    //     accountsWithNoSubAccount.add(accountModels[i]);
+    //     accountModels.removeAt(i);
+    //   }
+    // }
+    // accountModels.addAll(accountsWithNoSubAccount);
+    // accountsWithNoSubAccount = [];
     return ListView(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -127,13 +78,17 @@ class SelectAccount extends StatelessWidget {
                           physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
                           itemBuilder: (context, index) => AccountSelectItem(
-                            accountModel: accountModels[index],
+                            accountModel:
+                                incomeAndExpenseController.accountModels[index],
+                            categoryId: categoryId,
+                            categoryCardId: categoryCardId,
                           ),
                           separatorBuilder: (context, index) => Divider(
                             color: Colors.green.shade100,
                             height: 10,
                           ),
-                          itemCount: accountModels.length,
+                          itemCount:
+                              incomeAndExpenseController.accountModels.length,
                         ),
                       ),
                     ),
@@ -146,13 +101,17 @@ class SelectAccount extends StatelessWidget {
                           physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
                           itemBuilder: (context, index) => SubAccountSelectItem(
-                            subAccountModel: subAccountModels[index],
+                            subAccountModel: incomeAndExpenseController
+                                .selectedSubAccountList[index],
+                            categoryId: categoryId,
+                            categoryCardId: categoryCardId,
                           ),
                           separatorBuilder: (context, index) => Divider(
                             color: Colors.green.shade100,
                             height: 10,
                           ),
-                          itemCount: subAccountModels.length,
+                          itemCount: incomeAndExpenseController
+                              .selectedSubAccountList.length,
                         ),
                       ),
                     ),

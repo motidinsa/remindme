@@ -57,9 +57,11 @@ class SelectReason extends StatelessWidget {
                       .reasons
                       .where((element) => element.categoryId == categoryId)
                       .toList();
+                  print('cat leen 1 ${categoryReasons.length}');
                   List<Reason> allSubcategoryReasons = categoryReasons
                       .where((element) => element.subcategoryId != null)
                       .toList();
+                  print('cat leen 2 ${allSubcategoryReasons.length}');
                   List<Reason> subcategoryReasons = [];
 
                   for (Reason reason in allSubcategoryReasons) {

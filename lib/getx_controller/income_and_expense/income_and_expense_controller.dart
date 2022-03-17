@@ -20,6 +20,9 @@ import 'package:remindme/pages/add_transaction/income_and_expense/income_and_exp
 import 'package:remindme/pages/add_transaction/income_and_expense/multiple_category_card.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 
+import '../../models/account_model.dart';
+import '../../models/sub_account_model.dart';
+
 class IncomeAndExpenseController extends GetxController {
   final List<IncomeAndExpenseCategoryModel> categories = [
     IncomeAndExpenseCategoryModel(
@@ -218,9 +221,75 @@ class IncomeAndExpenseController extends GetxController {
       // location: 'alembank',
     ),
   ];
+
+  final List<AccountModel> accountModels = [
+    AccountModel(
+        accountName: 'Wallet 1',
+        balance: 2500,
+        id: 1,
+        hasSubAccount: true,
+        isDefault: true),
+    AccountModel(accountName: 'cv 2', balance: 3300, id: 2),
+    AccountModel(
+        accountName: 'Person 3', balance: 1200, id: 3, hasSubAccount: true),
+    AccountModel(
+        accountName: 'test 4', balance: 200, id: 4, hasSubAccount: true),
+  ];
+  List<SubAccountModel> subAccountModels = [
+    SubAccountModel(
+      id: 1,
+      accountId: 1,
+      subAccountName: 'Bank 1',
+      balance: 500,
+    ),
+    SubAccountModel(
+      id: 2,
+      accountId: 1,
+      subAccountName: 'Bank 2',
+      balance: 550,
+    ),
+    SubAccountModel(
+      id: 3,
+      accountId: 3,
+      subAccountName: 'Bank 3',
+      balance: 1200,
+    ),
+    SubAccountModel(
+      id: 4,
+      accountId: 3,
+      subAccountName: 'Bank 5',
+      balance: 200,
+    ),
+    SubAccountModel(
+      id: 5,
+      accountId: 3,
+      subAccountName: 'Person 1',
+      balance: 1000,
+    ),
+    SubAccountModel(
+      id: 6,
+      accountId: 4,
+      subAccountName: 'Person 2',
+      balance: 250,
+    ),
+    SubAccountModel(
+      id: 7,
+      accountId: 4,
+      subAccountName: 'Person 3',
+      balance: 250,
+    ),
+    SubAccountModel(
+      id: 8,
+      accountId: 4,
+      subAccountName: 'Person 4',
+      balance: 250,
+    ),
+  ];
+
   List<IncomeAndExpenseSubSubCategoryModel> selectedSubSubcategories = [];
   List<Reason> categoryReasons = [];
   List<Reason> subcategoryReasons = [];
+  List<SubAccountModel> selectedSubAccountList = [];
 
   int categoryModelId = 0;
   int multipleCategoryId = 0;
@@ -241,13 +310,32 @@ class IncomeAndExpenseController extends GetxController {
   CarouselController buttonCarouselController = CarouselController();
   DateTime now = DateTime.now();
   List<CategoryModel> category = [];
+  AccountModel defaultAccountModel;
+  AccountModel selectedAccountModel;
+  SubAccountModel selectedSubAccountModel;
 
+  // List
   bool isScrollable = true;
   ScrollController parentScrollController = ScrollController();
 
   @override
   void onInit() {
     super.onInit();
+    List<AccountModel> accountsWithNoSubAccount = [];
+    for (int i = 0; i < accountModels.length; i++) {
+      if (accountModels[i].hasSubAccount == null) {
+        accountsWithNoSubAccount.add(accountModels[i]);
+        accountModels.removeAt(i);
+      }
+    }
+    accountModels.addAll(accountsWithNoSubAccount);
+    accountsWithNoSubAccount = [];
+    for (AccountModel accountModel in accountModels) {
+      if (accountModel.isDefault == true) {
+        defaultAccountModel = accountModel;
+        break;
+      }
+    }
   }
 
   Stream<bool> initialize(String type) async* {
@@ -338,14 +426,14 @@ class IncomeAndExpenseController extends GetxController {
         id: multipleCategoryId++,
         categoryCardModels: [
           CategoryCardModel(
-            id: categoryModelId++,
-            categoryId: categoryId,
-            categoryName: incomeAndExpenseCategory.categoryName,
-            isLastItem: true,
-            frequency: 1,
-            date: DateTime(now.year, now.month, now.day),
-            categoryType: categoryType,
-          )
+              id: categoryModelId++,
+              categoryId: categoryId,
+              categoryName: incomeAndExpenseCategory.categoryName,
+              isLastItem: true,
+              frequency: 1,
+              date: DateTime(now.year, now.month, now.day),
+              categoryType: categoryType,
+              accountId: defaultAccountModel.id)
         ],
       ),
     );
@@ -424,14 +512,14 @@ class IncomeAndExpenseController extends GetxController {
 
     categoryModel.add(
       CategoryCardModel(
-        id: categoryModelId++,
-        isLastItem: true,
-        categoryName: categoryModel.last.categoryName,
-        categoryId: categoryModel.last.categoryId,
-        frequency: 1,
-        date: DateTime(now.year, now.month, now.day),
-        categoryType: categoryType,
-      ),
+          id: categoryModelId++,
+          isLastItem: true,
+          categoryName: categoryModel.last.categoryName,
+          categoryId: categoryModel.last.categoryId,
+          frequency: 1,
+          date: DateTime(now.year, now.month, now.day),
+          categoryType: categoryType,
+          accountId: defaultAccountModel.id),
     );
 
     update();
@@ -478,6 +566,15 @@ class IncomeAndExpenseController extends GetxController {
           .firstWhere((element) => element.id == id)
           .frequency--;
     }
+    update();
+  }
+
+  void resetFrequencyValue(int id, int categoryId) {
+    categoryModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .categoryCardModels
+        .firstWhere((element) => element.id == id)
+        .frequency = 1;
     update();
   }
 
@@ -688,6 +785,13 @@ class IncomeAndExpenseController extends GetxController {
     update();
   }
 
+  void fetchSubAccountList(int accountId) {
+    selectedSubAccountList = subAccountModels
+        .where((element) => element.accountId == accountId)
+        .toList();
+    update();
+  }
+
   void changeSelectedSubcategoryReasonColor(int categoryId, int subcategoryId) {
     for (var item in reasons) {
       item.isSubcategorySelected = false;
@@ -712,6 +816,16 @@ class IncomeAndExpenseController extends GetxController {
             element.subcategoryId == subcategoryId &&
             element.subSubcategoryId == subSubcategoryId)
         .isSubSubcategorySelected = true;
+
+    update();
+  }
+
+  void changeSelectedAccountColor(int accountId) {
+    for (var item in accountModels) {
+      item.isSelected = false;
+    }
+    accountModels.firstWhere((element) => element.id == accountId).isSelected =
+        true;
 
     update();
   }
@@ -771,6 +885,47 @@ class IncomeAndExpenseController extends GetxController {
         parentScrollController.position.minScrollExtent,
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeIn);
+    update();
+  }
+
+  void resetSelectedAccount() {
+    selectedSubAccountList = [];
+    for (var item in accountModels) {
+      item.isSelected = false;
+    }
+    update();
+  }
+
+  void setAccountDetail(
+    int accountId,
+    int categoryId,
+    int categoryCardId,
+  ) {
+    // selectedAccountModel = accountModels.firstWhere((element) => element.id == accountId);
+    categoryModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .categoryCardModels
+        .firstWhere((element) => element.id == categoryCardId)
+      ..accountId = accountId
+      ..subAccountId = null;
+    // print(selectedAccountModel.balance);
+    update();
+  }
+
+  void setSubAccountDetail(
+    int accountId,
+    int subAccountId,
+    int categoryId,
+    int categoryCardId,
+  ) {
+    // selectedAccountModel = accountModels.firstWhere((element) => element.id == accountId);
+    categoryModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .categoryCardModels
+        .firstWhere((element) => element.id == categoryCardId)
+      ..accountId = accountId
+      ..subAccountId = subAccountId;
+    // print(selectedAccountModel.balance);
     update();
   }
 }

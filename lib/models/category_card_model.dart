@@ -14,6 +14,8 @@ class CategoryCardModel {
   bool isLastItem;
   bool requestFocusOnAmount;
   final String categoryType;
+  int accountId;
+  int subAccountId;
 
   CategoryCardModel(
       {this.categoryName,
@@ -30,5 +32,7 @@ class CategoryCardModel {
       this.subSubCategoryId,
       this.id,
       this.requestFocusOnAmount,
-      this.categoryType});
+      this.categoryType,
+      this.subAccountId,
+      this.accountId});
 }

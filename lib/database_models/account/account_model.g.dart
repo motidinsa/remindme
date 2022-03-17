@@ -6,17 +6,17 @@ part of 'account_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class AccountModelAdapter extends TypeAdapter<AccountModel> {
+class AccountModelAdapter extends TypeAdapter<AccountDatabaseModel> {
   @override
   final int typeId = 5;
 
   @override
-  AccountModel read(BinaryReader reader) {
+  AccountDatabaseModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return AccountModel(
+    return AccountDatabaseModel(
       accountName: fields[0] as String,
       balance: fields[6] as double,
       dateAndTimeAdded: fields[1] as DateTime,
@@ -28,7 +28,7 @@ class AccountModelAdapter extends TypeAdapter<AccountModel> {
   }
 
   @override
-  void write(BinaryWriter writer, AccountModel obj) {
+  void write(BinaryWriter writer, AccountDatabaseModel obj) {
     writer
       ..writeByte(7)
       ..writeByte(0)

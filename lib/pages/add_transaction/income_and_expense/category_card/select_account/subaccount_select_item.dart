@@ -8,15 +8,19 @@ import '../../../../../models/sub_account_model.dart';
 
 class SubAccountSelectItem extends StatelessWidget {
   final SubAccountModel subAccountModel;
+  final int categoryId;
+  final int categoryCardId;
+
+  final IncomeAndExpenseController incomeAndExpenseController = Get.find();
 
   // final int categoryCardId;
   // final IncomeAndExpenseController incomeAndExpenseController = Get.find();
 
-  const SubAccountSelectItem({
-    Key key,
-    this.subAccountModel,
-    // this.categoryCardId,
-  }) : super(key: key);
+  SubAccountSelectItem(
+      {Key key, this.subAccountModel, this.categoryId, this.categoryCardId
+      // this.categoryCardId,
+      })
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +28,12 @@ class SubAccountSelectItem extends StatelessWidget {
       // color: subcategoryModel.isSelected ? Colors.green.shade50 : null,
       child: InkWell(
         onTap: () {
+          incomeAndExpenseController.setSubAccountDetail(
+              subAccountModel.accountId,
+              subAccountModel.id,
+              categoryId,
+              categoryCardId);
+          Get.back();
           // if (subcategoryModel.subSubcategoryCount > 0) {
           //   incomeAndExpenseController.fetchSubSubcategories(
           //       subcategoryModel.categoryID, subcategoryModel.id);
@@ -37,11 +47,11 @@ class SubAccountSelectItem extends StatelessWidget {
           //   Get.back();
           // }
         },
-        onLongPress: () {
-          // incomeAndExpenseController.updateCategoryModelDetailFromSubcategory(
-          //     subcategoryModel.categoryID, subcategoryModel.id, categoryCardId);
-          // Get.back();
-        },
+        // onLongPress: () {
+        //   // incomeAndExpenseController.updateCategoryModelDetailFromSubcategory(
+        //   //     subcategoryModel.categoryID, subcategoryModel.id, categoryCardId);
+        //   // Get.back();
+        // },
         // color: Colors.green,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
@@ -64,8 +74,8 @@ class SubAccountSelectItem extends StatelessWidget {
               const SizedBox(
                 height: 5,
               ),
-              const Text(
-                'ETB 1000',
+              Text(
+                '${subAccountModel.balance}',
                 style: TextStyle(color: Colors.green),
               )
             ],

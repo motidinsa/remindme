@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 part 'subaccount_model.g.dart';
 
 @HiveType(typeId: 6)
-class SubAccountModel extends HiveObject {
+class SubAccountDatabaseModel extends HiveObject {
   @HiveField(0)
   final String accountName;
 
@@ -28,7 +28,7 @@ class SubAccountModel extends HiveObject {
   @HiveField(7)
   final int accountId;
 
-  SubAccountModel({
+  SubAccountDatabaseModel({
     this.accountName,
     this.balance,
     this.dateAndTimeAdded,
