@@ -42,13 +42,14 @@ class IncomeAndExpenseModelAdapter extends TypeAdapter<IncomeAndExpenseModel> {
       subSubAccountName: fields[22] as String,
       orderNumber: fields[23] as int,
       selectedDateAndTime: fields[24] as DateTime,
+      totalAmount: fields[25] as double,
     );
   }
 
   @override
   void write(BinaryWriter writer, IncomeAndExpenseModel obj) {
     writer
-      ..writeByte(25)
+      ..writeByte(26)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -98,7 +99,9 @@ class IncomeAndExpenseModelAdapter extends TypeAdapter<IncomeAndExpenseModel> {
       ..writeByte(23)
       ..write(obj.orderNumber)
       ..writeByte(24)
-      ..write(obj.selectedDateAndTime);
+      ..write(obj.selectedDateAndTime)
+      ..writeByte(25)
+      ..write(obj.totalAmount);
   }
 
   @override

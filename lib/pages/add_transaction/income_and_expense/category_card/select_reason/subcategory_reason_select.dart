@@ -87,26 +87,39 @@ class SubcategoryReasonSelect extends StatelessWidget {
                         ),
                       ),
                     ),
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: reason.subSubcategoryId != null
-                              ? const Icon(
-                                  Icons.chevron_right_rounded,
-                                  color: Colors.green,
-                                )
-                              : Text(
-                                  reason.amount,
-                                  style: const TextStyle(
-                                      color: Colors.green, fontSize: 16),
-                                ),
-                        ),
-                        const Spacer(),
-                      ],
-                    ),
-                  ),
+                  reason.subSubcategoryId != null
+                      ? const Icon(
+                          Icons.chevron_right_rounded,
+                          color: Colors.green,
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: Text(
+                            reason.amount.toString(),
+                            style: const TextStyle(
+                                color: Colors.green, fontSize: 16),
+                          ),
+                        )
+                  // Expanded(
+                  //   child: Row(
+                  //     children: [
+                  //       Expanded(
+                  //         flex: 2,
+                  //         child: reason.subSubcategoryId != null
+                  //             ? const Icon(
+                  //                 Icons.chevron_right_rounded,
+                  //                 color: Colors.green,
+                  //               )
+                  //             : Text(
+                  //                 reason.amount.toString(),
+                  //                 style: const TextStyle(
+                  //                     color: Colors.green, fontSize: 16),
+                  //               ),
+                  //       ),
+                  //       const Spacer(),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
               if (reason.location != null && reason.subSubcategoryId == null)

@@ -5,7 +5,7 @@ import 'package:remindme/bloc/expense/expense_event.dart';
 
 class SingleReason extends StatelessWidget {
   final String name;
-  final String amount;
+  final double amount;
 
   final int reasonID;
   final int categoryID;
@@ -31,7 +31,7 @@ class SingleReason extends StatelessWidget {
         textAlign: TextAlign.start,
       ),
       trailing: Text(
-        amount,
+        amount.toString(),
         style: TextStyle(fontSize: 18, color: Colors.grey),
         textAlign: TextAlign.start,
       ),
@@ -44,7 +44,7 @@ class SingleReason extends StatelessWidget {
             subcategoryID: subSubcategoryID,
             subSubcategoryID: subSubcategoryID,
             categoryID: categoryID,
-            amount: amount));
+            amount: amount.toString()));
         Navigator.pop(context);
       },
     );

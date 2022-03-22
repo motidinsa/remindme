@@ -7,7 +7,7 @@ class CategoryCardModel {
   int subcategoryId;
   int subSubCategoryId;
   DateTime date;
-  String netAmount;
+  double netAmount;
   int frequency;
   String reason;
   String location;
@@ -16,23 +16,28 @@ class CategoryCardModel {
   final String categoryType;
   int accountId;
   int subAccountId;
+  String accountName;
+  String subAccountName;
 
-  CategoryCardModel(
-      {this.categoryName,
-      this.categoryId,
-      this.isLastItem,
-      this.date,
-      this.subcategoryName,
-      this.subSubcategoryName,
-      this.reason,
-      this.netAmount,
-      this.frequency,
-      this.location,
-      this.subcategoryId,
-      this.subSubCategoryId,
-      this.id,
-      this.requestFocusOnAmount,
-      this.categoryType,
-      this.subAccountId,
-      this.accountId});
+  CategoryCardModel({
+    this.categoryName,
+    this.categoryId,
+    this.isLastItem,
+    this.date,
+    this.subcategoryName,
+    this.subSubcategoryName,
+    this.reason,
+    this.netAmount,
+    this.frequency,
+    this.location,
+    this.subcategoryId,
+    this.subSubCategoryId,
+    this.id,
+    this.requestFocusOnAmount,
+    this.categoryType,
+    this.subAccountId,
+    this.accountId,
+    this.accountName,
+    this.subAccountName,
+  });
 }

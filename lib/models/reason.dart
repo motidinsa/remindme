@@ -4,7 +4,7 @@ class Reason {
   final int subcategoryId;
   final int subSubcategoryId;
   final String name;
-  final String amount;
+  final double amount;
   final String location;
   final String timeAdded;
   final String dateAdded;

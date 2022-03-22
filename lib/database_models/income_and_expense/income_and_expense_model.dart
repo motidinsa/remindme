@@ -79,31 +79,34 @@ class IncomeAndExpenseModel extends HiveObject {
   @HiveField(24)
   final DateTime selectedDateAndTime;
 
-  IncomeAndExpenseModel({
-    this.accountName,
-    this.subcategoryId,
-    this.dateAndTimeAdded,
-    this.lastModifiedDateAndTime,
-    this.dateType,
-    this.id,
-    this.userId,
-    this.accountId,
-    this.subAccountId,
-    this.subSubcategoryName,
-    this.categoryId,
-    this.subcategoryName,
-    this.categoryName,
-    this.frequency,
-    this.location,
-    this.subSubcategoryId,
-    this.name,
-    this.netAmount,
-    this.type,
-    this.reasonId,
-    this.subAccountName,
-    this.subSubAccountId,
-    this.subSubAccountName,
-    this.orderNumber,
-    this.selectedDateAndTime,
-  });
+  @HiveField(25)
+  final double totalAmount;
+
+  IncomeAndExpenseModel(
+      {this.accountName,
+      this.subcategoryId,
+      this.dateAndTimeAdded,
+      this.lastModifiedDateAndTime,
+      this.dateType,
+      this.id,
+      this.userId,
+      this.accountId,
+      this.subAccountId,
+      this.subSubcategoryName,
+      this.categoryId,
+      this.subcategoryName,
+      this.categoryName,
+      this.frequency,
+      this.location,
+      this.subSubcategoryId,
+      this.name,
+      this.netAmount,
+      this.type,
+      this.reasonId,
+      this.subAccountName,
+      this.subSubAccountId,
+      this.subSubAccountName,
+      this.orderNumber,
+      this.selectedDateAndTime,
+      this.totalAmount});
 }

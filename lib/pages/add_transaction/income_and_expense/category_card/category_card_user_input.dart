@@ -25,7 +25,7 @@ class _CategoryUserInputState extends State<CategoryUserInput> {
   final TextEditingController _frequencyController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
 
-  String amountValue;
+  double amountValue;
   String frequency;
   String reason;
   String location;
@@ -83,9 +83,13 @@ class _CategoryUserInputState extends State<CategoryUserInput> {
     if (widget.categoryModel.requestFocusOnAmount == true) {
       amountFocusNode.requestFocus();
     }
-    _amountController.value = _amountController.value.copyWith(
-      text: widget.categoryModel.netAmount,
-    );
+    _amountController.value = widget.categoryModel.netAmount == null
+        ? _amountController.value.copyWith(
+            text: '',
+          )
+        : _amountController.value.copyWith(
+            text: widget.categoryModel.netAmount.toString(),
+          );
     _reasonController.value = _reasonController.value.copyWith(
       text: widget.categoryModel.reason,
     );
@@ -142,7 +146,7 @@ class _CategoryUserInputState extends State<CategoryUserInput> {
                   contentPadding: EdgeInsets.only(left: 20, bottom: 20),
                 ),
                 onChanged: (amount) {
-                  amountValue = amount;
+                  amountValue = double.parse(amount);
                 },
                 onEditingComplete: () {
                   FocusScope.of(context).unfocus();

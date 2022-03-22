@@ -82,7 +82,7 @@ class SubSubcategoryReasonSelect extends StatelessWidget {
                             ),
                             Expanded(
                               child: Text(
-                                reason[i].amount,
+                                reason[i].amount.toString(),
                                 textAlign: TextAlign.center,
                               ),
                             )

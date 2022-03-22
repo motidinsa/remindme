@@ -6,7 +6,7 @@ part of 'account_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class AccountModelAdapter extends TypeAdapter<AccountDatabaseModel> {
+class AccountDatabaseModelAdapter extends TypeAdapter<AccountDatabaseModel> {
   @override
   final int typeId = 5;
 
@@ -53,7 +53,7 @@ class AccountModelAdapter extends TypeAdapter<AccountDatabaseModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AccountModelAdapter &&
+          other is AccountDatabaseModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

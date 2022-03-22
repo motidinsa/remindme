@@ -6,11 +6,12 @@ import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:remindme/database_models/income_and_expense/income_and_expense_model.dart';
 import 'package:intl/intl.dart';
 import 'package:remindme/getx_controller/income_and_expense/transaction_controller.dart';
+import 'package:remindme/helper/widget_size.dart';
 
 class SingleTransaction extends StatelessWidget {
   final List<IncomeAndExpenseModel> incomeAndExpenseModel;
   final DateTime date;
-
+  double accountSize = 0;
   final TransactionController transactionController = Get.find();
 
   SingleTransaction({Key key, this.incomeAndExpenseModel, this.date})
@@ -46,7 +47,7 @@ class SingleTransaction extends StatelessWidget {
           child: Card(
             elevation: 1,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,16 +63,72 @@ class SingleTransaction extends StatelessWidget {
                         // textAlign: TextAlign.center,
                       ),
                       const SizedBox(
-                        width: 15,
+                        width: 40,
                       ),
-                      const Expanded(
-                        child: Text(
-                          "DateFormat('dd-MM-yy')",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.brown,
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
+                      Expanded(
+                        child: Wrap(
+                          children: [
+                            Text(
+                              "${incomeAndExpenseModel[index].categoryName}",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.brown,
+                                  fontWeight: FontWeight.bold),
+                              // textAlign: TextAlign.center,
+                            ),
+                            if (incomeAndExpenseModel[index].subcategoryId !=
+                                null)
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(
+                                    width: 2,
+                                  ),
+                                  Icon(
+                                    Icons.navigate_next_rounded,
+                                    size: 18,
+                                    color: Colors.brown,
+                                  ),
+                                  SizedBox(
+                                    width: 2,
+                                  ),
+                                  Text(
+                                    "${incomeAndExpenseModel[index].subcategoryName}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.brown,
+                                        fontWeight: FontWeight.bold),
+                                    // textAlign: TextAlign.center,
+                                  ),
+                                  if (incomeAndExpenseModel[index]
+                                          .subSubcategoryId !=
+                                      null)
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 2,
+                                        ),
+                                        Icon(
+                                          Icons.navigate_next_rounded,
+                                          size: 18,
+                                          color: Colors.brown,
+                                        ),
+                                        SizedBox(
+                                          width: 2,
+                                        ),
+                                        Text(
+                                          "${incomeAndExpenseModel[index].subSubcategoryName}",
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.brown,
+                                              fontWeight: FontWeight.bold),
+                                          // textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    )
+                                ],
+                              ),
+                          ],
                         ),
                       ),
                       // Text(
@@ -110,8 +167,9 @@ class SingleTransaction extends StatelessWidget {
                   const SizedBox(
                     height: 5,
                   ),
+
                   Row(
-                    children: const [
+                    children: [
                       Icon(
                         Icons.remove,
                         color: Colors.red,
@@ -120,26 +178,94 @@ class SingleTransaction extends StatelessWidget {
                       SizedBox(
                         width: 10,
                       ),
-                      Expanded(
-                        flex: 4,
-                        child: Text(
-                          'help help help help help help help help help bkgjnkbfnbk ',
-                          style: TextStyle(
-                              color: Colors.black45,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
-                          textAlign: TextAlign.center,
+                      // Expanded(flex: 3,
+                      //   child: Wrap(
+                      //     children: [
+                      //       Text(
+                      //         ' bkjjb jbj ',
+                      //         style: TextStyle(color: Colors.red.shade200),
+                      //         textAlign: TextAlign.center,
+                      //       ),
+                      //       // SizedBox(
+                      //       //   width: 2,
+                      //       // ),
+                      //       // Icon(
+                      //       //   Icons.navigate_next_rounded,
+                      //       //   size: 18,
+                      //       //   color: Colors.red.shade200,
+                      //       // ),
+                      //       // SizedBox(
+                      //       //   width: 2,
+                      //       // ),
+                      //       // Text(
+                      //       //   '${incomeAndExpenseModel[index].subAccountName} abyb bank vuyuvuy',
+                      //       //   style: TextStyle(color: Colors.red.shade200),
+                      //       // )
+                      //     ],
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   width: 120,
+                      //     child: Text('bvjbfdjbvjdf vdhfbvd vdfvkbdf vdjfvkdfvjd fvkdh vkdjfv')),
+                      // SizedBox(
+                      //   width: 5,
+                      // ),
+                      if (incomeAndExpenseModel[index].name != null)
+                        Expanded(
+                          flex: 3,
+                          child: Text(
+                            '${incomeAndExpenseModel[index].name}',
+                            style: TextStyle(
+                                color: Colors.black45,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
+                      if (incomeAndExpenseModel[index].name == null)
+                        Expanded(
+                          flex: 4,
+                          child: Row(
+                            children: [
+                              Text(
+                                '${incomeAndExpenseModel[index].accountName}',
+                                style: TextStyle(color: Colors.red.shade200),
+                              ),
+                              if (incomeAndExpenseModel[index].subAccountId !=
+                                  null)
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 2,
+                                    ),
+                                    Icon(
+                                      Icons.navigate_next_rounded,
+                                      size: 18,
+                                      color: Colors.red.shade200,
+                                    ),
+                                    SizedBox(
+                                      width: 2,
+                                    ),
+                                    Text(
+                                      '${incomeAndExpenseModel[index].subAccountName}',
+                                      style:
+                                          TextStyle(color: Colors.red.shade200),
+                                    )
+                                  ],
+                                )
+                            ],
+                          ),
+                        ),
+                      SizedBox(
+                        width: 10,
                       ),
-                      Expanded(
-                        child: Text(
-                          '450',
-                          style: TextStyle(
-                              color: Colors.green,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
-                        ),
+                      Text(
+                        '${incomeAndExpenseModel[index].totalAmount}',
+                        style: TextStyle(
+                            color: Colors.green,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
                       )
                     ],
                   ),
@@ -147,27 +273,72 @@ class SingleTransaction extends StatelessWidget {
                   //   // height: 5,
                   // ),
                   SizedBox(
-                    height: 5,
+                    height: 2,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Icon(
-                        Icons.room_outlined,
-                        size: 16,
-                        color: Colors.grey,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: Text(
-                          'Location nrkjgnksgnvfk vdnk',
-                          style: TextStyle(color: Colors.grey),
+                      if (incomeAndExpenseModel[index].name != null)
+                        Row(
+                          children: [
+                            Text(
+                              '${incomeAndExpenseModel[index].accountName}',
+                              style: TextStyle(color: Colors.red.shade200),
+                            ),
+                            if (incomeAndExpenseModel[index].subAccountId !=
+                                null)
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: 2,
+                                  ),
+                                  Icon(
+                                    Icons.navigate_next_rounded,
+                                    size: 18,
+                                    color: Colors.red.shade200,
+                                  ),
+                                  SizedBox(
+                                    width: 2,
+                                  ),
+                                  Text(
+                                    '${incomeAndExpenseModel[index].subAccountName}',
+                                    style:
+                                        TextStyle(color: Colors.red.shade200),
+                                  )
+                                ],
+                              )
+                          ],
                         ),
-                      )
+                      SizedBox(
+                        width: 20,
+                      ),
+                      if (incomeAndExpenseModel[index].location != null)
+                        Expanded(
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Icon(
+                                Icons.room_outlined,
+                                size: 16,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  '${incomeAndExpenseModel[index].location}',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              )
+                            ],
+                          ),
+                        )
                     ],
-                  )
+                  ),
+
+                  // SizedBox(
+                  //   height: 2,
+                  // ),
                 ],
               ),
             ),
@@ -184,133 +355,5 @@ class SingleTransaction extends StatelessWidget {
             transactionController.onReorder(oldIndex, newIndex, date),
       ),
     );
-    // return ListView.builder(
-    //     itemCount: incomeAndExpenseModel.length,
-    //     shrinkWrap: true,
-    //     physics: NeverScrollableScrollPhysics(),
-    //     itemBuilder: (context, index) =>
-    //         Padding(
-    //           padding: const EdgeInsets.symmetric(horizontal: 5),
-    //           child: Card(
-    //             elevation: 1,
-    //             child: Padding(
-    //                 padding: const EdgeInsets.symmetric(
-    //                     vertical: 10, horizontal: 30),
-    //                 child: Column(
-    //                   mainAxisSize: MainAxisSize.min,
-    //                   crossAxisAlignment: CrossAxisAlignment.start,
-    //                   children: [
-    //                     Row(
-    //                       children: [
-    //                         Expanded(
-    //                           child: Text(
-    //                             DateFormat('dd-MM-yy').format(date),
-    //                             style: const TextStyle(
-    //                               fontSize: 16,
-    //                               // color: Colors.green,
-    //                             ),
-    //                           ),
-    //                         ),
-    //                         SizedBox(
-    //                           width: 25,
-    //                         ),
-    //                         // Text(
-    //                         //   incomeAndExpenseModel.categoryName ?? '',
-    //                         //   style: TextStyle(
-    //                         //       color: Colors.green,
-    //                         //       fontSize: 18,
-    //                         //       fontWeight: FontWeight.w800),
-    //                         // ),
-    //                         SizedBox(
-    //                           width: 5,
-    //                         ),
-    //                         // if (incomeAndExpenseModel.subcategoryId != null)
-    //                         //   Text(
-    //                         //     '->  ${incomeAndExpenseModel.subcategoryName}',
-    //                         //     style: TextStyle(
-    //                         //         color: Colors.lightGreen,
-    //                         //         fontSize: 16,
-    //                         //         fontWeight: FontWeight.w400),
-    //                         //   ),
-    //                         SizedBox(
-    //                           width: 5,
-    //                         ),
-    //                         // if (incomeAndExpenseModel.subSubcategoryId != null)
-    //                         //   Text(
-    //                         //     '->  ${incomeAndExpenseModel.subSubcategoryName}',
-    //                         //     style: TextStyle(
-    //                         //         color: Colors.lightGreen,
-    //                         //         fontSize: 16,
-    //                         //         fontWeight: FontWeight.w400),
-    //                         //   ),
-    //                       ],
-    //                     ),
-    //                     SizedBox(
-    //                       height: 10,
-    //                     ),
-    //                     // Row(
-    //                     //   children: [
-    //                     //     Expanded(
-    //                     //         child: Align(
-    //                     //           child: Icon(
-    //                     //             widget.expense.categoryType == 'Income'
-    //                     //                 ? Icons.add
-    //                     //                 : Icons.minimize,
-    //                     //             color: widget.expense.categoryType == 'Income'
-    //                     //                 ? Colors.green
-    //                     //                 : Colors.red,
-    //                     //             size: 30,
-    //                     //           ),
-    //                     //           alignment: Alignment.centerLeft,
-    //                     //         )),
-    //                     //     Expanded(
-    //                     //       flex: 7,
-    //                     //       child: Column(
-    //                     //         crossAxisAlignment: CrossAxisAlignment.start,
-    //                     //         children: [
-    //                     //           Row(
-    //                     //             children: [
-    //                     //               Text(
-    //                     //                 widget.expense.reason,
-    //                     //                 style: TextStyle(
-    //                     //                     color: Colors.grey,
-    //                     //                     fontSize: 16,
-    //                     //                     fontWeight: FontWeight.w600),
-    //                     //               ),
-    //                     //               SizedBox(
-    //                     //                 width: 25,
-    //                     //               ),
-    //                     //               widget.expense.numberOfTimes == 1
-    //                     //                   ? Text(
-    //                     //                 'amount: ${widget.expense.netAmount.toString()}',
-    //                     //                 style: TextStyle(
-    //                     //                   color: Colors.green,
-    //                     //                   fontSize: 16,
-    //                     //                 ),
-    //                     //               )
-    //                     //                   : Text(
-    //                     //                 'amount: ${widget.expense.numberOfTimes} x ${widget.expense.netAmount} -> ${widget.expense.totalAmount.toString()}',
-    //                     //                 style: TextStyle(
-    //                     //                   color: Colors.green,
-    //                     //                   fontSize: 16,
-    //                     //                 ),
-    //                     //               ),
-    //                     //             ],
-    //                     //           ),
-    //                     //           SizedBox(
-    //                     //             height: 10,
-    //                     //           ),
-    //                     //           Text(
-    //                     //             'Time added:  ${widget.expense.addedTime}',
-    //                     //           )
-    //                     //         ],
-    //                     //       ),
-    //                     //     )
-    //                     //   ],
-    //                     // ),
-    //                   ],
-    //                 )),
-    //           ),
-    //         ));
   }
 }

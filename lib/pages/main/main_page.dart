@@ -136,7 +136,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                       categories: categories,
                     ));
               },
-              child: const Icon(Icons.add),
+              child: const Icon(
+                Icons.add,
+              ),
             );
             break;
           case 1:

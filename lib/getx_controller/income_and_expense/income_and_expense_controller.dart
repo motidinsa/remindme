@@ -124,27 +124,27 @@ class IncomeAndExpenseController extends GetxController {
   List<Reason> reasons = [
     Reason(
       categoryId: 1,
-      amount: '5',
+      amount: 5,
       name: 'test reason',
       // location: 'alembank',
     ),
     Reason(
         categoryId: 1,
         subcategoryId: 1,
-        amount: '9',
+        amount: 9,
         name: 'test reason',
         location: 'zzzz vfd'),
     Reason(
       categoryId: 1,
       subcategoryId: 2,
-      amount: '5',
+      amount: 5,
       name: 'test reason',
       location: 'et',
     ),
     Reason(
       categoryId: 1,
       subcategoryId: 2,
-      amount: '54',
+      amount: 54,
       name: 'test reason',
       location: 'eth',
     ),
@@ -152,7 +152,7 @@ class IncomeAndExpenseController extends GetxController {
       categoryId: 1,
       subcategoryId: 1,
       subSubcategoryId: 1,
-      amount: '50',
+      amount: 50,
       name: 'test reason',
       location: 'alembank',
     ),
@@ -160,7 +160,7 @@ class IncomeAndExpenseController extends GetxController {
       categoryId: 1,
       subcategoryId: 1,
       subSubcategoryId: 1,
-      amount: '5',
+      amount: 5,
       name: 'test reason 2',
       // location: 'alembank',
     ),
@@ -168,7 +168,7 @@ class IncomeAndExpenseController extends GetxController {
       categoryId: 1,
       subcategoryId: 1,
       subSubcategoryId: 1,
-      amount: '24',
+      amount: 24,
       name: 'test reason 3',
       location: 'alembank',
     ),
@@ -176,7 +176,7 @@ class IncomeAndExpenseController extends GetxController {
       categoryId: 1,
       subcategoryId: 1,
       subSubcategoryId: 2,
-      amount: '50',
+      amount: 50,
       name: 'shaki sha',
       location: 'alembank',
     ),
@@ -184,7 +184,7 @@ class IncomeAndExpenseController extends GetxController {
       categoryId: 1,
       subcategoryId: 1,
       subSubcategoryId: 2,
-      amount: '504',
+      amount: 504,
       name: 'sha',
       // location: 'alembank',
     ),
@@ -192,7 +192,7 @@ class IncomeAndExpenseController extends GetxController {
       categoryId: 1,
       subcategoryId: 1,
       subSubcategoryId: 3,
-      amount: '504',
+      amount: 504,
       name: 'sha',
       // location: 'alembank',
     ),
@@ -200,7 +200,7 @@ class IncomeAndExpenseController extends GetxController {
       categoryId: 1,
       subcategoryId: 1,
       subSubcategoryId: 3,
-      amount: '504',
+      amount: 504,
       name: 'sha',
       // location: 'alembank',
     ),
@@ -208,7 +208,7 @@ class IncomeAndExpenseController extends GetxController {
       categoryId: 1,
       subcategoryId: 1,
       subSubcategoryId: 3,
-      amount: '504',
+      amount: 504,
       name: 'sha',
       // location: 'alembank',
     ),
@@ -216,7 +216,7 @@ class IncomeAndExpenseController extends GetxController {
       categoryId: 1,
       subcategoryId: 1,
       subSubcategoryId: 3,
-      amount: '504',
+      amount: 504,
       name: 'sha',
       // location: 'alembank',
     ),
@@ -239,48 +239,56 @@ class IncomeAndExpenseController extends GetxController {
     SubAccountModel(
       id: 1,
       accountId: 1,
+      accountName: 'Wallet 1',
       subAccountName: 'Bank 1',
       balance: 500,
     ),
     SubAccountModel(
       id: 2,
       accountId: 1,
+      accountName: 'Wallet 1',
       subAccountName: 'Bank 2',
       balance: 550,
     ),
     SubAccountModel(
       id: 3,
       accountId: 3,
+      accountName: 'Person 3',
       subAccountName: 'Bank 3',
       balance: 1200,
     ),
     SubAccountModel(
       id: 4,
       accountId: 3,
+      accountName: 'Person 3',
       subAccountName: 'Bank 5',
       balance: 200,
     ),
     SubAccountModel(
       id: 5,
       accountId: 3,
+      accountName: 'Person 3',
       subAccountName: 'Person 1',
       balance: 1000,
     ),
     SubAccountModel(
       id: 6,
       accountId: 4,
+      accountName: 'test 4',
       subAccountName: 'Person 2',
       balance: 250,
     ),
     SubAccountModel(
       id: 7,
       accountId: 4,
+      accountName: 'test 4',
       subAccountName: 'Person 3',
       balance: 250,
     ),
     SubAccountModel(
       id: 8,
       accountId: 4,
+      accountName: 'test 4',
       subAccountName: 'Person 4',
       balance: 250,
     ),
@@ -426,14 +434,16 @@ class IncomeAndExpenseController extends GetxController {
         id: multipleCategoryId++,
         categoryCardModels: [
           CategoryCardModel(
-              id: categoryModelId++,
-              categoryId: categoryId,
-              categoryName: incomeAndExpenseCategory.categoryName,
-              isLastItem: true,
-              frequency: 1,
-              date: DateTime(now.year, now.month, now.day),
-              categoryType: categoryType,
-              accountId: defaultAccountModel.id)
+            id: categoryModelId++,
+            categoryId: categoryId,
+            categoryName: incomeAndExpenseCategory.categoryName,
+            isLastItem: true,
+            frequency: 1,
+            date: DateTime(now.year, now.month, now.day),
+            categoryType: categoryType,
+            accountId: defaultAccountModel.id,
+            accountName: defaultAccountModel.accountName,
+          )
         ],
       ),
     );
@@ -512,20 +522,22 @@ class IncomeAndExpenseController extends GetxController {
 
     categoryModel.add(
       CategoryCardModel(
-          id: categoryModelId++,
-          isLastItem: true,
-          categoryName: categoryModel.last.categoryName,
-          categoryId: categoryModel.last.categoryId,
-          frequency: 1,
-          date: DateTime(now.year, now.month, now.day),
-          categoryType: categoryType,
-          accountId: defaultAccountModel.id),
+        id: categoryModelId++,
+        isLastItem: true,
+        categoryName: categoryModel.last.categoryName,
+        categoryId: categoryModel.last.categoryId,
+        frequency: 1,
+        date: DateTime(now.year, now.month, now.day),
+        categoryType: categoryType,
+        accountId: defaultAccountModel.id,
+        accountName: defaultAccountModel.accountName,
+      ),
     );
 
     update();
   }
 
-  void changeAmountValue(int id, int categoryId, String givenAmount) {
+  void changeAmountValue(int id, int categoryId, double givenAmount) {
     categoryModels
         .firstWhere((element) => element.categoryId == categoryId)
         .categoryCardModels
@@ -898,6 +910,7 @@ class IncomeAndExpenseController extends GetxController {
 
   void setAccountDetail(
     int accountId,
+    String accountName,
     int categoryId,
     int categoryCardId,
   ) {
@@ -907,14 +920,18 @@ class IncomeAndExpenseController extends GetxController {
         .categoryCardModels
         .firstWhere((element) => element.id == categoryCardId)
       ..accountId = accountId
-      ..subAccountId = null;
+      ..accountName = accountName
+      ..subAccountId = null
+      ..subAccountName = null;
     // print(selectedAccountModel.balance);
     update();
   }
 
   void setSubAccountDetail(
     int accountId,
+    String accountName,
     int subAccountId,
+    String subAccountName,
     int categoryId,
     int categoryCardId,
   ) {
@@ -924,7 +941,9 @@ class IncomeAndExpenseController extends GetxController {
         .categoryCardModels
         .firstWhere((element) => element.id == categoryCardId)
       ..accountId = accountId
-      ..subAccountId = subAccountId;
+      ..accountName = accountName
+      ..subAccountId = subAccountId
+      ..subAccountName = subAccountName;
     // print(selectedAccountModel.balance);
     update();
   }

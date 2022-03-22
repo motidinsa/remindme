@@ -5,6 +5,7 @@ class SubAccountModel {
   final String dateType;
   final int id;
   final int accountId;
+  final String accountName;
   final int userId;
   final double balance;
 
@@ -16,5 +17,6 @@ class SubAccountModel {
       this.dateType,
       this.id,
       this.userId,
-      this.accountId});
+      this.accountId,
+      this.accountName});
 }

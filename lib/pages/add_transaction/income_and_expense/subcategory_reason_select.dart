@@ -124,7 +124,8 @@ class SubcategoryReasonSelect extends StatelessWidget {
                                                               trailing: Text(
                                                                   subsubcategoryReasonList[
                                                                           subSubReasonIndex]
-                                                                      .amount),
+                                                                      .amount
+                                                                      .toString()),
                                                               onTap: () {
                                                                 BlocProvider.of<ExpenseBloc>(context).add(AddExpenseReasonFromList(
                                                                     reasonID:
@@ -144,7 +145,8 @@ class SubcategoryReasonSelect extends StatelessWidget {
                                                                         categoryID,
                                                                     amount: subsubcategoryReasonList[
                                                                             subSubReasonIndex]
-                                                                        .amount));
+                                                                        .amount
+                                                                        .toString()));
                                                                 Navigator.pop(
                                                                     context);
                                                                 Navigator.pop(
@@ -230,7 +232,9 @@ class SubcategoryReasonSelect extends StatelessWidget {
                                                 ),
                                               ),
                                               trailing: Text(
-                                                subcategoryReasonList[i].amount,
+                                                subcategoryReasonList[i]
+                                                    .amount
+                                                    .toString(),
                                                 style: TextStyle(
                                                     fontSize: 16,
                                                     color: Colors.black),
@@ -257,7 +261,8 @@ class SubcategoryReasonSelect extends StatelessWidget {
                                                         amount:
                                                             subcategoryReasonList[
                                                                     i]
-                                                                .amount));
+                                                                .amount
+                                                                .toString()));
                                                 Navigator.pop(context);
                                                 Navigator.pop(context);
                                               },

@@ -53,21 +53,21 @@ class _ExpenseDetailState extends State<ExpenseDetail> {
   List<Reason> categoryReasonList = [];
   List<Reason> reasonlist = [
     Reason(
-      amount: 2.toString(),
+      amount: 2,
       name: 'reason 1',
       // record: 2,
     ),
     Reason(
-      amount: 1.toString(),
+      amount: 1,
       name: 'reason 2',
       // record: 7,
     ),
     Reason(
-      amount: 2.toString(),
+      amount: 2,
       name: 'reason 3',
       // record: 1,
     ),
-    Reason(amount: 5.toString(), name: 'reason 4')
+    Reason(amount: 5, name: 'reason 4')
   ];
 
   void onAmountFocusChange() {

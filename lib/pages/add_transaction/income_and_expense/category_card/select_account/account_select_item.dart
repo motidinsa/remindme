@@ -35,8 +35,8 @@ class AccountSelectItem extends StatelessWidget {
             //     .removeBackgroundColorOfSelectedSubSubCategoryReason();
             // print('cat id ${reason.categoryId} subcat ${reason.subcategoryId}');
           } else {
-            incomeAndExpenseController.setAccountDetail(
-                accountModel.id, categoryId, categoryCardId);
+            incomeAndExpenseController.setAccountDetail(accountModel.id,
+                accountModel.accountName, categoryId, categoryCardId);
             Get.back();
           }
           // if (subcategoryModel.subSubcategoryCount > 0) {

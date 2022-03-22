@@ -30,7 +30,9 @@ class SubAccountSelectItem extends StatelessWidget {
         onTap: () {
           incomeAndExpenseController.setSubAccountDetail(
               subAccountModel.accountId,
+              subAccountModel.accountName,
               subAccountModel.id,
+              subAccountModel.subAccountName,
               categoryId,
               categoryCardId);
           Get.back();
