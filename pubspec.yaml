@@ -55,6 +55,8 @@ dependencies:
   collection: ^1.15.0
   flutter_sticky_header: ^0.6.0
   sortedmap: ^0.5.1
+  responsive_grid_list: ^1.2.4
+  dropdown_button2: ^1.2.2
 
 
 dev_dependencies:

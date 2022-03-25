@@ -68,7 +68,9 @@ class SelectAccount extends StatelessWidget {
             child: SizedBox(
               height: incomeAndExpenseController.accountSelectPageHeight,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: Get.context.isLandscape
+                    ? const EdgeInsets.fromLTRB(20, 0, 20, 20)
+                    : const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

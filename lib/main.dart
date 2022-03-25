@@ -38,43 +38,45 @@ void main() async {
   await Hive.openBox<IncomeAndExpenseModel>('income_and_expense');
   Get.put(TransactionController());
 
-  runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider<TaskBloc>(
-            create: (context) => TaskBloc(taskRepository: taskRepository)
-              ..add(const TaskLoad())),
-        BlocProvider<AddReminderBloc>(
-          create: (context) => AddReminderBloc(),
-        ),
-        BlocProvider<CompletedTaskBloc>(
-          create: (context) => CompletedTaskBloc(taskRepository: taskRepository)
-            ..add(const CompletedTaskLoad()),
-        ),
-        BlocProvider<ExpenseBloc>(
-          create: (context) =>
-              ExpenseBloc(expenseRepository: expenseRepository),
-        ),
-        BlocProvider<CategoryBloc>(
-          create: (context) =>
-              CategoryBloc(expenseRepository: expenseRepository)
-                ..add(CheckInitialization()),
-        ),
-        BlocProvider<ReasonBloc>(
-          create: (context) => ReasonBloc(expenseRepository: expenseRepository)
-            ..add(const GetAllCategories()),
-        ),
-        BlocProvider<ExpenseAndIncomeBloc>(
-          create: (context) =>
-              ExpenseAndIncomeBloc(expenseRepository: expenseRepository)
-                ..add(const GetAllIncomeAndExpense()),
-        )
-      ],
-      child: MyApp(
-        taskRepository: taskRepository,
-      ),
-    ),
-  );
+  runApp(MyApp(
+          // taskRepository: taskRepository,
+          )
+      // MultiBlocProvider(
+      //   providers: [
+      //     BlocProvider<TaskBloc>(
+      //         create: (context) => TaskBloc(taskRepository: taskRepository)
+      //           ..add(const TaskLoad())),
+      //     BlocProvider<AddReminderBloc>(
+      //       create: (context) => AddReminderBloc(),
+      //     ),
+      //     BlocProvider<CompletedTaskBloc>(
+      //       create: (context) => CompletedTaskBloc(taskRepository: taskRepository)
+      //         ..add(const CompletedTaskLoad()),
+      //     ),
+      //     BlocProvider<ExpenseBloc>(
+      //       create: (context) =>
+      //           ExpenseBloc(expenseRepository: expenseRepository),
+      //     ),
+      //     BlocProvider<CategoryBloc>(
+      //       create: (context) =>
+      //           CategoryBloc(expenseRepository: expenseRepository)
+      //             ..add(CheckInitialization()),
+      //     ),
+      //     BlocProvider<ReasonBloc>(
+      //       create: (context) => ReasonBloc(expenseRepository: expenseRepository)
+      //         ..add(const GetAllCategories()),
+      //     ),
+      //     BlocProvider<ExpenseAndIncomeBloc>(
+      //       create: (context) =>
+      //           ExpenseAndIncomeBloc(expenseRepository: expenseRepository)
+      //             ..add(const GetAllIncomeAndExpense()),
+      //     )
+      //   ],
+      //   child: MyApp(
+      //     // taskRepository: taskRepository,
+      //   ),
+      // ),
+      );
   // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
   //   statusBarColor: Colors.white,
   // ));

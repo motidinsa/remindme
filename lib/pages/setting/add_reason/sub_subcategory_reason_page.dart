@@ -8,7 +8,7 @@ import 'package:remindme/models/expense_and_income_subcategory.dart';
 import 'package:remindme/models/expense_and_income_subsubcategory.dart';
 import 'package:remindme/models/reason.dart';
 import 'package:remindme/pages/add_transaction/icon_select.dart';
-import 'package:remindme/pages/setting/add_category/single_row_category_icon_list.dart';
+import 'package:remindme/pages/setting/add_category_page/single_row_category_icon_list.dart';
 import 'package:remindme/pages/setting/add_reason/sub_subcategory_reason_page.dart';
 import 'package:remindme/pages/setting/add_reason/subcategory_reason_page.dart';
 import 'package:remindme/helper/icons_helper.dart';

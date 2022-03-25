@@ -8,9 +8,11 @@ import 'package:remindme/repository/task_repository.dart';
 import 'package:remindme/route/routes.dart';
 
 class MyApp extends StatelessWidget {
-  final TaskRepository taskRepository;
+  const MyApp({Key key}) : super(key: key);
 
-  MyApp({@required this.taskRepository}) : assert(taskRepository != null);
+  // final TaskRepository taskRepository;
+
+  // MyApp();
 
   @override
   Widget build(BuildContext context) {
@@ -19,38 +21,35 @@ class MyApp extends StatelessWidget {
     //     statusBarColor: Colors.white,
     //   ),
     // );
-    return RepositoryProvider.value(
-      value: taskRepository,
-      child: GetMaterialApp(
-        title: 'Remind Me',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.green,
-          appBarTheme: const AppBarTheme(
-            color: Colors.white,
-            foregroundColor: Colors.green,
-            elevation: 1,
-            systemOverlayStyle: SystemUiOverlayStyle(
-                statusBarColor: Colors.transparent,
-                statusBarIconBrightness: Brightness.dark),
-          ),
-          tabBarTheme: const TabBarTheme(
-            labelColor: Colors.green,
-            indicator: UnderlineTabIndicator(
-              borderSide: BorderSide(
-                width: 1,
-                color: Colors.green,
-              ),
+    return GetMaterialApp(
+      title: 'Remind Me',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        appBarTheme: const AppBarTheme(
+          color: Colors.white,
+          foregroundColor: Colors.green,
+          elevation: 1,
+          systemOverlayStyle: SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent,
+              statusBarIconBrightness: Brightness.dark),
+        ),
+        tabBarTheme: const TabBarTheme(
+          labelColor: Colors.green,
+          indicator: UnderlineTabIndicator(
+            borderSide: BorderSide(
+              width: 1,
+              color: Colors.green,
             ),
           ),
-          visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        supportedLocales: const [
-          Locale('en', 'US'), // English
-          Locale('am', 'ET'),
-        ],
-        onGenerateRoute: Routes.generateRoute,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      supportedLocales: const [
+        Locale('en', 'US'), // English
+        Locale('am', 'ET'),
+      ],
+      onGenerateRoute: Routes.generateRoute,
     );
   }
 

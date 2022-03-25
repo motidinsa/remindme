@@ -132,7 +132,9 @@ class SelectSubcategory extends StatelessWidget {
                     height:
                         incomeAndExpenseController.subcategorySelectPageHeight,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: Get.context.isLandscape
+                          ? const EdgeInsets.fromLTRB(20, 0, 20, 10)
+                          : const EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

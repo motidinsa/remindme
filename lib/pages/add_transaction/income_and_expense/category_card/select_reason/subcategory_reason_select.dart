@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
@@ -13,13 +15,12 @@ class SubcategoryReasonSelect extends StatelessWidget {
   final IncomeAndExpenseSubSubCategoryModel subSubcategoryModel;
   final IncomeAndExpenseController incomeAndExpenseController = Get.find();
 
-  SubcategoryReasonSelect(
-      {Key key, this.reason, this.categoryCardId, this.subSubcategoryModel})
+  SubcategoryReasonSelect({Key key, this.reason, this.categoryCardId, this.subSubcategoryModel})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-      return Container(
+    return Container(
       color: reason.isSubSubcategorySelected ? Colors.green.shade50 : null,
       child: InkWell(
         onTap: () {
@@ -34,11 +35,11 @@ class SubcategoryReasonSelect extends StatelessWidget {
                   subSubcategoryName: subSubcategoryModel.subSubcategoryName,
                   reason: incomeAndExpenseController.reasons
                       .where((element) =>
-                          element.categoryId ==
-                              subSubcategoryModel.categoryID &&
-                          element.subcategoryId ==
-                              subSubcategoryModel.subcategoryID &&
-                          element.subSubcategoryId == subSubcategoryModel.id)
+                  element.categoryId ==
+                      subSubcategoryModel.categoryID &&
+                      element.subcategoryId ==
+                          subSubcategoryModel.subcategoryID &&
+                      element.subSubcategoryId == subSubcategoryModel.id)
                       .toList(),
                 );
               },
@@ -84,18 +85,24 @@ class SubcategoryReasonSelect extends StatelessWidget {
                         child: Text(
                           subSubcategoryModel.subSubcategoryName,
                           style: const TextStyle(fontSize: 16),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ),
                   reason.subSubcategoryId != null
-                      ? const Icon(
-                          Icons.chevron_right_rounded,
-                          color: Colors.green,
+                      ? Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: const Icon(
+                            Icons.chevron_right_rounded,
+                            color: Colors.green,
+                          ),
                         )
                       : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          padding: const EdgeInsets.only(right: 15),
                           child: Text(
-                            reason.amount.toString(),
+                            reason.amount % 1 == 0
+                                ? reason.amount.toInt().toString()
+                                : reason.amount.toString(),
                             style: const TextStyle(
                                 color: Colors.green, fontSize: 16),
                           ),
@@ -142,7 +149,7 @@ class SubcategoryReasonSelect extends StatelessWidget {
                         Text(
                           reason.location,
                           style:
-                              const TextStyle(color: Colors.grey, fontSize: 15),
+                          const TextStyle(color: Colors.grey, fontSize: 15),
                         )
                       ],
                     ),

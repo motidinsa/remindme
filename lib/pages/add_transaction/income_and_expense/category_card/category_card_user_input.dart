@@ -88,11 +88,15 @@ class _CategoryUserInputState extends State<CategoryUserInput> {
             text: '',
           )
         : _amountController.value.copyWith(
-            text: widget.categoryModel.netAmount.toString(),
+            text: widget.categoryModel.netAmount % 1 == 0
+                ? widget.categoryModel.netAmount.toInt().toString()
+                : widget.categoryModel.netAmount.toString(),
           );
+    amountValue = widget.categoryModel.netAmount;
     _reasonController.value = _reasonController.value.copyWith(
       text: widget.categoryModel.reason,
     );
+    reason = widget.categoryModel.reason;
     _frequencyController.value = _frequencyController.value.copyWith(
       text: widget.categoryModel.frequency.toString(),
     );
@@ -105,6 +109,7 @@ class _CategoryUserInputState extends State<CategoryUserInput> {
         text: widget.categoryModel.location,
       );
     }
+    location = widget.categoryModel.location;
 
     return Column(
       children: [
@@ -273,7 +278,8 @@ class _CategoryUserInputState extends State<CategoryUserInput> {
                       ),
                       contentPadding: EdgeInsets.only(left: 20),
                     ),
-                    onChanged: (givenReason) => reason = givenReason,
+                    onChanged: (givenReason) =>
+                        reason = givenReason == '' ? null : givenReason,
                     onEditingComplete: () {
                       FocusScope.of(context).unfocus();
                     }),

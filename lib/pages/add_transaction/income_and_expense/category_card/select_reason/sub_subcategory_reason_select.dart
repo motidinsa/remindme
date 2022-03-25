@@ -58,7 +58,14 @@ class SubSubcategoryReasonSelect extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(reason[i].name),
+                                  Text(
+                                    reason[i].name,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  if (reason[i].location != null)
+                                    SizedBox(
+                                      height: 2,
+                                    ),
                                   if (reason[i].location != null)
                                     Row(
                                       children: [
@@ -82,7 +89,9 @@ class SubSubcategoryReasonSelect extends StatelessWidget {
                             ),
                             Expanded(
                               child: Text(
-                                reason[i].amount.toString(),
+                                reason[i].amount % 1 == 0
+                                    ? reason[i].amount.toInt().toString()
+                                    : reason[i].amount.toString(),
                                 textAlign: TextAlign.center,
                               ),
                             )

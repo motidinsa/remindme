@@ -1,14 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:remindme/bloc/category/category_bloc.dart';
 import 'package:remindme/bloc/category/category_event.dart';
 import 'package:remindme/pages/setting/add_reason/reason_page.dart';
 import 'package:remindme/pages/setting/theme/theme.dart';
 
 import 'about/about.dart';
-import 'add_category/edit_category.dart';
-import 'add_category/expense_and_income_category_insert.dart';
+import 'add_category_page/add_category_page.dart';
+import 'add_category_page/edit_category.dart';
+import 'add_category_page/expense_and_income_category_insert.dart';
 import 'add_subcategory/add_subcategory.dart';
 
 class Setting extends StatelessWidget {
@@ -43,12 +46,35 @@ class Setting extends StatelessWidget {
                   title: Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: Text(
-                      'Manage Category',
+                      'Add Category',
                       style: TextStyle(fontSize: 18),
                     ),
                   ),
                   onTap: () {
-                    BlocProvider.of<CategoryBloc>(context).add(ClearCategory());
+                    // BlocProvider.of<CategoryBloc>(context).add(ClearCategory());
+                    // Get.to(()=>ExpenseAndIncomeCategoryInsert());
+                    Get.to(() => AddCategoryPage());
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => ExpenseAndIncomeCategoryInsert(),
+                    //   ),
+                    // );
+                  },
+                ),
+                Divider(
+                  height: 0,
+                ),
+                ListTile(
+                  title: Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Text(
+                      'Modify Category',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  onTap: () {
+                    // BlocProvider.of<CategoryBloc>(context).add(ClearCategory());
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -56,9 +82,6 @@ class Setting extends StatelessWidget {
                       ),
                     );
                   },
-                ),
-                Divider(
-                  height: 0,
                 ),
                 // ListTile(
                 //   title: Padding(
@@ -74,9 +97,9 @@ class Setting extends StatelessWidget {
                 //         MaterialPageRoute(builder: (context) => EditCategory()));
                 //   },
                 // ),
-                // Divider(
-                //   height: 0,
-                // ),
+                Divider(
+                  height: 0,
+                ),
                 ListTile(
                   title: Padding(
                     padding: const EdgeInsets.only(left: 10),
@@ -105,6 +128,86 @@ class Setting extends StatelessWidget {
                     // );
                   },
                 ),
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5),
+          child: Card(
+            // elevation: 2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, top: 10),
+                  child: Text(
+                    'Account',
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.green.shade300,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                // SizedBox(
+                //   height: 5,
+                // ),
+                // Divider(
+                //   height: 0,
+                // ),
+                ListTile(
+                  title: Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Text(
+                      'Add Account',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  onTap: () {
+                    // BlocProvider.of<CategoryBloc>(context).add(ClearCategory());
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ExpenseAndIncomeCategoryInsert(),
+                      ),
+                    );
+                  },
+                ),
+                Divider(
+                  height: 0,
+                ),
+                ListTile(
+                  title: Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Text(
+                      'Modify Account',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  onTap: () {
+                    BlocProvider.of<CategoryBloc>(context).add(ClearCategory());
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ExpenseAndIncomeCategoryInsert(),
+                      ),
+                    );
+                  },
+                ),
+                // ListTile(
+                //   title: Padding(
+                //     padding: const EdgeInsets.only(left: 10),
+                //     child: Text(
+                //       'Add sub-category',
+                //       style: TextStyle(fontSize: 18),
+                //     ),
+                //   ),
+                //   onTap: () {
+                //     BlocProvider.of<CategoryBloc>(context).add(ClearCategory());
+                //     Navigator.push(context,
+                //         MaterialPageRoute(builder: (context) => EditCategory()));
+                //   },
+                // ),
               ],
             ),
           ),

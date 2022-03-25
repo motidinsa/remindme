@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
@@ -12,8 +13,7 @@ class CategoryReasonSelect extends StatelessWidget {
   final IncomeAndExpenseSubCategoryModel subcategoryModel;
   final IncomeAndExpenseController incomeAndExpenseController = Get.find();
 
-  CategoryReasonSelect(
-      {Key key, this.reason, this.categoryCardId, this.subcategoryModel})
+  CategoryReasonSelect({Key key, this.reason, this.categoryCardId, this.subcategoryModel})
       : super(key: key);
 
   @override
@@ -54,6 +54,7 @@ class CategoryReasonSelect extends StatelessWidget {
                             style: const TextStyle(
                               fontSize: 16,
                             ),
+                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),
@@ -69,14 +70,19 @@ class CategoryReasonSelect extends StatelessWidget {
                       ),
                     ),
                   reason.subcategoryId != null
-                      ? const Icon(
-                          Icons.chevron_right_rounded,
-                          color: Colors.green,
+                      ? Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: const Icon(
+                            Icons.chevron_right_rounded,
+                            color: Colors.green,
+                          ),
                         )
                       : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          padding: const EdgeInsets.only(right: 15),
                           child: Text(
-                            reason.amount.toString(),
+                            reason.amount % 1 == 0
+                                ? reason.amount.toInt().toString()
+                                : reason.amount.toString(),
                             style: const TextStyle(
                                 color: Colors.green, fontSize: 16),
                           ),

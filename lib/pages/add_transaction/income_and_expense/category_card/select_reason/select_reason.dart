@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
@@ -96,7 +97,9 @@ class SelectReason extends StatelessWidget {
                     child: SizedBox(
                       height: incomeAndExpenseController.reasonSelectPageHeight,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        padding: Get.context.isLandscape
+                            ? const EdgeInsets.fromLTRB(20, 0, 20, 10)
+                            : const EdgeInsets.symmetric(horizontal: 20),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

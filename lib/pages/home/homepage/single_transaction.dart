@@ -260,7 +260,7 @@ class SingleTransaction extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                        '${incomeAndExpenseModel[index].totalAmount}',
+                        '${incomeAndExpenseModel[index].totalAmount % 1 == 0 ? incomeAndExpenseModel[index].totalAmount.toInt() : incomeAndExpenseModel[index].totalAmount}',
                         style: TextStyle(
                             color: Colors.green,
                             fontSize: 16,
@@ -305,12 +305,12 @@ class SingleTransaction extends StatelessWidget {
                                         TextStyle(color: Colors.red.shade200),
                                   )
                                 ],
-                              )
+                              ),
+                            SizedBox(
+                              width: 20,
+                            ),
                           ],
                         ),
-                      SizedBox(
-                        width: 20,
-                      ),
                       if (incomeAndExpenseModel[index].location != null)
                         Expanded(
                           child: Row(
