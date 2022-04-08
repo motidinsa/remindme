@@ -9,9 +9,9 @@ import 'package:remindme/pages/setting/add_reason/reason_page.dart';
 import 'package:remindme/pages/setting/theme/theme.dart';
 
 import 'about/about.dart';
-import 'add_category_page/add_category_page.dart';
-import 'add_category_page/edit_category.dart';
-import 'add_category_page/expense_and_income_category_insert.dart';
+import 'category/add_category_page/add_category_page.dart';
+import 'category/add_category_page/edit_category.dart';
+import 'category/add_category_page/expense_and_income_category_insert.dart';
 import 'add_subcategory/add_subcategory.dart';
 
 class Setting extends StatelessWidget {
@@ -53,7 +53,9 @@ class Setting extends StatelessWidget {
                   onTap: () {
                     // BlocProvider.of<CategoryBloc>(context).add(ClearCategory());
                     // Get.to(()=>ExpenseAndIncomeCategoryInsert());
-                    Get.to(() => AddCategoryPage());
+                    Get.to(() => AddCategoryPage(
+                          isEditCategory: false,
+                        ));
                     // Navigator.push(
                     //   context,
                     //   MaterialPageRoute(
@@ -66,21 +68,24 @@ class Setting extends StatelessWidget {
                   height: 0,
                 ),
                 ListTile(
-                  title: Padding(
-                    padding: const EdgeInsets.only(left: 10),
+                  title: const Padding(
+                    padding: EdgeInsets.only(left: 10),
                     child: Text(
-                      'Modify Category',
+                      'Edit Category',
                       style: TextStyle(fontSize: 18),
                     ),
                   ),
                   onTap: () {
                     // BlocProvider.of<CategoryBloc>(context).add(ClearCategory());
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ExpenseAndIncomeCategoryInsert(),
-                      ),
-                    );
+                    Get.to(() => AddCategoryPage(
+                          isEditCategory: true,
+                        ));
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => ExpenseAndIncomeCategoryInsert(),
+                    //   ),
+                    // );
                   },
                 ),
                 // ListTile(

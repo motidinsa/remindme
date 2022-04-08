@@ -163,7 +163,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           case 3:
             body = Setting();
             appbar = AppBar(
-              title: const Text('Theme'),
+              title: const Text('Settings'),
             );
             floatingActionButton = null;
             break;

@@ -3,30 +3,115 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:remindme/models/add_sub_subcategory_model.dart';
 import 'package:remindme/models/add_subcategory_model.dart';
 
+import '../../helper/category_select.dart';
 import '../../helper/icons_helper.dart';
 import '../../models/add_category_model.dart';
 import '../../pages/add_transaction/icon_select.dart';
 
 class AddCategoryController extends GetxController {
+  final bool isEditCategory;
+
   int currentCategoryId = 1;
   int currentSubcategoryId = 1;
   int currentSubSubcategoryId = 1;
 
-  // bool manyCategories = false;
-  // bool categoryHasSubcategory = false;
+  final List<String> categoryTypes = [
+    'Income',
+    'Expense',
+    'Both',
+  ];
 
   List<IconSelect> iconList;
   List<AddCategoryModel> addCategoryModels = [];
+  List<AddCategoryModel> tempAddCategoryModels = [
+    AddCategoryModel(
+      id: 1,
+      categoryName: 'Cat 1',
+      categoryType: 'Income',
+      iconName: 'backup',
+      subcategoryModels: [
+        AddSubcategoryModel(
+          id: 1,
+          categoryId: 1,
+          subcategoryName: 'Sub 1',
+          subSubcategoryModels: [
+            AddSubSubcategoryModel(
+                categoryId: 1,
+                subcategoryId: 1,
+                id: 1,
+                subSubcategoryName: 'Sub Sub 1'),
+          ],
+        )
+      ],
+    ),
+    AddCategoryModel(
+      id: 2,
+      categoryName: 'Cat 2',
+      categoryType: 'Income',
+      iconName: 'share',
+      subcategoryModels: [
+        AddSubcategoryModel(
+          id: 2,
+          categoryId: 2,
+          subcategoryName: 'Sub 2',
+          subSubcategoryModels: [
+            AddSubSubcategoryModel(
+                categoryId: 2,
+                subcategoryId: 2,
+                id: 2,
+                subSubcategoryName: 'Sub Sub 2'),
+          ],
+        )
+      ],
+    ),
+    AddCategoryModel(
+      id: 3,
+      categoryName: 'Cat 3',
+      categoryType: 'Income',
+      iconName: 'update',
+      subcategoryModels: [
+        AddSubcategoryModel(
+          id: 3,
+          categoryId: 3,
+          subcategoryName: 'Sub 3',
+          subSubcategoryModels: [
+            AddSubSubcategoryModel(
+                categoryId: 3,
+                subcategoryId: 3,
+                id: 3,
+                subSubcategoryName: 'Sub Sub 3'),
+          ],
+        )
+      ],
+    )
+  ];
+  List<CategorySelect> categoryList = [];
 
-  // String iconType = 'category';
   int iconCategoryId;
   int iconSubcategoryId;
+  int editedCategoryCount = 0;
+
+  AddCategoryController({this.isEditCategory});
 
   @override
   void onInit() {
     super.onInit();
-    addCategoryModels.add(AddCategoryModel(
-        id: currentCategoryId++, subcategoryModels: [], requestFocus: true));
+    if (isEditCategory) {
+      for (int i = 0; i < tempAddCategoryModels.length; i++) {
+        categoryList.add(
+          CategorySelect(
+            categoryId: tempAddCategoryModels[i].id,
+            categoryName: 'cat ${tempAddCategoryModels[i].id}',
+            icon: Icon(IconsHelper.iconsMap[tempAddCategoryModels[i].iconName]),
+          ),
+        );
+      }
+    } else {
+      addCategoryModels.add(
+        AddCategoryModel(
+            id: currentCategoryId++, subcategoryModels: [], requestFocus: true),
+      );
+    }
 
     iconList = IconsHelper.iconsMap.entries
         .map((e) => IconSelect(
@@ -44,8 +129,28 @@ class AddCategoryController extends GetxController {
     update();
   }
 
-  void deleteCategory({int categoryId}) {
+  void deleteCategory({int categoryId, bool isCancelButton}) {
     addCategoryModels.removeWhere((element) => element.id == categoryId);
+    if (isEditCategory) {
+      AddCategoryModel deletedCategoryModel = tempAddCategoryModels
+          .firstWhere((element) => element.id == categoryId);
+
+      if (isCancelButton) {
+        editedCategoryCount--;
+        categoryList.insert(
+          0,
+          CategorySelect(
+            categoryId: categoryId,
+            categoryName: deletedCategoryModel.categoryName,
+            icon: Icon(IconsHelper.iconsMap[deletedCategoryModel.iconName]),
+          ),
+        );
+      } else {
+        if (addCategoryModels.isEmpty) {
+          editedCategoryCount = 0;
+        }
+      }
+    }
     update();
   }
 
@@ -58,8 +163,7 @@ class AddCategoryController extends GetxController {
     update();
   }
 
-  void deleteSubSubcategory(
-      {int categoryId, int subcategoryId, int subSubcategoryId}) {
+  void deleteSubSubcategory({int categoryId, int subcategoryId, int subSubcategoryId}) {
     addCategoryModels
         .firstWhere((element) => element.id == categoryId)
         .subcategoryModels
@@ -74,14 +178,16 @@ class AddCategoryController extends GetxController {
     addCategoryModels
         .firstWhere((element) => element.id == categoryId)
         .categoryName = categoryName;
-    for (var element in addCategoryModels) {
-      element.requestFocus = false;
+    if (!isEditCategory) {
+      for (var element in addCategoryModels) {
+        element.requestFocus = false;
+      }
     }
+
     update();
   }
 
-  void changeSubcategoryName(
-      {int categoryId, int subcategoryId, String subcategoryName}) {
+  void changeSubcategoryName({int categoryId, int subcategoryId, String subcategoryName}) {
     addCategoryModels
         .firstWhere((element) => element.id == categoryId)
         .subcategoryModels
@@ -98,8 +204,7 @@ class AddCategoryController extends GetxController {
     update();
   }
 
-  void changeSubSubcategoryName(
-      {int categoryId, int subcategoryId, int id, String subSubcategoryName}) {
+  void changeSubSubcategoryName({int categoryId, int subcategoryId, int id, String subSubcategoryName}) {
     addCategoryModels
         .firstWhere((element) => element.id == categoryId)
         .subcategoryModels
@@ -129,7 +234,7 @@ class AddCategoryController extends GetxController {
     });
 
     AddCategoryModel currentAddCategoryModel =
-        addCategoryModels.firstWhere((element) => element.id == categoryId);
+    addCategoryModels.firstWhere((element) => element.id == categoryId);
     currentAddCategoryModel.subcategoryModels.add(
       AddSubcategoryModel(
           categoryId: categoryId,
@@ -158,17 +263,16 @@ class AddCategoryController extends GetxController {
         .firstWhere((element) => element.id == subcategoryId)
         .subSubcategoryModels
         .add(
-          AddSubSubcategoryModel(
-              id: currentSubSubcategoryId++,
-              categoryId: categoryId,
-              subcategoryId: subcategoryId,
-              requestFocus: true),
-        );
+      AddSubSubcategoryModel(
+          id: currentSubSubcategoryId++,
+          categoryId: categoryId,
+          subcategoryId: subcategoryId,
+          requestFocus: true),
+    );
     update();
   }
 
-  void addIcon(
-      {int categoryId, int subcategoryId, String iconName, Icon icon}) {
+  void addIcon({int categoryId, int subcategoryId, String iconName, Icon icon}) {
     if (categoryId != null && subcategoryId == null) {
       addCategoryModels.firstWhere((element) => element.id == categoryId)
         ..iconName = iconName
@@ -205,6 +309,14 @@ class AddCategoryController extends GetxController {
         .firstWhere((element) => element.id == categoryId)
         .categoryType = categoryType;
 
+    update();
+  }
+
+  void addEditCategoryModel(int categoryId) {
+    addCategoryModels.add(tempAddCategoryModels
+        .firstWhere((element) => element.id == categoryId));
+    categoryList.removeWhere((element) => element.categoryId == categoryId);
+    editedCategoryCount++;
     update();
   }
 }

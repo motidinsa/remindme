@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:remindme/pages/setting/add_category_page/add_sub_subcategory.dart';
+import 'package:remindme/pages/setting/category/add_category_page/add_sub_subcategory.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 
-import '../../../getx_controller/category/add_category_controller.dart';
-import '../../../models/add_subcategory_model.dart';
+import '../../../../getx_controller/category/add_category_controller.dart';
+import '../../../../helper/icons_helper.dart';
+import '../../../../models/add_category_model.dart';
+import '../../../../models/add_subcategory_model.dart';
 
 class AddSubcategory extends StatefulWidget {
   final AddSubcategoryModel addSubcategoryModel;
@@ -35,6 +36,7 @@ class _AddSubcategoryState extends State<AddSubcategory> {
   void initState() {
     super.initState();
     subcategoryNameFocusNode.addListener(onSubcategoryNameFocusChange);
+    subcategoryName = widget.addSubcategoryModel.subcategoryName;
   }
 
   Future<void> showIconListAlertDialog() async {
@@ -43,13 +45,13 @@ class _AddSubcategoryState extends State<AddSubcategory> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Select Icon for ${addCategoryController.addCategoryModels.firstWhere((element) => element.id == widget.addSubcategoryModel.categoryId).subcategoryModels.firstWhere((element) => element.id == widget.addSubcategoryModel.id).subcategoryName ?? 'your category'}',
+            'Select Icon for ${widget.addSubcategoryModel.subcategoryName ?? 'your subcategory'}',
             textAlign: TextAlign.center,
           ),
-          contentPadding: EdgeInsets.symmetric(vertical: 10),
-          content: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
+          contentPadding: const EdgeInsets.symmetric(vertical: 5),
+          content: SizedBox(
+            height: Get.height,
+            width: Get.width,
             child: ResponsiveGridList(
               minItemsPerRow: 4,
               minItemWidth: 40,
@@ -63,13 +65,15 @@ class _AddSubcategoryState extends State<AddSubcategory> {
 
   @override
   Widget build(BuildContext context) {
-    // subcategoryNameFocusNode.requestFocus();
     subcategoryNameController.value = subcategoryNameController.value.copyWith(
       text: widget.addSubcategoryModel.subcategoryName,
     );
-    if (widget.addSubcategoryModel.requestFocus) {
+    if (widget.addSubcategoryModel.requestFocus == true) {
       subcategoryNameFocusNode.requestFocus();
     }
+    AddCategoryModel parentCategory = addCategoryController.addCategoryModels
+        .firstWhere(
+            (element) => element.id == widget.addSubcategoryModel.categoryId);
     return Card(
       child: Container(
         color: Colors.green.shade100.withOpacity(0.3),
@@ -78,12 +82,12 @@ class _AddSubcategoryState extends State<AddSubcategory> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Text(
-                'Subcategory for ${addCategoryController.addCategoryModels.firstWhere((element) => element.id == widget.addSubcategoryModel.categoryId).categoryName ?? 'your category'}',
-                style: TextStyle(
+                'Subcategory for ${parentCategory.categoryName ?? 'your category'}',
+                style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                     color: Colors.green),
@@ -91,10 +95,10 @@ class _AddSubcategoryState extends State<AddSubcategory> {
               Row(
                 children: [
                   Container(
-                    // margin: EdgeInsets.fromLTRB(10, 0, 20, 0),
-                    width: MediaQuery.of(context).size.width / 2,
-                    padding: EdgeInsets.only(top: 5),
+                    width: Get.width / 2,
+                    padding: const EdgeInsets.only(top: 5),
                     child: TextField(
+                      // key: UniqueKey(),
                       focusNode: subcategoryNameFocusNode,
                       controller: subcategoryNameController,
                       decoration: const InputDecoration(
@@ -107,12 +111,9 @@ class _AddSubcategoryState extends State<AddSubcategory> {
                               BorderSide(color: Colors.green, width: 0.75),
                         ),
                         isDense: true,
-                        // labelText: 'Subcategory name',
                         labelStyle: TextStyle(
-                          // fontSize: 16,
                           color: Colors.green,
                         ),
-                        // contentPadding: EdgeInsets.only(left: 20)
                       ),
                       onChanged: (giveSubcategoryName) {
                         subcategoryName = giveSubcategoryName == ''
@@ -134,9 +135,10 @@ class _AddSubcategoryState extends State<AddSubcategory> {
                         padding: EdgeInsets.zero,
                         splashRadius: 0.1,
                         color: Colors.red.shade300,
-                        icon: Icon(Icons.cancel),
+                        icon: Icon(addCategoryController.isEditCategory
+                            ? Icons.delete
+                            : Icons.cancel),
                         onPressed: () {
-                          // FocusScope.of(context).unfocus();
                           addCategoryController.deleteSubcategory(
                               categoryId: widget.addSubcategoryModel.categoryId,
                               subcategoryId: widget.addSubcategoryModel.id);
@@ -146,18 +148,13 @@ class _AddSubcategoryState extends State<AddSubcategory> {
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    // Text('Icon'),
-                    // SizedBox(width: 10,),
-                    // categoryIcon ?? Container(),
-                    // if (categoryIcon != null) categoryIcon,
                     TextButton(
                       onPressed: () {
                         FocusScope.of(context).unfocus();
@@ -167,32 +164,24 @@ class _AddSubcategoryState extends State<AddSubcategory> {
                         showIconListAlertDialog();
                       },
                       child: Text(
-                        '${addCategoryController.addCategoryModels.firstWhere((element) => element.id == widget.addSubcategoryModel.categoryId).subcategoryModels.firstWhere((element) => element.id == widget.addSubcategoryModel.id).iconName != null || addCategoryController.addCategoryModels.firstWhere((element) => element.id == widget.addSubcategoryModel.categoryId).iconName != null ? 'Change' : 'Choose'} Icon',
+                        '${widget.addSubcategoryModel.iconName != null || parentCategory.iconName != null ? 'Change' : 'Choose'} Icon',
                         style: const TextStyle(color: Colors.green),
                       ),
-                      style: ButtonStyle(
+                      style: const ButtonStyle(
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
-                    // if (widget.addSubcategoryModel.icon != null)
-                    //   widget.addSubcategoryModel.icon,
-                    addCategoryController.addCategoryModels
-                            .firstWhere((element) =>
-                                element.id ==
-                                widget.addSubcategoryModel.categoryId)
-                            .subcategoryModels
-                            .firstWhere((element) =>
-                                element.id == widget.addSubcategoryModel.id)
-                            .icon ??
-                        addCategoryController.addCategoryModels
-                            .firstWhere((element) =>
-                                element.id ==
-                                widget.addSubcategoryModel.categoryId)
-                            .icon ??
-                        Container()
+                    addCategoryController.isEditCategory
+                        ? Icon(IconsHelper.iconsMap[
+                            widget.addSubcategoryModel.icon != null
+                                ? widget.addSubcategoryModel.iconName
+                                : parentCategory.iconName])
+                        : widget.addSubcategoryModel.icon ??
+                            parentCategory.icon ??
+                            Container()
                   ],
                 ),
               ),
@@ -210,13 +199,12 @@ class _AddSubcategoryState extends State<AddSubcategory> {
                     height: 5,
                   ),
                 ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Center(
                 child: OutlinedButton(
                   onPressed: () {
-                    // FocusScope.of(context).unfocus();
                     addCategoryController.addSubSubcategory(
                       categoryId: widget.addSubcategoryModel.categoryId,
                       subcategoryId: widget.addSubcategoryModel.id,

@@ -1,14 +1,11 @@
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:remindme/database_models/category/category_model.dart';
 import 'package:remindme/database_models/setting/setting_model.dart';
 import 'package:remindme/helper/icons_helper.dart';
-import 'package:remindme/helper/widget_size.dart';
 import 'package:remindme/models/category_card_model.dart';
 import 'package:remindme/models/expense_and_income_category.dart';
 import 'package:remindme/models/expense_and_income_subcategory.dart';
@@ -17,7 +14,6 @@ import 'package:remindme/models/income_and_expense_category_select_model.dart';
 import 'package:remindme/models/multiple_category_card_model.dart';
 import 'package:remindme/models/reason.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/income_and_expense_category.dart';
-import 'package:remindme/pages/add_transaction/income_and_expense/multiple_category_card.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 
 import '../../models/account_model.dart';
@@ -399,7 +395,6 @@ class IncomeAndExpenseController extends GetxController {
       category = Hive.box<CategoryModel>('category').values.toList();
       categoryType = type;
       for (var element in category) {
-        print('inside ${element.categoryName}');
         categoryList.add(
           IncomeAndExpenseCategorySelect(
             categoryName: element.categoryName,
@@ -485,7 +480,6 @@ class IncomeAndExpenseController extends GetxController {
   void updateSubcategoryHeight(double givenHeight) {
     if (givenHeight > Get.height / 2) {
       subcategorySelectPageHeight = Get.height / 2;
-      // isSubSubcategoryHeightSet = true;
     }
     update();
   }
@@ -506,7 +500,6 @@ class IncomeAndExpenseController extends GetxController {
 
   void updateCategoryListHeight(double givenHeight) {
     categoryListHeight = givenHeight;
-    print('height $categoryListHeight');
     if (categoryListHeight > Get.height / 4) {
       categoryListHeight = Get.height / 4;
     }
@@ -682,10 +675,7 @@ class IncomeAndExpenseController extends GetxController {
       ..subcategoryName = null
       ..subSubCategoryId = null
       ..subSubcategoryName = null;
-    // categoryModels
-    //     .firstWhere((element) => element.categoryId == categoryId)
-    //     .categoryCardModels
-    //     .firstWhere((element) => element.id == categoryCardId).location = null;
+
     update();
   }
 
@@ -713,7 +703,6 @@ class IncomeAndExpenseController extends GetxController {
       int categoryCardId,
       int subcategoryId,
       int subSubcategoryId}) {
-    print('reason loc ${reason.location}');
     categoryModels
         .firstWhere((element) => element.categoryId == categoryId)
         .categoryCardModels
@@ -729,8 +718,6 @@ class IncomeAndExpenseController extends GetxController {
       ..subSubcategoryName = subSubcategories
           .firstWhere((element) => element.id == subSubcategoryId)
           .subSubcategoryName;
-    print(
-        'nn ${categoryModels.firstWhere((element) => element.categoryId == categoryId).categoryCardModels.firstWhere((element) => element.id == categoryCardId).location}');
     update();
   }
 

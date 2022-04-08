@@ -5,9 +5,9 @@ import 'package:remindme/bloc/category/category_event.dart';
 import 'package:remindme/bloc/category/category_state.dart';
 import 'package:remindme/models/expense_and_income_subsubcategory.dart';
 import 'package:remindme/pages/add_transaction/icon_select.dart';
-import 'package:remindme/pages/setting/add_category_page/expense_and_income_category_insert.dart';
-import 'package:remindme/pages/setting/add_category_page/single_row_category_icon_list.dart';
-import 'package:remindme/pages/setting/add_category_page/sub_subcategory.dart';
+import 'package:remindme/pages/setting/category/add_category_page/expense_and_income_category_insert.dart';
+import 'package:remindme/pages/setting/category/add_category_page/single_row_category_icon_list.dart';
+import 'package:remindme/pages/setting/category/add_category_page/sub_subcategory.dart';
 import 'package:remindme/helper/icons_helper.dart';
 
 class Subcategory extends StatefulWidget {

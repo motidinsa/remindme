@@ -1,21 +1,22 @@
-import 'dart:ui';
-
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:remindme/pages/setting/add_category_page/add_subcategory.dart';
+import 'package:remindme/helper/icons_helper.dart';
+import 'package:remindme/pages/setting/category/add_category_page/add_subcategory.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 
-import '../../../getx_controller/category/add_category_controller.dart';
-import '../../../models/add_category_model.dart';
+import '../../../../getx_controller/category/add_category_controller.dart';
+import '../../../../models/add_category_model.dart';
 
 class AddCategory extends StatefulWidget {
-  bool hasDeleteCategoryButton = false;
+  final bool hasDeleteCategoryButton;
   final AddCategoryModel addCategoryModel;
 
-  AddCategory({Key key, this.hasDeleteCategoryButton, this.addCategoryModel})
-      : super(key: key);
+  const AddCategory({
+    Key key,
+    this.hasDeleteCategoryButton,
+    this.addCategoryModel,
+  }) : super(key: key);
 
   @override
   State<AddCategory> createState() => _AddCategoryState();
@@ -26,18 +27,15 @@ class _AddCategoryState extends State<AddCategory> {
   TextEditingController categoryNameController = TextEditingController();
   FocusNode categoryNameFocusNode = FocusNode();
   final AddCategoryController addCategoryController = Get.find();
-  final List<String> categoryTypes = [
-    'Income',
-    'Expense',
-    'Both',
-  ];
 
   String selectedValue;
 
   void onCategoryNameFocusChange() {
     if (!categoryNameFocusNode.hasFocus) {
       addCategoryController.changeCategoryName(
-          categoryId: widget.addCategoryModel.id, categoryName: categoryName);
+        categoryId: widget.addCategoryModel.id,
+        categoryName: categoryName,
+      );
     }
   }
 
@@ -47,10 +45,10 @@ class _AddCategoryState extends State<AddCategory> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-              'Select Icon for ${addCategoryController.addCategoryModels.firstWhere((element) => element.id == widget.addCategoryModel.id).categoryName ?? 'your category'}',
+              'Select Icon for ${widget.addCategoryModel.categoryName ?? 'your category'}',
               textAlign: TextAlign.center),
-          contentPadding: EdgeInsets.symmetric(vertical: 10),
-          content: Container(
+          contentPadding: const EdgeInsets.symmetric(vertical: 5),
+          content: SizedBox(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: ResponsiveGridList(
@@ -68,6 +66,7 @@ class _AddCategoryState extends State<AddCategory> {
   void initState() {
     super.initState();
     categoryNameFocusNode.addListener(onCategoryNameFocusChange);
+    categoryName = widget.addCategoryModel.categoryName;
   }
 
   @override
@@ -75,10 +74,9 @@ class _AddCategoryState extends State<AddCategory> {
     categoryNameController.value = categoryNameController.value.copyWith(
       text: widget.addCategoryModel.categoryName,
     );
-    if (widget.addCategoryModel.requestFocus) {
+    if (widget.addCategoryModel.requestFocus == true) {
       categoryNameFocusNode.requestFocus();
     }
-    // reason = widget.categoryModel.reason;
     return Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -88,9 +86,8 @@ class _AddCategoryState extends State<AddCategory> {
             Row(
               children: [
                 Container(
-                  // margin: EdgeInsets.fromLTRB(10, 0, 20, 0),
                   width: MediaQuery.of(context).size.width / 2,
-                  padding: EdgeInsets.only(top: 5),
+                  padding: const EdgeInsets.only(top: 5),
                   child: TextField(
                     focusNode: categoryNameFocusNode,
                     controller: categoryNameController,
@@ -114,43 +111,57 @@ class _AddCategoryState extends State<AddCategory> {
                       categoryName =
                           giveCategoryName == '' ? null : giveCategoryName;
                       addCategoryController.changeCategoryName(
-                          categoryId: widget.addCategoryModel.id,
-                          categoryName: categoryName);
+                        categoryId: widget.addCategoryModel.id,
+                        categoryName: categoryName,
+                      );
                     },
                     onEditingComplete: () {
                       FocusScope.of(context).unfocus();
                     },
                   ),
                 ),
-                if (widget.hasDeleteCategoryButton)
+                if (widget.hasDeleteCategoryButton == true)
                   Expanded(
-                      child: Center(
-                    child: IconButton(
-                      padding: EdgeInsets.zero,
-                      splashRadius: 0.1,
-                      color: Colors.red,
-                      icon: Icon(Icons.cancel),
-                      onPressed: () {
-                        addCategoryController.deleteCategory(
-                            categoryId: widget.addCategoryModel.id);
-                        // FocusScope.of(context).unfocus();
-                      },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          splashRadius: 0.1,
+                          color: Colors.red,
+                          icon: Icon(addCategoryController.isEditCategory
+                              ? Icons.delete
+                              : Icons.cancel),
+                          onPressed: () {
+                            addCategoryController.deleteCategory(
+                                categoryId: widget.addCategoryModel.id,
+                                isCancelButton: false);
+                          },
+                        ),
+                        if (addCategoryController.isEditCategory)
+                          IconButton(
+                            padding: EdgeInsets.zero,
+                            splashRadius: 0.1,
+                            color: Colors.red.shade400,
+                            icon: const Icon(Icons.cancel),
+                            onPressed: () {
+                              addCategoryController.deleteCategory(
+                                  categoryId: widget.addCategoryModel.id,
+                                  isCancelButton: true);
+                            },
+                          )
+                      ],
                     ),
-                  ))
+                  )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  // Text('Icon'),
-                  // SizedBox(width: 10,),
-                  // categoryIcon ?? Container(),
-                  // if (categoryIcon != null) categoryIcon,
                   TextButton(
                     onPressed: () {
                       FocusScope.of(context).unfocus();
@@ -160,24 +171,28 @@ class _AddCategoryState extends State<AddCategory> {
                       // _showMyDialog();
                     },
                     child: Text(
-                      '${addCategoryController.addCategoryModels.firstWhere((element) => element.id == widget.addCategoryModel.id).iconName != null ? 'Change' : 'Choose'} Icon',
-                      style: TextStyle(color: Colors.green),
+                      '${widget.addCategoryModel.iconName != null ? 'Change' : 'Choose'} Icon',
+                      style: const TextStyle(color: Colors.green),
                     ),
-                    style: ButtonStyle(
+                    style: const ButtonStyle(
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
-                  if (widget.addCategoryModel.icon != null)
-                    widget.addCategoryModel.icon
+                  if (widget.addCategoryModel.iconName != null)
+                    addCategoryController.isEditCategory
+                        ? Icon(IconsHelper
+                            .iconsMap[widget.addCategoryModel.iconName])
+                        : widget.addCategoryModel.icon
                 ],
               ),
             ),
             SizedBox(
               width: Get.width / 2,
               child: DropdownButtonFormField2(
+                value: widget.addCategoryModel.categoryType,
                 decoration: InputDecoration(
                   enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.green, width: 0.5),
@@ -200,64 +215,59 @@ class _AddCategoryState extends State<AddCategory> {
                   color: Colors.green,
                 ),
                 iconSize: 25,
-                // buttonHeight: 60,
                 buttonPadding: const EdgeInsets.only(left: 20, right: 10),
                 dropdownDecoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                items: categoryTypes
-                    .map((item) => DropdownMenuItem<String>(
-                          value: item,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  item,
-                                  style: const TextStyle(
-                                    fontSize: 14,
+                items: addCategoryController.categoryTypes
+                    .map(
+                      (item) => DropdownMenuItem<String>(
+                        value: item,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                item,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            if (item == 'Expense')
+                              const Expanded(
+                                child: Center(
+                                  child: Icon(
+                                    Icons.arrow_downward_rounded,
+                                    color: Colors.red,
                                   ),
-                                  textAlign: TextAlign.center,
                                 ),
                               ),
-                              // SizedBox(width: 20,),
-                              if (item == 'Expense')
-                                const Expanded(
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.arrow_downward_rounded,
-                                      color: Colors.red,
-                                    ),
+                            if (item == 'Income')
+                              const Expanded(
+                                child: Center(
+                                  child: Icon(
+                                    Icons.arrow_upward_rounded,
+                                    color: Colors.green,
                                   ),
                                 ),
-                              if (item == 'Income')
-                                const Expanded(
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.arrow_upward_rounded,
-                                      color: Colors.green,
-                                    ),
+                              ),
+                            if (item == 'Both')
+                              const Expanded(
+                                child: Center(
+                                  child: Icon(
+                                    Icons.import_export_rounded,
+                                    size: 26,
+                                    color: Colors.grey,
                                   ),
                                 ),
-                              if (item == 'Both')
-                                const Expanded(
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.import_export_rounded,
-                                      size: 26,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                )
-                            ],
-                          ),
-                        ))
+                              )
+                          ],
+                        ),
+                      ),
+                    )
                     .toList(),
-                validator: (value) {
-                  if (value == null) {
-                    return 'Please select gender.';
-                  }
-                },
                 onChanged: (value) {
                   addCategoryController.setCategoryType(
                       categoryId: widget.addCategoryModel.id,
@@ -268,7 +278,7 @@ class _AddCategoryState extends State<AddCategory> {
                 },
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             if (widget.addCategoryModel.subcategoryModels.isNotEmpty)
@@ -284,7 +294,6 @@ class _AddCategoryState extends State<AddCategory> {
             Center(
               child: OutlinedButton(
                 onPressed: () {
-                  // FocusScope.of(context).unfocus();
                   addCategoryController.addSubcategory(
                     categoryId: widget.addCategoryModel.id,
                   );
@@ -293,13 +302,6 @@ class _AddCategoryState extends State<AddCategory> {
                   'Add Subcategory for ${widget.addCategoryModel.categoryName ?? 'your category'}',
                   textAlign: TextAlign.center,
                 ),
-                // style: ButtonStyle(
-                //     backgroundColor:
-                //     MaterialStateProperty.all<Color>(
-                //         Colors.green),
-                //     foregroundColor:
-                //     MaterialStateProperty.all<Color>(
-                //         Colors.white)),
               ),
             )
           ],
