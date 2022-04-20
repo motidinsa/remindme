@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:remindme/models/add_sub_subcategory_model.dart';
 import 'package:remindme/models/add_subcategory_model.dart';
@@ -11,9 +11,9 @@ import '../../pages/add_transaction/icon_select.dart';
 class AddCategoryController extends GetxController {
   final bool isEditCategory;
 
-  int currentCategoryId = 1;
-  int currentSubcategoryId = 1;
-  int currentSubSubcategoryId = 1;
+  int currentCategoryId = 4;
+  int currentSubcategoryId = 4;
+  int currentSubSubcategoryId = 4;
 
   final List<String> categoryTypes = [
     'Income',
@@ -102,7 +102,16 @@ class AddCategoryController extends GetxController {
           CategorySelect(
             categoryId: tempAddCategoryModels[i].id,
             categoryName: 'cat ${tempAddCategoryModels[i].id}',
-            icon: Icon(IconsHelper.iconsMap[tempAddCategoryModels[i].iconName]),
+            // icon: Icon(
+            //   IconsHelper.getIconGuessFavorFA(name: tempAddCategoryModels[i].iconName),
+            //   color: Colors.black54,
+            //   size: 20,
+            // ),
+            icon: Icon(
+              IconsHelper.iconsMap[tempAddCategoryModels[i].iconName],
+              // color: Colors.black54,
+              size: 20,
+            ),
           ),
         );
       }
@@ -124,7 +133,7 @@ class AddCategoryController extends GetxController {
       element.requestFocus = false;
     }
     addCategoryModels.add(AddCategoryModel(
-        id: currentCategoryId++, subcategoryModels: [], requestFocus: true));
+        id: ++currentCategoryId, subcategoryModels: [], requestFocus: true));
 
     update();
   }
@@ -142,13 +151,15 @@ class AddCategoryController extends GetxController {
           CategorySelect(
             categoryId: categoryId,
             categoryName: deletedCategoryModel.categoryName,
-            icon: Icon(IconsHelper.iconsMap[deletedCategoryModel.iconName]),
+            icon: Icon(
+              IconsHelper.iconsMap[deletedCategoryModel.iconName],
+              size: 20,
+            ),
           ),
         );
-      } else {
-        if (addCategoryModels.isEmpty) {
-          editedCategoryCount = 0;
-        }
+      }
+      if (addCategoryModels.isEmpty) {
+        editedCategoryCount = 0;
       }
     }
     update();
@@ -163,7 +174,8 @@ class AddCategoryController extends GetxController {
     update();
   }
 
-  void deleteSubSubcategory({int categoryId, int subcategoryId, int subSubcategoryId}) {
+  void deleteSubSubcategory(
+      {int categoryId, int subcategoryId, int subSubcategoryId}) {
     addCategoryModels
         .firstWhere((element) => element.id == categoryId)
         .subcategoryModels
@@ -187,7 +199,8 @@ class AddCategoryController extends GetxController {
     update();
   }
 
-  void changeSubcategoryName({int categoryId, int subcategoryId, String subcategoryName}) {
+  void changeSubcategoryName(
+      {int categoryId, int subcategoryId, String subcategoryName}) {
     addCategoryModels
         .firstWhere((element) => element.id == categoryId)
         .subcategoryModels
@@ -204,7 +217,8 @@ class AddCategoryController extends GetxController {
     update();
   }
 
-  void changeSubSubcategoryName({int categoryId, int subcategoryId, int id, String subSubcategoryName}) {
+  void changeSubSubcategoryName(
+      {int categoryId, int subcategoryId, int id, String subSubcategoryName}) {
     addCategoryModels
         .firstWhere((element) => element.id == categoryId)
         .subcategoryModels
@@ -234,11 +248,11 @@ class AddCategoryController extends GetxController {
     });
 
     AddCategoryModel currentAddCategoryModel =
-    addCategoryModels.firstWhere((element) => element.id == categoryId);
+        addCategoryModels.firstWhere((element) => element.id == categoryId);
     currentAddCategoryModel.subcategoryModels.add(
       AddSubcategoryModel(
           categoryId: categoryId,
-          id: currentSubcategoryId++,
+          id: ++currentSubcategoryId,
           subSubcategoryModels: [],
           requestFocus: true,
           icon: currentAddCategoryModel.icon,
@@ -263,16 +277,17 @@ class AddCategoryController extends GetxController {
         .firstWhere((element) => element.id == subcategoryId)
         .subSubcategoryModels
         .add(
-      AddSubSubcategoryModel(
-          id: currentSubSubcategoryId++,
-          categoryId: categoryId,
-          subcategoryId: subcategoryId,
-          requestFocus: true),
-    );
+          AddSubSubcategoryModel(
+              id: ++currentSubSubcategoryId,
+              categoryId: categoryId,
+              subcategoryId: subcategoryId,
+              requestFocus: true),
+        );
     update();
   }
 
-  void addIcon({int categoryId, int subcategoryId, String iconName, Icon icon}) {
+  void addIcon(
+      {int categoryId, int subcategoryId, String iconName, Icon icon}) {
     if (categoryId != null && subcategoryId == null) {
       addCategoryModels.firstWhere((element) => element.id == categoryId)
         ..iconName = iconName

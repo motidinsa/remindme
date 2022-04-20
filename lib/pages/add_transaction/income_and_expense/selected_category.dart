@@ -75,8 +75,8 @@ class _SelectedCategoryInsertItemState
   Widget build(BuildContext context) {
     // incomeAndExpenseController.
     // print('detailll ${incomeAndExpenseController.categoryHeight}');
-    final IncomeAndExpenseController incomeAndExpenseController =
-        Get.put(IncomeAndExpenseController());
+    // final IncomeAndExpenseController incomeAndExpenseController =
+    //     Get.put(IncomeAndExpenseController());
     return GetBuilder(
         init: incomeAndExpenseController,
         builder: (_) {
@@ -86,7 +86,9 @@ class _SelectedCategoryInsertItemState
             // key: UniqueKey(),
             // shrinkWrap: true,
             children: [
-              CategoryList(),
+              CategoryList(
+                incomeAndExpenseController: incomeAndExpenseController,
+              ),
               CategoryCarouselIndicator(),
               CarouselCategoryList(),
 

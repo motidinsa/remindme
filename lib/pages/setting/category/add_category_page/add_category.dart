@@ -183,8 +183,10 @@ class _AddCategoryState extends State<AddCategory> {
                   ),
                   if (widget.addCategoryModel.iconName != null)
                     addCategoryController.isEditCategory
-                        ? Icon(IconsHelper
-                            .iconsMap[widget.addCategoryModel.iconName])
+                        ? Icon(
+                            IconsHelper
+                                .iconsMap[widget.addCategoryModel.iconName],
+                          )
                         : widget.addCategoryModel.icon
                 ],
               ),

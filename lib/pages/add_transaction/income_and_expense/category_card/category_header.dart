@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CategoryHeader extends StatelessWidget {
@@ -16,61 +17,72 @@ class CategoryHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(
-          categoryName,
-          style: const TextStyle(
-              fontSize: 15, fontWeight: FontWeight.bold, color: Colors.brown),
-        ),
-        if (subcategoryName != null)
-          Row(
-            children: [
-              const SizedBox(
-                width: 5,
-              ),
-              const Icon(Icons.chevron_right_rounded, color: Colors.brown),
-              const SizedBox(
-                width: 5,
-              ),
-              Text(
-                subcategoryName,
-                style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.brown),
-              )
-            ],
-          ),
-        if (subSubcategoryName != null)
-          Row(
-            children: [
-              const SizedBox(
-                width: 5,
-              ),
-              const Icon(Icons.chevron_right_rounded, color: Colors.brown),
-              const SizedBox(
-                width: 5,
-              ),
-              Text(
-                subSubcategoryName,
-                style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.brown),
-              )
-            ],
-          ),
         Expanded(
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: InkWell(
-              child: const Icon(
-                Icons.remove,
-                color: Colors.red,
-                size: 24,
+          child: Wrap(
+            children: [
+              Text(
+                categoryName,
+                style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.brown),
               ),
-              onTap: () {},
-              borderRadius: BorderRadius.circular(30),
+              if (subcategoryName != null)
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Icon(Icons.chevron_right_rounded, color: Colors.brown),
+                    SizedBox(
+                      width: 5,
+                    ),
+                  ],
+                ),
+              if (subcategoryName != null)
+                Text(
+                  subcategoryName,
+                  style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.brown),
+                ),
+              if (subSubcategoryName != null)
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Icon(Icons.chevron_right_rounded, color: Colors.brown),
+                    SizedBox(
+                      width: 5,
+                    ),
+                  ],
+                ),
+              if (subSubcategoryName != null)
+                Text(
+                  subSubcategoryName,
+                  style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.brown),
+                ),
+            ],
+          ),
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: IconButton(
+            icon: Icon(
+              Icons.delete,
+              color: Colors.red.shade300,
             ),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            splashRadius: 20,
+            onPressed: () {},
           ),
         )
       ],

@@ -10,16 +10,24 @@ import 'package:remindme/pages/add_transaction/income_and_expense/income_and_exp
 import 'package:remindme/pages/add_transaction/income_and_expense/one_row_category.dart';
 import 'package:flutter/rendering.dart';
 
+import '../../../getx_controller/reason/reason_controller.dart';
+
 class CategoryList extends StatelessWidget {
-  final IncomeAndExpenseController incomeAndExpenseController = Get.find();
+  final IncomeAndExpenseController incomeAndExpenseController;
+  final ReasonController reasonController;
   final String type;
 
-  CategoryList({Key key, this.type}) : super(key: key);
+  const CategoryList(
+      {Key key,
+      this.type,
+      this.incomeAndExpenseController,
+      this.reasonController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: incomeAndExpenseController.initialize(type),
+        stream: incomeAndExpenseController.initialize(),
         builder: (context, snapshot) {
           if (incomeAndExpenseController.isInitialized) {
             return GetBuilder(

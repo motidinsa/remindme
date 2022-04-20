@@ -67,6 +67,7 @@ class CarouselCategoryList extends StatelessWidget {
                                   Colors.white),
                             ),
                             onPressed: () {
+                              FocusScope.of(context).unfocus();
                               IncomeAndExpenseOperation
                                   incomeAndExpenseInstance =
                                   IncomeAndExpenseOperation();

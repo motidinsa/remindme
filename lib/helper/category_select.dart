@@ -20,13 +20,13 @@ class CategorySelect extends StatelessWidget {
         InkWell(
           child: Container(
             child: icon,
-            padding: const EdgeInsets.all(5),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
               border: Border.all(color: Colors.grey),
             ),
           ),
-          borderRadius: BorderRadius.circular(60),
+          borderRadius: BorderRadius.circular(50),
           onTap: () {
             addCategoryController.addEditCategoryModel(categoryId);
             Get.back();

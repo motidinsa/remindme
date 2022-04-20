@@ -1,580 +1,241 @@
-import 'package:flutter/material.dart';
-import 'package:intl/src/intl/date_format.dart';
-import 'package:remindme/helper/widget_size.dart';
-import 'package:remindme/test2.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
-class TestExpenseDetail extends StatefulWidget {
-  @override
-  _TestExpenseDetailState createState() => _TestExpenseDetailState();
-}
-
-class _TestExpenseDetailState extends State<TestExpenseDetail> {
-  final TextEditingController _expenseReasonController =
-      TextEditingController();
-  final TextEditingController _expenseAmountController =
-      TextEditingController();
-  final TextEditingController _expenseNumberOfTimesController =
-      TextEditingController();
-  final TextEditingController _expenseLocationController =
-      TextEditingController();
-  String dropdown;
-  String date = DateFormat("dd-MM-yy").format(DateTime.now());
-  String _selectedDate;
-  String amount;
-  String reason;
-  int numberOfTimes;
-  String _dateCount;
-  String _rangeCount;
-  String dateSet = DateFormat("dd-MM-yy").format(DateTime.now());
-  FocusNode amountFocusNode = FocusNode();
-  FocusNode reasonFocusNode = FocusNode();
-  FocusNode numberOfTimesFocusNode = FocusNode();
-  FocusNode locationFocusNode = FocusNode();
-  double height;
-  double categoryheight;
-  bool isHeightSet = false;
-  bool isCategoryHeightSet = false;
-  bool saveReason = true;
-
-  void onAmountFocusChange() {}
-
-  void onReasonFocusChange() {}
-
-  void onNumberOfTimesFocusChange() {}
-
-  void setDate(String date) {
-    setState(() {
-      dateSet = date ?? dateSet;
-    });
-  }
-
-  void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
-    if (args.value is DateTime) {
-      // _selectedDate = args.value;
-      // date =
-      //     '${DateTime.parse(_selectedDate).day > 9 ? DateTime.parse(_selectedDate).day : '0${DateTime.parse(_selectedDate).day}'}-${DateTime.parse(_selectedDate).month > 9 ? DateTime.parse(_selectedDate).month : '0${DateTime.parse(_selectedDate).month}'}-${DateTime.parse(_selectedDate).year}';
-      date = DateFormat("dd-MM-yy").format(args.value);
-      print(date);
-
-      print(date);
-    } else if (args.value is List<DateTime>) {
-      _dateCount = args.value.length.toString();
-    } else {
-      _rangeCount = args.value.length.toString();
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    amountFocusNode.addListener(onAmountFocusChange);
-    reasonFocusNode.addListener(onReasonFocusChange);
-    numberOfTimesFocusNode.addListener(onNumberOfTimesFocusChange);
-    // if (widget.expense.netAmount != null) {
-    //   _expenseAmountController.text = widget.expense.netAmount.toString();
-    // }
-    // if (widget.expense.reason != null) {
-    //   _expenseReasonController.text = widget.expense.reason;
-    // }
-    //
-    // if (widget.expense.numberOfTimes != 1) {
-    //   _expenseNumberOfTimesController.text =
-    //       widget.expense.numberOfTimes.toString();
-    // }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.only(top: 100),
-        child: Card(
-          elevation: 3,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Date:',
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.brown,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      'expense.date',
-                      // key: UniqueKey(),
-                      style: TextStyle(fontSize: 16, color: Colors.green),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            child: const Text(
-                              'Change Date',
-                              style: TextStyle(color: Colors.green),
-                            ),
-                            style: TextButton.styleFrom(
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                            onPressed: () {
-                              showModalBottomSheet(
-                                isScrollControlled: true,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      topRight: Radius.circular(10)),
-                                ),
-                                context: context,
-                                builder: (context) => StatefulBuilder(
-                                  builder: (context, setState) {
-                                    return Container(
-                                      padding: EdgeInsets.only(top: 20),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          SfDateRangePicker(
-                                            onSelectionChanged:
-                                                _onSelectionChanged,
-                                            showNavigationArrow: true,
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.only(right: 20),
-                                            child: Align(
-                                              alignment: Alignment.centerRight,
-                                              child: OutlinedButton(
-                                                child: Text(
-                                                  'OK',
-                                                  style: TextStyle(
-                                                      color: Colors.green),
-                                                ),
-                                                onPressed: () {
-                                                  // BlocProvider.of<ExpenseBloc>(
-                                                  //     context)
-                                                  //     .add(AddExpenseDate(
-                                                  //     widget.categoryID,
-                                                  //     widget.index,
-                                                  //     date));
-                                                  // setDate(date);
-                                                  Navigator.pop(context);
-
-                                                  // DateTime date = Datetime
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Row(
-                  children: [
-                    Text('Subtract from '),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Card(
-                      elevation: 3,
-                      color: Colors.green.shade50,
-                      child: Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Column(
-                          children: [Text('Wallet'), Text('Balance: 100')],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text('Change'),
-                      // style: TextButton.styleFrom(
-                      //   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      // ),
-                    )
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  TextButton(
-                    child: const Text('Select reason'),
-                    style: TextButton.styleFrom(
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    onPressed: () {},
-                  ),
-                  TextButton(
-                    child: const Text('Select Subcategory'),
-                    style: TextButton.styleFrom(
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    onPressed: () {
-                      showModalBottomSheet(
-                          isScrollControlled: true,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10)),
-                          ),
-                          context: context,
-                          builder: (context) => Test2());
-                    },
-                  ),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 20),
-                child: Row(
-                  children: const [
-                    Icon(
-                      Icons.star_rounded,
-                      color: Colors.grey,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: Text(
-                        'Subcategories will be automatically added if you pressed the select reason button',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, bottom: 5),
-                child: Row(
-                  children: const [
-                    Text(
-                      'Transport',
-                      style: TextStyle(fontSize: 15, color: Colors.black87),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Icon(Icons.chevron_right_rounded, color: Colors.black87),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      'Bus',
-                      style: TextStyle(fontSize: 15, color: Colors.black87),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Icon(Icons.chevron_right_rounded, color: Colors.black87),
-                    Text(
-                      'Anbessa',
-                      style: TextStyle(fontSize: 15, color: Colors.black87),
-                    )
-                  ],
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(left: 175),
-                child: Text(
-                  'Frequency',
-                  style: TextStyle(color: Colors.brown),
-                ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Container(
-                margin: const EdgeInsets.only(
-                  left: 20,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SizedBox(
-                      width: 100,
-                      height: isHeightSet ? height - 10 : height,
-                      child: TextField(
-                        focusNode: amountFocusNode,
-                        keyboardType: TextInputType.number,
-                        controller: _expenseAmountController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Amount',
-                          labelStyle: TextStyle(
-                            fontSize: 16,
-                            color: Colors.green,
-                          ),
-                          contentPadding: EdgeInsets.only(left: 20, bottom: 20),
-                        ),
-                        onChanged: (newValue) {
-                          amount = newValue;
-                        },
-                        onEditingComplete: () {
-                          // BlocProvider.of<ExpenseBloc>(context).add(AddExpenseAmount(
-                          //     widget.categoryID, widget.index, amount));
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 50,
-                    ),
-                    SizedBox(
-                      width: 100,
-                      height: isHeightSet ? height - 10 : height,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.green.shade100),
-                            borderRadius: BorderRadius.circular(5)),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              // flex: 2,
-                              child: WidgetSize(
-                                onChange: (Size size) {
-                                  if (height == null) {
-                                    setState(() {
-                                      height = size.height;
-                                      isHeightSet = true;
-                                    });
-                                  }
-                                },
-                                child: TextButton(
-                                  child: const Icon(
-                                    Icons.remove,
-                                  ),
-                                  style: TextButton.styleFrom(
-                                    padding: EdgeInsets.zero,
-                                  ),
-                                  onPressed: () {},
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: TextField(
-                                // focusNode: amountFocusNode,
-                                keyboardType: TextInputType.number,
-                                controller: _expenseNumberOfTimesController,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  contentPadding:
-                                      EdgeInsets.only(left: 10, bottom: 20),
-                                ),
-                                onChanged: (newValue) {
-                                  amount = newValue;
-                                },
-                                onEditingComplete: () {
-                                  // BlocProvider.of<ExpenseBloc>(context).add(AddExpenseAmount(
-                                  //     widget.categoryID, widget.index, amount));
-                                },
-                              ),
-                            ),
-                            Expanded(
-                              // flex: 2,
-                              child: TextButton(
-                                child: const Center(
-                                  child: Icon(Icons.add),
-                                ),
-                                style: OutlinedButton.styleFrom(
-                                    padding: EdgeInsets.zero),
-                                onPressed: () {},
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: SizedBox(
-                        height: isHeightSet ? height - 10 : height,
-                        child: TextField(
-                            focusNode: reasonFocusNode,
-                            // cursorHeight: 30,
-                            controller: _expenseReasonController,
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Reason (Optional)',
-                              labelStyle: TextStyle(
-                                // fontSize: 18,
-                                color: Colors.green,
-                              ),
-                              contentPadding: EdgeInsets.only(left: 20),
-                            ),
-                            onChanged: (newValue) => reason = newValue,
-                            onEditingComplete: () {
-                              //   expenseController.addReason(
-                              //   widget.id,
-                              //   widget.index,
-                              //   reason,
-                              // );
-                              // BlocProvider.of<ExpenseBloc>(context).add(
-                              //     AddExpenseReason(
-                              //         widget.categoryID, widget.index, reason));
-                            }),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Expanded(
-                      // flex: 2,
-                      child: Row(
-                        children: [
-                          const Expanded(
-                              child: Text(
-                            'Save reason',
-                          )),
-                          Expanded(
-                            child: Switch(
-                              onChanged: (value) {
-                                setState(() {
-                                  saveReason = value;
-                                });
-                              },
-                              value: saveReason,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: SizedBox(
-                        height: isHeightSet ? height - 10 : height,
-                        child: TextField(
-                            focusNode: locationFocusNode,
-                            // cursorHeight: 30,
-                            controller: _expenseLocationController,
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Location (Optional)',
-                              labelStyle: TextStyle(
-                                // fontSize: 18,
-                                color: Colors.green,
-                              ),
-                              contentPadding: EdgeInsets.only(left: 20),
-                            ),
-                            onChanged: (newValue) => reason = newValue,
-                            onEditingComplete: () {
-                              //   expenseController.addReason(
-                              //   widget.id,
-                              //   widget.index,
-                              //   reason,
-                              // );
-                              // BlocProvider.of<ExpenseBloc>(context).add(
-                              //     AddExpenseReason(
-                              //         widget.categoryID, widget.index, reason));
-                            }),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Spacer()
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              // if (widget.isLastItem)
-              Row(
-                children: [
-                  Expanded(child: Container()),
-                  Expanded(
-                    child: TextButton(
-                      onPressed: () {
-                        // expenseController.addAnotherItem(widget.id);
-                        // BlocProvider.of<ExpenseBloc>(context)
-                        //     .add(AddAnotherItem(widget.categoryID));
-                      },
-                      child: Text(
-                        'Add another',
-                        style: TextStyle(color: Colors.green),
-                      ),
-                      style: TextButton.styleFrom(
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      // style: ButtonStyle(
-                      //   foregroundColor:
-                      //       MaterialStateProperty.all<Color>(Colors.green),
-                      // ),
-                    ),
-                  ),
-                  Expanded(
-                    child: TextButton(
-                      onPressed: () {
-                        // expenseController.finishCategory(widget.id);
-                        // BlocProvider.of<ExpenseBloc>(context)
-                        //     .add(FinishCategory(widget.categoryID));
-                      },
-                      child: Text('Finish'),
-                      style: TextButton.styleFrom(
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 5,
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+// import 'package:flutter/material.dart';
+//
+//
+// class Test extends StatelessWidget {
+//   const Test({Key key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: Scaffold(
+//         body: Container(
+//             width: 375,
+//             height: 812,
+//             decoration: BoxDecoration(
+//               borderRadius: BorderRadius.only(
+//                 topLeft: Radius.circular(40),
+//                 topRight: Radius.circular(40),
+//                 bottomLeft: Radius.circular(40),
+//                 bottomRight: Radius.circular(40),
+//               ),
+//               color: Color.fromRGBO(37, 40, 55, 1),
+//             ),
+//             child: Stack(
+//                 children: <Widget>[
+//                   Positioned(
+//                       top: 83,
+//                       left: 375,
+//                       child: Container(
+//                           width: 375,
+//                           height: 241,
+//                           decoration: BoxDecoration(
+//                             color: Color.fromRGBO(66, 66, 66, 1),
+//                           ),
+//                           child: Stack(
+//                               children: <Widget>[
+//                                 Positioned(
+//                                     top: 0,
+//                                     left: 0,
+//                                     child: Container(
+//                                         width: 375,
+//                                         height: 241,
+//                                         decoration: BoxDecoration(
+//                                           color: Color.fromRGBO(65, 65, 65, 1),
+//                                         )
+//                                     )
+//                                 ), Positioned(
+//                                     top: -63,
+//                                     left: -156,
+//                                     child: Container(
+//                                         width: 573,
+//                                         height: 348,
+//
+//                                         child: Stack(
+//                                             children: <Widget>[
+//                                               Positioned(
+//                                                   top: 0,
+//                                                   left: 163,
+//                                                   child: Container(
+//                                                       width: 410,
+//                                                       height: 348,
+//                                                       decoration: BoxDecoration(
+//                                                         image: DecorationImage(
+//                                                             image: AssetImage(
+//                                                                 'assets/images/Image12.png'),
+//                                                             fit: BoxFit.fitWidth
+//                                                         ),
+//                                                       )
+//                                                   )
+//                                               ), Positioned(
+//                                                   top: 63,
+//                                                   left: 0,
+//                                                   child: Container(
+//                                                       width: 259,
+//                                                       height: 222,
+//                                                       decoration: BoxDecoration(
+//                                                         image: DecorationImage(
+//                                                             image: AssetImage(
+//                                                                 'assets/images/Image13.png'),
+//                                                             fit: BoxFit.fitWidth
+//                                                         ),
+//                                                       )
+//                                                   )
+//                                               ), Positioned(
+//                                                   top: 146.80010986328125,
+//                                                   left: 187.95199584960938,
+//                                                   child: SvgPicture.asset(
+//                                                       'assets/images/vector.svg',
+//                                                       semanticsLabel: 'vector'
+//                                                   )
+//                                               ),
+//                                             ]
+//                                         )
+//                                     )
+//                                 ),
+//                               ]
+//                           )
+//                       )
+//                   ), Positioned(
+//                       top: 83,
+//                       left: 0,
+//                       child: Container(
+//                           width: 375,
+//                           height: 241,
+//                           decoration: BoxDecoration(
+//                             color: Color.fromRGBO(197, 59, 64, 1),
+//                           ),
+//                           child: Stack(
+//                               children: <Widget>[
+//                                 Positioned(
+//                                     top: 0,
+//                                     left: 0,
+//                                     child: Container(
+//                                         width: 375,
+//                                         height: 241,
+//                                         decoration: BoxDecoration(
+//                                           color: Color.fromRGBO(65, 65, 65, 1),
+//                                         )
+//                                     )
+//                                 ), Positioned(
+//                                     top: 1,
+//                                     left: 0,
+//                                     child: Container(
+//                                         width: 188,
+//                                         height: 240,
+//                                         decoration: BoxDecoration(
+//                                           image: DecorationImage(
+//                                               image: AssetImage(
+//                                                   'assets/images/Image21.png'),
+//                                               fit: BoxFit.fitWidth
+//                                           ),
+//                                         )
+//                                     )
+//                                 ), Positioned(
+//                                     top: 93,
+//                                     left: 212,
+//                                     child: Text('Beats Solo3 Wireless'
+//                                       , textAlign: TextAlign.left, style: TextStyle(
+//                                           color: Color.fromRGBO(255, 255, 255, 1),
+//                                           fontFamily: 'Avenir',
+//                                           fontSize: 26,
+//                                           letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+//                                           fontWeight: FontWeight.normal,
+//                                           height: 1
+//                                       ),)
+//                                 ), Positioned(
+//                                     top: 170,
+//                                     left: 214,
+//                                     child: Text(
+//                                       '€319.90', textAlign: TextAlign.left,
+//                                       style: TextStyle(
+//                                           color: Color.fromRGBO(255, 255, 255, 1),
+//                                           fontFamily: 'Avenir',
+//                                           fontSize: 16,
+//                                           letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+//                                           fontWeight: FontWeight.normal,
+//                                           height: 1
+//                                       ),)
+//                                 ), Positioned(
+//                                     top: 76,
+//                                     left: 213,
+//                                     child: Text(
+//                                       'Beats by Dre', textAlign: TextAlign.left,
+//                                       style: TextStyle(
+//                                           color: Color.fromRGBO(255, 255, 255, 1),
+//                                           fontFamily: 'Avenir',
+//                                           fontSize: 10,
+//                                           letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+//                                           fontWeight: FontWeight.normal,
+//                                           height: 1
+//                                       ),)
+//                                 ),
+//                               ]
+//                           )
+//                       )), Positioned(
+//                       top: 305,
+//                       left: 180,
+//                       child: Container(
+//                           width: 16,
+//                           height: 5,
+//
+//                           child: Stack(
+//                               children: <Widget>[
+//                                 Positioned(
+//                                     top: 0,
+//                                     left: 11,
+//                                     child: Container(
+//                                         width: 5,
+//                                         height: 5,
+//                                         decoration: BoxDecoration(
+//                                           borderRadius: BorderRadius.only(
+//                                             topLeft: Radius.circular(90),
+//                                             topRight: Radius.circular(90),
+//                                             bottomLeft: Radius.circular(90),
+//                                             bottomRight: Radius.circular(90),
+//                                           ),
+//                                           color: Color.fromRGBO(255, 255, 255, 0.5),
+//                                         )
+//                                     )
+//                                 ), Positioned(
+//                                     top: 0,
+//                                     left: 0,
+//                                     child: Container(
+//                                         width: 5,
+//                                         height: 5,
+//                                         decoration: BoxDecoration(
+//                                           borderRadius: BorderRadius.only(
+//                                             topLeft: Radius.circular(90),
+//                                             topRight: Radius.circular(90),
+//                                             bottomLeft: Radius.circular(90),
+//                                             bottomRight: Radius.circular(90),
+//                                           ),
+//                                           color: Color.fromRGBO(255, 255, 255, 1),
+//                                         )
+//                                     )
+//                                 ),
+//                               ]
+//                           )
+//                       )
+//                   ),
+//                    Positioned(
+//                       top: 0,
+//                       left: -188,
+//                       child: SvgPicture.asset(
+//                           'assets/images/rectangle41.svg',
+//                           semanticsLabel: 'rectangle41'
+//                       )
+//                   ), Positioned(
+//                       top: 0,
+//                       left: 375,
+//                       child: SvgPicture.asset(
+//                           'assets/images/rectangle42.svg',
+//                           semanticsLabel: 'rectangle42'
+//                       )
+//                   ),
+//                 ]
+//             )
+//         ),
+//       ),
+//     );
+//   }
+// }

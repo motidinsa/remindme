@@ -84,7 +84,7 @@ class _EditCategoryState extends State<EditCategory> {
                                   name: state.categories[i].iconName),
                             ),
                             name: state.categories[i].categoryName,
-                            type: 'add_reason',
+                            type: 'add_reason_page',
                             id: state.categories[i].id),
                         Text(categoryModels[i].categoryName)
                       ],

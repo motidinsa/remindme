@@ -3,9 +3,11 @@ import 'package:get/get.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remindme/bloc/expense/expense_bloc.dart';
 import 'package:remindme/bloc/expense/expense_event.dart';
+import 'package:remindme/database_models/reason/reason_model.dart';
 import 'package:remindme/getx_controller/income_and_expense/income_and_expense_controller.dart';
 import 'package:remindme/models/income_and_expense_category_select_model.dart';
 
+import '../../../getx_controller/reason/reason_controller.dart';
 import 'expense_controller.dart';
 
 //ignore: must_be_immutable
@@ -16,42 +18,57 @@ class IncomeAndExpenseCategorySelect extends StatelessWidget {
   bool isSelected;
   bool finishedCategory;
   final int categoryID;
+  IncomeAndExpenseController incomeAndExpenseController;
+  ReasonController reasonController;
+  final bool isAddReasonCategory;
 
-  IncomeAndExpenseCategorySelect({
-    Key key,
-    this.categoryName,
-    this.isSelected,
-    this.categoryID,
-    this.icon,
-    this.finishedCategory,
-  }) : super(key: key);
+  IncomeAndExpenseCategorySelect(
+      {Key key,
+      this.categoryName,
+      this.isSelected,
+      this.categoryID,
+      this.icon,
+      this.finishedCategory,
+      this.isAddReasonCategory})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final IncomeAndExpenseController incomeAndExpenseController = Get.find();
+    if (isAddReasonCategory == true) {
+      reasonController = Get.find();
+    } else {
+      incomeAndExpenseController = Get.find();
+    }
+
     // print('aa ${incomeAndExpenseController.selectedCategories.isEmpty}');
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // if (incomeAndExpenseController != null)
-          InkWell(
-            child: GetBuilder(
-              init: incomeAndExpenseController,
-              builder: (_) => Container(
-                child: icon,
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  color: isSelected ? Colors.green.shade50 : null,
-                  border: Border.all(color: Colors.grey),
-                ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // if (incomeAndExpenseController != null)
+        InkWell(
+          child: GetBuilder(
+            init: isAddReasonCategory == true
+                ? reasonController
+                : incomeAndExpenseController,
+            builder: (_) => Container(
+              child: icon,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                color: isSelected ? Colors.green.shade50 : null,
+                border: Border.all(color: Colors.grey),
               ),
             ),
-            borderRadius: BorderRadius.circular(50),
-            onTap: () {
-              if (!isSelected) {
+          ),
+          borderRadius: BorderRadius.circular(50),
+          onTap: () {
+            if (!isSelected) {
+              if (isAddReasonCategory == true) {
+                reasonController.addReasonCategory(
+                  categoryID,
+                );
+                Get.back();
+              } else {
                 incomeAndExpenseController.addIncomeAndExpense(
                   IncomeAndExpenseCategorySelectModel(
                     categoryName: categoryName,
@@ -68,34 +85,35 @@ class IncomeAndExpenseCategorySelect extends StatelessWidget {
                   //         incomeAndExpenseController.categoryModels.length - 1);
                   // buttonCarouselController.
                 }
-                // BlocProvider.of<ExpenseBloc>(context).add(
-                //   AddExpenseCategory(
-                //     IncomeAndExpenseCategorySelect(
-                //         categoryName: widget.categoryName,
-                //         icon: widget.icon,
-                //         isSelected: widget.isSelected,
-                //         categoryID: widget.categoryID,
-                //         finishedCategory: false,
-                //         key: UniqueKey()),
-                //   ),
-                // );
-              } else {
-                incomeAndExpenseController.removeCategory(categoryID);
-                // BlocProvider.of<ExpenseBloc>(context).add(
-                //   RemoveExpenseCategory(widget.categoryID),
-                // );
               }
-            },
+
+              // BlocProvider.of<ExpenseBloc>(context).add(
+              //   AddExpenseCategory(
+              //     IncomeAndExpenseCategorySelect(
+              //         categoryName: widget.categoryName,
+              //         icon: widget.icon,
+              //         isSelected: widget.isSelected,
+              //         categoryID: widget.categoryID,
+              //         finishedCategory: false,
+              //         key: UniqueKey()),
+              //   ),
+              // );
+            } else {
+              incomeAndExpenseController.removeCategory(categoryID);
+              // BlocProvider.of<ExpenseBloc>(context).add(
+              //   RemoveExpenseCategory(widget.categoryID),
+              // );
+            }
+          },
+        ),
+        Text(
+          categoryName,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 14,
           ),
-          Text(
-            categoryName,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 14,
-            ),
-          )
-        ],
-      ),
+        )
+      ],
     );
   }
 }

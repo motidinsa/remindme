@@ -6,9 +6,11 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:remindme/bloc/category/category_bloc.dart';
 import 'package:remindme/bloc/category/category_event.dart';
 import 'package:remindme/pages/setting/add_reason/reason_page.dart';
+import 'package:remindme/pages/setting/reason/add_reason_page/add_reason_page.dart';
 import 'package:remindme/pages/setting/theme/theme.dart';
 
 import 'about/about.dart';
+import 'add_reason/category_reason.dart';
 import 'category/add_category_page/add_category_page.dart';
 import 'category/add_category_page/edit_category.dart';
 import 'category/add_category_page/expense_and_income_category_insert.dart';
@@ -131,6 +133,7 @@ class Setting extends StatelessWidget {
                     //     },
                     //   ),
                     // );
+                    Get.to(() => AddReasonPage());
                   },
                 ),
               ],

@@ -260,7 +260,7 @@ class SingleTransaction extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                        '${incomeAndExpenseModel[index].totalAmount % 1 == 0 ? incomeAndExpenseModel[index].totalAmount.toInt() : incomeAndExpenseModel[index].totalAmount}',
+                        '${incomeAndExpenseModel[index].totalAmount == null ? '' : incomeAndExpenseModel[index].totalAmount % 1 == 0 ? incomeAndExpenseModel[index].totalAmount.toInt() : incomeAndExpenseModel[index].totalAmount}',
                         style: TextStyle(
                             color: Colors.green,
                             fontSize: 16,

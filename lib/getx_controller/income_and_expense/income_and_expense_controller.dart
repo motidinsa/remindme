@@ -340,9 +340,11 @@ class IncomeAndExpenseController extends GetxController {
         break;
       }
     }
+    print('on init');
   }
 
-  Stream<bool> initialize(String type) async* {
+  Stream<bool> initialize() async* {
+    // print('yee $type');
     if (!isInitialized) {
       await Hive.openBox<CategoryModel>('category');
       await Hive.openBox<SettingModel>('setting');
@@ -393,14 +395,14 @@ class IncomeAndExpenseController extends GetxController {
         }
       }
       category = Hive.box<CategoryModel>('category').values.toList();
-      categoryType = type;
+      // categoryType = type;
       for (var element in category) {
         categoryList.add(
           IncomeAndExpenseCategorySelect(
             categoryName: element.categoryName,
             icon: Icon(
               IconsHelper.getIconGuessFavorFA(name: element.iconName),
-              color: Colors.black54,
+              // color: Colors.black54,
               size: 20,
             ),
             isSelected: false,
@@ -412,6 +414,8 @@ class IncomeAndExpenseController extends GetxController {
       }
       isInitialized = true;
       yield true;
+
+      print('initialize');
     }
   }
 

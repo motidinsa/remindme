@@ -8,8 +8,8 @@
 // import 'package:remindme/pages/add_transaction/icon_select.dart';
 // import 'package:remindme/pages/setting/add_category_page/expense_category.dart';
 // import 'package:remindme/pages/setting/add_category_page/single_row_category_icon_list.dart';
-// import 'package:remindme/pages/setting/add_reason/sub_subcategory_reason_page.dart';
-// import 'package:remindme/pages/setting/add_reason/subcategory_reason_page.dart';
+// import 'package:remindme/pages/setting/add_reason_page/sub_subcategory_reason_page.dart';
+// import 'package:remindme/pages/setting/add_reason_page/subcategory_reason_page.dart';
 // import 'package:remindme/helper/icons_helper.dart';
 // import 'package:intl/src/intl/date_format.dart';
 // import 'category_reason.dart';
@@ -74,7 +74,7 @@
 //                                   name: state.categories[i].iconName),
 //                             ),
 //                             name: state.categories[i].categoryName,
-//                             type: 'add_reason',
+//                             type: 'add_reason_page',
 //                             id: state.categories[i].id),
 //                         Text(categoryModels[i].categoryName)
 //                       ],
