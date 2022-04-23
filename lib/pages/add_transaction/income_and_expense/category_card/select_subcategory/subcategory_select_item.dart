@@ -8,12 +8,19 @@ import 'package:remindme/models/expense_and_income_subcategory.dart';
 class SubcategorySelectItem extends StatelessWidget {
   final IncomeAndExpenseSubCategoryModel subcategoryModel;
   final int categoryCardId;
-  final IncomeAndExpenseController incomeAndExpenseController = Get.find();
 
-  SubcategorySelectItem({
+  // final IncomeAndExpenseController controller = Get.find();
+  final String type;
+  final controller;
+  final int id;
+
+  const SubcategorySelectItem({
     Key key,
     this.subcategoryModel,
     this.categoryCardId,
+    this.type,
+    this.controller,
+    this.id,
   }) : super(key: key);
 
   @override
@@ -23,21 +30,42 @@ class SubcategorySelectItem extends StatelessWidget {
       child: InkWell(
         onTap: () {
           if (subcategoryModel.subSubcategoryCount > 0) {
-            incomeAndExpenseController.fetchSubSubcategories(
+            controller.fetchSubSubcategories(
                 subcategoryModel.categoryID, subcategoryModel.id);
-            incomeAndExpenseController.changeSelectedSubcategoryColor(
+            controller.changeSelectedSubcategoryColor(
                 subcategoryModel.categoryID, subcategoryModel.id);
           } else {
-            incomeAndExpenseController.updateCategoryModelDetailFromSubcategory(
-                subcategoryModel.categoryID,
-                subcategoryModel.id,
-                categoryCardId);
+            type == 'reason'
+                ? id != null
+                    ? controller.editCategory(
+                        categoryId: subcategoryModel.categoryID,
+                        subcategoryId: subcategoryModel.id,
+                        reasonModelId: id,
+                      )
+                    : controller.addReason(
+                        categoryId: subcategoryModel.categoryID,
+                        subcategoryId: subcategoryModel.id)
+                : controller.updateCategoryModelDetailFromSubcategory(
+                    subcategoryModel.categoryID,
+                    subcategoryModel.id,
+                    categoryCardId);
             Get.back();
           }
         },
         onLongPress: () {
-          incomeAndExpenseController.updateCategoryModelDetailFromSubcategory(
-              subcategoryModel.categoryID, subcategoryModel.id, categoryCardId);
+          type == 'reason'
+              ? id != null
+                  ? controller.editCategory(
+                      categoryId: subcategoryModel.categoryID,
+                      subcategoryId: subcategoryModel.id,
+                      reasonModelId: id)
+                  : controller.addReason(
+                      categoryId: subcategoryModel.categoryID,
+                      subcategoryId: subcategoryModel.id)
+              : controller.updateCategoryModelDetailFromSubcategory(
+                  subcategoryModel.categoryID,
+                  subcategoryModel.id,
+                  categoryCardId);
           Get.back();
         },
         // color: Colors.green,

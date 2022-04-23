@@ -6,13 +6,13 @@ import 'package:remindme/bloc/expense/expense_event.dart';
 import 'package:remindme/database_models/reason/reason_model.dart';
 import 'package:remindme/getx_controller/income_and_expense/income_and_expense_controller.dart';
 import 'package:remindme/models/income_and_expense_category_select_model.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../../../getx_controller/reason/reason_controller.dart';
 import 'expense_controller.dart';
 
 //ignore: must_be_immutable
 class IncomeAndExpenseCategorySelect extends StatelessWidget {
-  // final IncomeAndExpenseController incomeAndExpenseController = Get.put(IncomeAndExpenseController());
   final String categoryName;
   final Icon icon;
   bool isSelected;
@@ -22,15 +22,18 @@ class IncomeAndExpenseCategorySelect extends StatelessWidget {
   ReasonController reasonController;
   final bool isAddReasonCategory;
 
-  IncomeAndExpenseCategorySelect(
-      {Key key,
-      this.categoryName,
-      this.isSelected,
-      this.categoryID,
-      this.icon,
-      this.finishedCategory,
-      this.isAddReasonCategory})
-      : super(key: key);
+  // final int index;
+
+  IncomeAndExpenseCategorySelect({
+    Key key,
+    this.categoryName,
+    this.isSelected,
+    this.categoryID,
+    this.icon,
+    this.finishedCategory,
+    this.isAddReasonCategory,
+    // this.index,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +70,12 @@ class IncomeAndExpenseCategorySelect extends StatelessWidget {
                 reasonController.addReasonCategory(
                   categoryID,
                 );
+                reasonController.controller.scrollToIndex(
+                    reasonController.multipleReasonModels
+                        .firstWhere(
+                            (element) => element.categoryId == categoryID)
+                        .id,
+                    preferPosition: AutoScrollPosition.end);
                 Get.back();
               } else {
                 incomeAndExpenseController.addIncomeAndExpense(

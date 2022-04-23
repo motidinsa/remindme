@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:hive/hive.dart';
+import 'package:remindme/models/reason/add_reason_model.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../../database_models/category/category_model.dart';
 import '../../database_models/reason/reason_model.dart';
@@ -16,6 +18,9 @@ import '../../models/reason/multiple_reason_model.dart';
 import '../../pages/add_transaction/income_and_expense/income_and_expense_category.dart';
 
 class ReasonController extends GetxController {
+  double subcategorySelectPageHeight;
+  List<IncomeAndExpenseSubSubCategoryModel> selectedSubSubcategories = [];
+
   final List<IncomeAndExpenseCategoryModel> categories = [
     IncomeAndExpenseCategoryModel(
         categoryType: 'Expense',
@@ -157,23 +162,26 @@ class ReasonController extends GetxController {
   double categoryListHeight;
   List<MultipleReasonModel> multipleReasonModels = [];
   int reasonModelId = 0;
+  int multipleReasonModelId = 0;
+  AutoScrollController controller = AutoScrollController();
 
   @override
   void onInit() {
     super.onInit();
-    for (var element in categories) {
+    for (int i = 0; i < categories.length; i++) {
       categoryList.add(
         IncomeAndExpenseCategorySelect(
-          categoryName: element.categoryName,
+          categoryName: categories[i].categoryName,
           icon: Icon(
-            IconsHelper.getIconGuessFavorFA(name: element.iconName),
+            IconsHelper.getIconGuessFavorFA(name: categories[i].iconName),
             // color: Colors.black54,
             size: 20,
           ),
           isSelected: false,
-          categoryID: element.id,
+          categoryID: categories[i].id,
           finishedCategory: false,
           isAddReasonCategory: true,
+          // index: i,
           // key: UniqueKey(),
         ),
       );
@@ -190,18 +198,36 @@ class ReasonController extends GetxController {
     }
     if (!categoryExists) {
       multipleReasonModels.add(
-        MultipleReasonModel(categoryId: categoryId, reasonModels: []),
+        MultipleReasonModel(
+            id: multipleReasonModelId++,
+            categoryId: categoryId,
+            reasonModels: []),
       );
     }
 
     update();
   }
 
-  void addReason(int categoryId) {
+  void addReason({int categoryId, int subcategoryId, int subSubcategoryId}) {
+    // AddReasonModel currentAddReasonModel =
+    // multipleReasonModels.firstWhere((element) => element.id == categoryId).;
+    for (var element in multipleReasonModels) {
+      for (var element in element.reasonModels) {
+        element.requestFocus = false;
+      }
+    }
+
     multipleReasonModels
         .firstWhere((element) => element.categoryId == categoryId)
         .reasonModels
-        .add(ReasonModel(categoryId: categoryId, id: reasonModelId++));
+        .add(
+          AddReasonModel(
+              categoryId: categoryId,
+              id: reasonModelId++,
+              requestFocus: true,
+              subcategoryId: subcategoryId,
+              subSubcategoryId: subSubcategoryId),
+        );
     update();
   }
 
@@ -210,5 +236,103 @@ class ReasonController extends GetxController {
         .firstWhere((element) => element.categoryId == categoryId)
         .reasonModels
         .length;
+  }
+
+  void removeFocus() {
+    for (var element in multipleReasonModels) {
+      for (var element in element.reasonModels) {
+        element.requestFocus = false;
+      }
+    }
+    update();
+  }
+
+  void updateSubcategoryHeight(double givenHeight) {
+    if (givenHeight > Get.height / 2) {
+      subcategorySelectPageHeight = Get.height / 2;
+    }
+    update();
+  }
+
+  void fetchSubSubcategories(int categoryId, int subcategoryId) {
+    selectedSubSubcategories = subSubcategories
+        .where((element) =>
+            element.categoryID == categoryId &&
+            element.subcategoryID == subcategoryId)
+        .toList();
+    update();
+  }
+
+  void changeSelectedSubcategoryColor(int categoryId, int subcategoryId) {
+    for (var item in subcategories) {
+      item.isSelected = false;
+    }
+    subcategories
+        .firstWhere((element) =>
+            element.id == subcategoryId && element.categoryID == categoryId)
+        .isSelected = true;
+    update();
+  }
+
+  void editCategory({
+    int categoryId,
+    int subcategoryId,
+    int subSubcategoryId,
+    int reasonModelId,
+  }) {
+    removeFocus();
+    multipleReasonModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .reasonModels
+        .firstWhere((element) => element.id == reasonModelId)
+      ..subcategoryId = subcategoryId
+      ..subSubcategoryId = subSubcategoryId
+      ..requestFocus = true;
+
+    update();
+  }
+
+  void changeReasonName({String reasonName, int categoryId, int id}) {
+    multipleReasonModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .reasonModels
+        .firstWhere((element) => element.id == id)
+        .name = reasonName;
+    update();
+  }
+
+  void changeAmount({double amount, int categoryId, int id}) {
+    multipleReasonModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .reasonModels
+        .firstWhere((element) => element.id == id)
+        .amount = amount;
+    update();
+  }
+
+  void changeLocationName({String locationName, int categoryId, int id}) {
+    multipleReasonModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .reasonModels
+        .firstWhere((element) => element.id == id)
+        .location = locationName;
+    update();
+  }
+
+  void deleteReason({int categoryId, int id}) {
+    print('yyyy $categoryId');
+    multipleReasonModels
+        .firstWhere((element) => element.categoryId == categoryId)
+        .reasonModels
+        .removeWhere((element) => element.id == id);
+
+    update();
+  }
+
+  void deleteCategoryReason({int categoryId}) {
+    multipleReasonModels
+        .removeWhere((element) => element.categoryId == categoryId);
+
+    update();
   }
 }

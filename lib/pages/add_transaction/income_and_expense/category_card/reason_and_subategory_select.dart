@@ -70,6 +70,7 @@ class ReasonAndSubcategorySelect extends StatelessWidget {
                   builder: (context) => SelectSubcategory(
                     categoryId: categoryId,
                     categoryCardId: categoryCardId,
+                    controller: incomeAndExpenseController,
                   ),
                 );
               },

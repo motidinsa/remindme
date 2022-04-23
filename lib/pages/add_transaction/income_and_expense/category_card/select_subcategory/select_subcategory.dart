@@ -10,69 +10,25 @@ import 'package:remindme/models/expense_and_income_subsubcategory.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/category_card/select_subcategory/sub_subcategory_select_item.dart';
 import 'package:remindme/pages/add_transaction/income_and_expense/category_card/select_subcategory/subcategory_select_item.dart';
 
+import '../../../../../getx_controller/reason/reason_controller.dart';
 import 'empty_subcategory_select.dart';
 
 class SelectSubcategory extends StatelessWidget {
   final int categoryId;
   final int categoryCardId;
-  final IncomeAndExpenseController incomeAndExpenseController = Get.find();
+  final String type;
+  final controller;
+  final int id;
 
-  SelectSubcategory({Key key, this.categoryId, this.categoryCardId})
-      : super(key: key);
+  SelectSubcategory({
+    Key key,
+    this.categoryId,
+    this.categoryCardId,
+    this.type,
+    this.controller,
+    this.id,
+  }) : super(key: key);
 
-  // final List<IncomeAndExpenseCategoryModel> categories = [
-  //   IncomeAndExpenseCategoryModel(
-  //       categoryType: 'Expense',
-  //       id: 1,
-  //       categoryName: 'Transport',
-  //       iconType: 'material',
-  //       iconName: 'account_balance',
-  //       subcategoryCount: 3),
-  //   IncomeAndExpenseCategoryModel(
-  //       categoryType: 'Expense',
-  //       id: 2,
-  //       categoryName: 'Food',
-  //       iconType: 'material',
-  //       iconName: 'account_balance'),
-  //   IncomeAndExpenseCategoryModel(
-  //       categoryType: 'Expense',
-  //       id: 3,
-  //       categoryName: 'Other',
-  //       iconType: 'material',
-  //       iconName: 'account_balance'),
-  // ];
-  // List<IncomeAndExpenseSubCategoryModel> subcategories = [
-  //   IncomeAndExpenseSubCategoryModel(
-  //     subcategoryType: 'Expense',
-  //     id: 1,
-  //     categoryID: 1,
-  //     subcategoryName: 'Bus',
-  //     iconType: 'material',
-  //     iconName: 'account_balance',
-  //     subSubcategoryCount: 3,
-  //     isSelected: false,
-  //   ),
-  //   IncomeAndExpenseSubCategoryModel(
-  //     subcategoryType: 'Expense',
-  //     id: 2,
-  //     categoryID: 1,
-  //     subcategoryName: 'Taxi',
-  //     iconType: 'material',
-  //     iconName: 'account_balance',
-  //     subSubcategoryCount: 3,
-  //     isSelected: false,
-  //   ),
-  //   IncomeAndExpenseSubCategoryModel(
-  //     subcategoryType: 'Expense',
-  //     id: 3,
-  //     categoryID: 1,
-  //     subcategoryName: 'Bajaj',
-  //     iconType: 'material',
-  //     iconName: 'account_balance',
-  //     subSubcategoryCount: 3,
-  //     isSelected: false,
-  //   )
-  // ];
   final List<IncomeAndExpenseSubSubCategoryModel> subSubcategories = [
     IncomeAndExpenseSubSubCategoryModel(
       subSubcategoryType: 'Expense',
@@ -92,9 +48,7 @@ class SelectSubcategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var allSubcategories =
-    //     subcategories.where((element) => element.categoryID == categoryId);
-    return incomeAndExpenseController.subcategories.isNotEmpty
+    return controller.subcategories.isNotEmpty
         ? ListView(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
@@ -122,15 +76,15 @@ class SelectSubcategory extends StatelessWidget {
                 ),
               ),
               GetBuilder(
-                init: incomeAndExpenseController,
-                builder: (controller) => WidgetSize(
+                init: type == 'reason'
+                    ? controller as ReasonController
+                    : controller as IncomeAndExpenseController,
+                builder: (_) => WidgetSize(
                   onChange: (Size size) {
-                    incomeAndExpenseController
-                        .updateSubcategoryHeight(size.height);
+                    controller.updateSubcategoryHeight(size.height);
                   },
                   child: SizedBox(
-                    height:
-                        incomeAndExpenseController.subcategorySelectPageHeight,
+                    height: controller.subcategorySelectPageHeight,
                     child: Padding(
                       padding: Get.context.isLandscape
                           ? const EdgeInsets.fromLTRB(20, 0, 20, 10)
@@ -145,17 +99,18 @@ class SelectSubcategory extends StatelessWidget {
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) =>
                                     SubcategorySelectItem(
-                                  subcategoryModel: incomeAndExpenseController
-                                      .subcategories
-                                      .elementAt(index),
+                                  subcategoryModel:
+                                      controller.subcategories.elementAt(index),
                                   categoryCardId: categoryCardId,
+                                  controller: controller,
+                                  type: type,
+                                  id: id,
                                 ),
                                 separatorBuilder: (context, index) => Divider(
                                   color: Colors.green.shade100,
                                   height: 10,
                                 ),
-                                itemCount: incomeAndExpenseController
-                                    .subcategories.length,
+                                itemCount: controller.subcategories.length,
                               ),
                             ),
                           ),
@@ -169,18 +124,20 @@ class SelectSubcategory extends StatelessWidget {
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) =>
                                     SubSubcategorySelectItem(
-                                  subSubcategoryModel:
-                                      incomeAndExpenseController
-                                          .selectedSubSubcategories
-                                          .elementAt(index),
+                                  controller: controller,
+                                  subSubcategoryModel: controller
+                                      .selectedSubSubcategories
+                                      .elementAt(index),
                                   categoryCardId: categoryCardId,
+                                  type: type,
+                                  id: id,
                                 ),
                                 separatorBuilder: (context, index) => Divider(
                                   color: Colors.green.shade100,
                                   height: 10,
                                 ),
-                                itemCount: incomeAndExpenseController
-                                    .selectedSubSubcategories.length,
+                                itemCount:
+                                    controller.selectedSubSubcategories.length,
                               ),
                             ),
                           ),

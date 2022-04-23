@@ -3,15 +3,16 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:remindme/database_models/reason/reason_model.dart';
 import '../../../../getx_controller/reason/reason_controller.dart';
+import '../../../add_transaction/income_and_expense/category_card/select_subcategory/select_subcategory.dart';
 
 class ReasonCategoryAndSubcategorySelect extends StatelessWidget {
   final int categoryId;
+  final String categoryName;
   final ReasonController reasonController = Get.find();
 
-  ReasonCategoryAndSubcategorySelect({
-    Key key,
-    this.categoryId,
-  }) : super(key: key);
+  ReasonCategoryAndSubcategorySelect(
+      {Key key, this.categoryId, this.categoryName})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,16 +22,18 @@ class ReasonCategoryAndSubcategorySelect extends StatelessWidget {
           children: [
             Expanded(
               child: TextButton(
-                child: const Text(
-                  'Add reason to category dbhfvfd vfvf',
+                child: Text(
+                  'Add reason to $categoryName',
                   textAlign: TextAlign.center,
                 ),
                 style: TextButton.styleFrom(
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 onPressed: () {
+                  reasonController.removeFocus();
+                  // FocusScope.of(context).unfocus();
                   reasonController.addReason(
-                    categoryId,
+                    categoryId: categoryId,
                   );
                   // FocusScope.of(context).unfocus();
                   // for (var element in incomeAndExpenseController.reasons) {
@@ -63,24 +66,23 @@ class ReasonCategoryAndSubcategorySelect extends StatelessWidget {
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 onPressed: () {
-                  // FocusScope.of(context).unfocus();
-                  // for (var element in incomeAndExpenseController.subcategories) {
-                  //   element.isSelected = false;
-                  // }
-                  // incomeAndExpenseController.selectedSubSubcategories = [];
-                  // showModalBottomSheet(
-                  //   shape: const RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.only(
-                  //       topLeft: Radius.circular(10),
-                  //       topRight: Radius.circular(10),
-                  //     ),
-                  //   ),
-                  //   context: context,
-                  //   builder: (context) => SelectSubcategory(
-                  //     categoryId: categoryId,
-                  //     categoryCardId: categoryCardId,
-                  //   ),
-                  // );
+                  reasonController.removeFocus();
+                  FocusScope.of(context).unfocus();
+                  showModalBottomSheet(
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                      ),
+                    ),
+                    context: context,
+                    builder: (context) => SelectSubcategory(
+                      categoryId: categoryId,
+                      // categoryCardId: categoryCardId,
+                      controller: reasonController,
+                      type: 'reason',
+                    ),
+                  );
                 },
               ),
             ),

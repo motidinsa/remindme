@@ -129,9 +129,12 @@ class _AddCategoryState extends State<AddCategory> {
                           padding: EdgeInsets.zero,
                           splashRadius: 0.1,
                           color: Colors.red,
-                          icon: Icon(addCategoryController.isEditCategory
-                              ? Icons.delete
-                              : Icons.cancel),
+                          icon: Icon(
+                            addCategoryController.isEditCategory
+                                ? Icons.delete
+                                : Icons.cancel,
+                            color: Colors.red.shade300,
+                          ),
                           onPressed: () {
                             addCategoryController.deleteCategory(
                                 categoryId: widget.addCategoryModel.id,
@@ -142,7 +145,7 @@ class _AddCategoryState extends State<AddCategory> {
                           IconButton(
                             padding: EdgeInsets.zero,
                             splashRadius: 0.1,
-                            color: Colors.red.shade400,
+                            color: Colors.red.shade300,
                             icon: const Icon(Icons.cancel),
                             onPressed: () {
                               addCategoryController.deleteCategory(

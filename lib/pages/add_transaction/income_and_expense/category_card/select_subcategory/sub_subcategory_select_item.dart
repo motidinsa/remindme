@@ -8,21 +8,41 @@ import 'package:remindme/models/expense_and_income_subsubcategory.dart';
 class SubSubcategorySelectItem extends StatelessWidget {
   final IncomeAndExpenseSubSubCategoryModel subSubcategoryModel;
   final int categoryCardId;
-  final IncomeAndExpenseController incomeAndExpenseController = Get.find();
 
-  SubSubcategorySelectItem(
-      {Key key, this.subSubcategoryModel, this.categoryCardId})
-      : super(key: key);
+  // final IncomeAndExpenseController controller = Get.find();
+  final controller;
+  final String type;
+  final int id;
+
+  const SubSubcategorySelectItem({
+    Key key,
+    this.subSubcategoryModel,
+    this.categoryCardId,
+    this.controller,
+    this.type,
+    this.id,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        incomeAndExpenseController.updateCategoryModelDetailFromSubSubcategory(
-            subSubcategoryModel.categoryID,
-            subSubcategoryModel.subcategoryID,
-            subSubcategoryModel.id,
-            categoryCardId);
+        type == 'reason'
+            ? id != null
+                ? controller.editCategory(
+                    categoryId: subSubcategoryModel.categoryID,
+                    subcategoryId: subSubcategoryModel.subcategoryID,
+                    subSubcategoryId: subSubcategoryModel.id,
+                    id: id)
+                : controller.addReason(
+                    categoryId: subSubcategoryModel.categoryID,
+                    subcategoryId: subSubcategoryModel.subcategoryID,
+                    subSubcategoryId: subSubcategoryModel.id)
+            : controller.updateCategoryModelDetailFromSubSubcategory(
+                subSubcategoryModel.categoryID,
+                subSubcategoryModel.subcategoryID,
+                subSubcategoryModel.id,
+                categoryCardId);
         Get.back();
       },
       child: Padding(

@@ -131,7 +131,14 @@ class AddCategoryController extends GetxController {
   void addCategory() {
     for (var element in addCategoryModels) {
       element.requestFocus = false;
+      for (var subcategory in element.subcategoryModels) {
+        subcategory.requestFocus = false;
+        for (var subSubcategory in subcategory.subSubcategoryModels) {
+          subSubcategory.requestFocus = false;
+        }
+      }
     }
+
     addCategoryModels.add(AddCategoryModel(
         id: ++currentCategoryId, subcategoryModels: [], requestFocus: true));
 
@@ -240,15 +247,13 @@ class AddCategoryController extends GetxController {
   }
 
   void addSubcategory({int categoryId}) {
-    addCategoryModels
-        .firstWhere((element) => element.id == categoryId)
-        .subcategoryModels
-        .forEach((element) {
-      element.requestFocus = false;
-    });
-
     AddCategoryModel currentAddCategoryModel =
         addCategoryModels.firstWhere((element) => element.id == categoryId);
+
+    for (var element in currentAddCategoryModel.subcategoryModels) {
+      element.requestFocus = false;
+    }
+
     currentAddCategoryModel.subcategoryModels.add(
       AddSubcategoryModel(
           categoryId: categoryId,

@@ -1,7 +1,7 @@
-import '../../database_models/reason/reason_model.dart';
+import 'add_reason_model.dart';
 
 class MultipleReasonModel {
-  List<ReasonModel> reasonModels = [];
+  List<AddReasonModel> reasonModels = [];
   final int categoryId;
   int id;
 
